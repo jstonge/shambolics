@@ -165,7 +165,7 @@ plot_duration(filtered_dat, by_attr)
 Only showing coders.
 
 ```{ojs}
-viewof by_attr2 = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
+viewof by_attr2 = Inputs.radio(["gender_binary", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
 
 function plot_attr_h(dat, val_col, by_attr, col_legend) {
   return Plot.plot({
@@ -248,7 +248,7 @@ function crosstab_filter(x) {
 crosstab_dat_filter1 = crosstab_filter(form.extra_filter.join(","))
 
 crosstab_dat_filter2 = {
-    if (rm_nulls) {
+  if (rm_nulls) {
       return crosstab_dat_filter1.filter(d => d[form.dep_var] !== null && d[form.indep_var] !== null) 
   } else {
       return crosstab_dat_filter1
@@ -303,7 +303,10 @@ Note: There are <font color="red">${d3.sum(crosstab_dat_long, d=> d.n)}</font>  
 
 ```{ojs}
 //| echo: false
-Inputs.table(tidy(pdata, select(['academia_status', 'nb_advisors', 'dept_students_lab', "pref_pronouns", "year_born", "ethnicity_binary", 'country_origin', 'us_state', 'reason_coding', 'how_did_you_learn_code','first_line_code', 'first_line_code_c', 'years_coding',  'freq_coding_proj', 'freq_coding_proj_c', 'freq_oss_proj', 'what_os', 'position_industry', 'use_lang'])))
+profile_cols = ['academia_status', 'nb_advisors', 'dept_students_lab', "pref_pronouns", 
+                "year_born", "ethnicity_binary", 'country_origin', 'us_state', 'reason_coding', 'how_did_you_learn_code','first_line_code', 'first_line_code_c','years_coding',  'freq_coding_proj', 'freq_coding_proj_c', 'freq_oss_proj', 'what_os', 'position_industry', 'use_lang']
+
+Inputs.table(pdata, { columns: profile_cols })
 ```
 
 ## Questions
@@ -329,12 +332,11 @@ viewof sel_dept_cb = Inputs.select([''].concat(
   tidy(
     pdata.filter(d => d["dept_students_lab"] !== null),
     distinct('dept_students_lab')
-  ).map(d => d["dept_students_lab"])), {label: "Choose dept"})
+  ).map(d => d["dept_students_lab"])), { label: "Choose dept" })
 
-viewof by_attr_cb = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
-
-viewof do_pct_2 = Inputs.toggle({label: "Show %"}) 
-viewof rm_nulls_2 = Inputs.toggle({label: "Remove nulls", value: true}) 
+viewof by_attr_cb = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], { label: "attributes" })
+viewof do_pct_2 =   Inputs.toggle({ label: "Show %" }) 
+viewof rm_nulls_2 = Inputs.toggle({ label: "Remove nulls", value: true }) 
 ```
 
 ::: {.panel-tabset}
@@ -344,10 +346,9 @@ viewof rm_nulls_2 = Inputs.toggle({label: "Remove nulls", value: true})
 Smaller values are more negative attitude.
 
 ```{ojs}
-plot_attr_v(coders, "enough_instit_support_ord", by_attr_cb, true, 
-"Institutional support", do_pct_2)
-plot_attr_v(coders, "more_time_learning_to_code_ord", by_attr_cb, false, "More time learning to code", do_pct_2)
-plot_attr_v(coders, "self_expect_time_coding_ord", by_attr_cb, false, "Self expectation time coding", do_pct_2)
+plot_attr_v(coders, "enough_instit_support_ord",      by_attr_cb, true,  "Institutional support",        do_pct_2)
+plot_attr_v(coders, "more_time_learning_to_code_ord", by_attr_cb, false, "More time learning to code",   do_pct_2)
+plot_attr_v(coders, "self_expect_time_coding_ord",    by_attr_cb, false, "Self expectation time coding", do_pct_2)
 ```
 
 ## Benefits
@@ -357,8 +358,8 @@ Depending on other variables, the answers to these questions can be interepreted
 :::
 
 ```{ojs}
-plot_attr_v(coders, "value_learn_code_in_field_ord", by_attr_cb, true, "Coding on future opportunities", do_pct_2)
-plot_attr_v(coders, "value_comp_skills_wrt_domain_ord", by_attr_cb, false, "Value comp skills wrt domain", do_pct_2)
+plot_attr_v(coders, "value_learn_code_in_field_ord",    by_attr_cb, true, "Coding on future opportunities", do_pct_2)
+plot_attr_v(coders, "value_comp_skills_wrt_domain_ord", by_attr_cb, false, "Value comp skills wrt domain",  do_pct_2)
 ```
 
 ```{ojs}
@@ -390,23 +391,24 @@ plot_social_contacts(coders, by_attr_cb)
 ## OSS
 
 ```{ojs}
-plot_attr_v(coders, "do_share_code_online", by_attr_cb, true, "", do_pct_2)
-plot_attr_v(coders, "value_comp_skills_wrt_domain", by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "do_share_code_online",           by_attr_cb, true,  "", do_pct_2)
+plot_attr_v(coders, "value_comp_skills_wrt_domain",   by_attr_cb, false, "", do_pct_2)
 plot_attr_v(coders, "value_accessibility_paper_code", by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_paper_code_citability", by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_share_code", by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_welcoming_community_ord", by_attr_cb, false, "Welcoming community", do_pct_2)
+plot_attr_v(coders, "value_paper_code_citability",    by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_share_code",               by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_welcoming_community_ord",  by_attr_cb, false, "Welcoming community", do_pct_2)
 ```
 
 ## Data
 
 ```{ojs}
 cost_cols = ['pct_social_contacts_coding', 'comp_skills_factors_pursue_academia',
-'comp_skills_pro_benefits_s', 'enough_instit_support',
-'friends_help', 'perceived_benefits_coding', 'first_adv_expect_time_coding',
-'second_adv_expect_time_coding', 'reason_coding',  'value_comp_skills_wrt_domain', 'do_share_code_online', "value_learn_code_in_field"]
+             'comp_skills_pro_benefits_s', 'enough_instit_support',
+             'friends_help', 'perceived_benefits_coding', 'first_adv_expect_time_coding',
+             'second_adv_expect_time_coding', 'reason_coding',  'value_comp_skills_wrt_domain', 
+             'do_share_code_online', "value_learn_code_in_field"]
 
-Inputs.table(tidy(coders, select(cost_cols)))
+Inputs.table(coders, { columns: cost_cols })
 ```
 
 :::

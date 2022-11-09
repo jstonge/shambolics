@@ -3,7 +3,6 @@
     "listing": "/index.html",
     "items": [
       "/posts/source-sink/index.html",
-      "/posts/source-sink/interactive.html",
       "/posts/survey-programming/index.html",
       "/posts/interactive-stats/index.html"
     ]
