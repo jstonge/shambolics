@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 2ec047d6-0f96-461a-b203-d00781209884
+      url: 'https://quartopub.com/sites/jstonge/shambolics'

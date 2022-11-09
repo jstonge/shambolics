@@ -1,0 +1,121 @@
+---
+title: "Source-sink behavioural dynamics limit institutional evolution in a group structured society"
+description: This model describes behaviors that require institutional strength to get off the ground. But as you add institutional levels to your collective, there is a cost. The model finds organizational free-riding, with some organizations preferring others to pay the cost of institutional strength while benefiting the behaviors emerging from those.
+format:
+  html:
+    echo: false
+editor: visual
+image: unions.jpg
+---
+
+## Algebraic model
+
+The key ingredients of the model are our groups $G$ with the number of adopters $i$ and with an institution of level $\ell$. We assume that with higher levels of institutional strength, $\ell$, the institution will more effectively promote group-beneficial behavior, $\ell\beta$. But this is offset by a cost, $c$, of entertaining larger groups. For instance, think of the process of unionization, promoting behaviors that are costly at individual level. When unionization becomes more successful, the unions can become ungaingly. 
+
+First master equation:
+
+\begin{align*}
+\frac{d}{dt}G_{i,\ell}^{diff} &= \ell \beta [(i-1) + R](n - i + 1)G_{i-1,\ell} \\
+                              &- \ell \beta (i+R)(n-i) G_{i,\ell} \\
+                              &+ \gamma(i+1)G_{i+1,\ell} - \gamma i G_{i,\ell}
+\end{align*}
+
+where $R = \mathbin{\color{red}{\rho}} \sum_{i',\ell'} i'G_{i',\ell'}$ represents the global diffusion of behaviors and primes denote variable over which we sum to calculate global quantity. The sum over adopters at each level weighted by global behavioural diffusion [$\rho$]{style="color: red;"}.
+
+Second master equation:
+
+\begin{align*}
+\frac{d}{dt}G_{i,\ell}^{select} &= \mathbin{\color{red}{\rho}} [G_{i,\ell-1}(Z_\ell Z_{\ell-1}^{-1} + \mathbin{\color{midnightblue}{\mu}}) + G_{i,\ell+1}(Z\ell Z_{\ell + 1}^{-1} + \mathbin{\color{midnightblue}{\mu}})] \\
+                                &-\mathbin{\color{red}{\rho}}(Z_{\ell-1}Z_\ell^{-1} + Z_{\ell+1}^{-1} + 2\mathbin{\color{midnightblue}{\mu}})G_{i,\ell}
+\end{align*}
+
+where $Z_\ell = \frac{\sum_{i'} exp(bi'-c\ell)G_{i',\ell}}{\sum_{i'}G_{i',\ell}}$. Note that we add a constant rate of transition [$\mu$]{style="color: midnightblue;"} to the selection proces.
+
+Taken togetherm we have the set of master equations:
+
+$$
+\frac{d}{dt}G_{i,\ell} = \frac{d}{dt}G_{i,\ell}^{diff} + \frac{d}{dt}G_{i,\ell}^{select}
+$$
+
+
+## Julia model
+
+```julia
+function source_sink!(du, u, p, t)
+    G, L, n = u, length(u.x), length(first(u.x))
+    β, γ, ρ, b, c, μ = p
+    Z, pop, R = zeros(L), zeros(L), 0.
+
+    # Calculate mean-field coupling and observed fitness landscape
+    for ℓ in 1:L
+      n_adopt = collect(0:(n-1))
+      Z[ℓ]    = sum(exp.(b*n_adopt .- c*(ℓ-1)) .* G.x[ℓ])
+      pop[ℓ]  = sum(G.x[ℓ])
+      R       += sum(ρ*n_adopt .* G.x[ℓ])
+      pop[ℓ] > 0.0 && ( Z[ℓ] /= pop[ℓ] )
+    end
+
+    for ℓ = 1:L, i = 1:n
+      n_adopt, gr_size = i-1, n-1
+
+      # Diffusion events
+      du.x[ℓ][i] = -γ*n_adopt*G.x[ℓ][i] - (ℓ-1)*β*(n_adopt+R)*(gr_size-n_adopt)*G.x[ℓ][i]
+
+      n_adopt > 0 && ( du.x[ℓ][i] += β*(ℓ-1)*(n_adopt-1+R)*(gr_size-n_adopt+1)*G.x[ℓ][i-1])
+      n_adopt < gr_size && ( du.x[ℓ][i] +=  γ*(n_adopt+1)*G.x[ℓ][i+1] )
+
+      # Group selection process
+      ℓ > 1 && ( du.x[ℓ][i] += ρ*G.x[ℓ-1][i]*(Z[ℓ] / Z[ℓ-1] + μ) - ρ*G.x[ℓ][i]*(Z[ℓ-1] / Z[ℓ]+μ) )
+      ℓ < L && ( du.x[ℓ][i] += ρ*G.x[ℓ+1][i]*(Z[ℓ] / Z[ℓ+1] + μ) - ρ*G.x[ℓ][i]*(Z[ℓ+1] / Z[ℓ]+μ) )
+    end
+end
+```
+
+## Output
+
+```{ojs}
+data = FileAttachment("data.json").json()
+p = Object.keys(data).map(d => d.split("_")) //unpack params
+```
+
+```{ojs}
+//| panel: sidebar
+
+minmax = (p, i) => d3.extent(p.map(d => parseFloat(d[i])))
+
+viewof beta  = Inputs.range(minmax(p,0), {step: 0.05, label: "β", value:"0.07"})
+viewof gamma = Inputs.range(minmax(p,1), {step: 0.03, label: "γ", value:"1.0"})
+viewof rho   = Inputs.range(minmax(p,2), {step: 0.15,label: "ρ", value:"0.1"})
+viewof b     = Inputs.range(minmax(p,3), {step: 0.05, label: "b", value:"0.18"})
+viewof c     = Inputs.range(minmax(p,4), {step: 0.5, label: "c", value:"1.05"})
+viewof mu    = Inputs.range(minmax(p,5), {step: 0.03, label: "μ", value:"0.0001"})
+```
+
+::: {.panel-tabset}
+
+## Plot
+
+```{ojs}
+f = (x) => Number.isInteger(x) ? x.toPrecision(2) : x
+
+Plot.plot({
+  x: {type:"log"},
+  y: {domain: [0,1]},
+  color: {scheme: "reds", type: "ordinal", legend: true},
+  marks: [
+    Plot.dot(
+      data[`${f(beta)}_${f(gamma)}_${f(rho)}_${f(b)}_${f(c)}_${f(mu)}`], {
+        x: 'timesteps', y: "value", stroke: "L"
+        })
+  ]
+})
+```
+
+:::
+
+##  Takeaways:
+
+ - Frequency of behaviour in groups with different institutional strength.
+ - Within groups, the frequency of cooperative behaviour follows the strength of institutions (with ℓ = 1 in light beige and ℓ = 6 in dark red).
+ - Qualitatively, no institutions are possible if institutional costs are too high, and the behaviour never spreads.
+ - The time dynamics of global behavioural frequency and behaviour in groups can include patterns of surge and collapse.

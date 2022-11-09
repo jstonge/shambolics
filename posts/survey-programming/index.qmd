@@ -1,0 +1,461 @@
+---
+title: Survey results (early release)
+subtitle: Preliminary results from a survey on the cost and benefits of learning to code
+description: |
+  The costs and benefits of learning to code in science vary across individuals and disciplines. We should have a better idea of these tradeoffs before selling anyone on coding.
+categories:
+  - Survey
+  - Programming
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+  html: 
+    echo: false
+image: soapboxing.jpg
+---
+
+```{ojs}
+//| include: false
+//| echo: false
+pdata = FileAttachment("data_clean.csv").csv({ typed: true })
+
+// useful vars
+colnames = d3.sort(Object.keys(pdata[0]))
+coders = pdata.filter(d => d.is_coder === 'coder')
+coder_count = tidy(pdata, count("is_coder")).map(d => d.n)
+
+// global filtering
+filtered_dat = sel_dept == "" ? pdata : pdata.filter(d => d["dept_students_lab"] === sel_dept)
+filtered_coders = sel_dept == "" ? coders : coders.filter(d => d["dept_students_lab"] === sel_dept)
+```
+
+
+
+We currently have ${pdata.length} valid responses, from ${tidy(pdata.filter(d => d["dept_students_lab"] !== ""), count("dept_students_lab")).length} different departments. There are ${coder_count[0]} coders and ${coder_count[1]} non-coders.
+
+
+## Profiles
+
+```{ojs}
+viewof sel_dept = Inputs.select([''].concat(
+  tidy(
+    pdata.filter(d => d["dept_students_lab"] !== null),
+    distinct('dept_students_lab')
+  ).map(d => d["dept_students_lab"])), {label: "Choose dept"})
+
+viewof do_pct = Inputs.toggle({label: "Show %"}) 
+viewof rm_nulls = Inputs.toggle({label: "Remove nulls", value: true}) 
+```
+
+
+
+::: {.panel-tabset}
+
+## Demographics
+
+
+```{ojs}
+col_dems = ["is_coder", "pref_pronouns", "year_born", "ethnicity_binary", 
+            "dept_students_binary", "academia_status"]
+
+viewof by_attr = Inputs.radio(col_dems, {label: "attributes"})
+
+function plot_attr_v(dat, val_col, by_attr, col_legend, ylab, do_pct) {
+    return Plot.plot({
+      marginLeft: ylab === "" ? 175 : 90,
+      grid: true,
+      color: col_legend === true ? { legend: by_attr ? true : false } : null,
+      y: { label: ylab },
+      x: { 
+        label: do_pct ? " Frequency (%) →" : "# respondents →", 
+        percent: do_pct ? true : false
+      },
+      marks: [
+      Plot.barX(
+          rm_nulls ? dat.filter(d => d[val_col] !== null && d[by_attr] !== null) : dat,
+          Plot.groupY({ x: do_pct ? "proportion" : "count" }, { 
+              y: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
+          })
+        ),
+      ]
+  })
+}
+
+plot_attr_v(filtered_dat, "pref_pronouns", by_attr, true, "", do_pct)
+plot_attr_v(filtered_dat, "academia_status", by_attr, false, "", do_pct)
+plot_attr_v(filtered_dat, "dept_students_lab", by_attr, false, "", do_pct)
+```
+
+#### Year born
+
+```{ojs}
+function plot_yr_born(dat, by_attr) {
+  const parseTime = d3.timeParse("%Y");
+  const formatTime = d3.timeFormat("%Y")
+  
+  return Plot.plot({
+    grid: true,
+    x: {
+      label: "", 
+      tickRotate: 45,
+      tickFormat: d => formatTime(parseTime(d))
+      },
+    y: { 
+      label: do_pct ? " Frequency (%) ↑" : "# respondents ↑", 
+      percent: do_pct ? true : false
+      },
+    marks: [
+      Plot.rectY(
+        rm_nulls ? dat.filter(d => d["year_born"] !== null) : dat,
+        Plot.binX({ y: do_pct ? "proportion" : "count" }, { 
+          x: "year_born", r: 3, fill: d => by_attr ? d[by_attr] : "grey", 
+          thresholds: 30, order: by_attr 
+        })
+      ),
+      Plot.ruleY([0])
+    ]
+  })
+}
+
+plot_yr_born(filtered_dat, by_attr)
+```
+
+#### Duration (sec)
+
+```{ojs}
+function plot_duration(dat, by_attr) {
+  return Plot.plot({
+    grid: true,
+    fy: {
+      label: "", 
+    },
+    facet: { 
+      data: rm_nulls ? dat.filter(d => d["duration_sec"] !== null) : dat, 
+      y: d => by_attr ? d[by_attr] : null,
+      marginRight: 130,
+      marginTop: 50,
+    },
+    x: { 
+      transform: d => d / 60, 
+      label: "time(min)  →",
+      domain: [0,d3.max(filtered_dat, d => (d["duration_sec"] / 60) + 2)]
+    },
+    y: { 
+      label: do_pct ? " Frequency (%) ↑" : "# respondents ↑", 
+      percent: do_pct ? true : false
+    },
+    marks: [
+      Plot.rectY(
+        rm_nulls ? dat.filter(d => d["duration_sec"] !== null && d[by_attr] !== null) : dat, 
+        Plot.binX({ y: do_pct ? "proportion" : "count" }, {
+          x: "duration_sec", fill: d => by_attr ? d[by_attr] : "grey", thresholds: 20
+          })
+      ),
+      Plot.ruleY([0])
+    ]
+  })
+}
+
+plot_duration(filtered_dat, by_attr)
+```
+
+## Dev Profiles
+
+Only showing coders.
+
+```{ojs}
+viewof by_attr2 = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
+
+function plot_attr_h(dat, val_col, by_attr, col_legend) {
+  return Plot.plot({
+    marginLeft: 100,
+    marginBottom: 50,
+    height: 250,
+    grid: true,
+    color: col_legend === true ? { legend: by_attr ? true : false } : null,
+    y: {
+      label: do_pct ? " Frequency (%) ↑" : "# respondents ↑", 
+      percent: do_pct ? true : false
+      },
+    x: {
+      tickRotate: 10,
+      label: "← more novices • more experience →",
+      domain: d3.sort(dat, d => d[`${val_col}_c`]).map(d => d[val_col])
+    },
+    marks: [
+      Plot.barY(
+        rm_nulls ? dat.filter(d => d[val_col] !== null) : dat, 
+        Plot.groupX({ y: do_pct ? "proportion" : "count" }, { 
+            x: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
+          })
+      )
+    ]
+  })
+}
+
+plot_attr_v(filtered_coders, "self_id_as_coder", by_attr2, true, "Self id as coder", do_pct)
+plot_attr_v(filtered_coders, "what_os", by_attr2, false, "What OS", do_pct)
+```
+
+**First line code**
+```{ojs}
+plot_attr_h(filtered_coders, "first_line_code", by_attr2, false, "first line")
+```
+
+**Years coding**
+```{ojs}
+plot_attr_h(filtered_coders, "years_coding", by_attr2, false, "years coding")
+```
+
+
+## Tables
+
+
+```{ojs}
+viewof form = Inputs.form({
+  extra_filter: Inputs.checkbox(['coder', 'female', 'stem', 'Non-stem'], {label: 'Only'}), 
+  dep_var: Inputs.select(colnames, {value: 'self_id_as_coder', label: 'Dep var (DV)'}),
+  indep_var: Inputs.select(colnames, {value: 'gender_binary', label: 'Indep var (IV)'}), 
+  do_pct_crosstab: Inputs.radio(['DV (→)', 'IV (↓)'], {label: "Show %", value: 'IV (↓)'})
+})
+
+function crosstab_filter(x) {
+    switch (x) {
+      case "":         return pdata; 
+      case 'coder':    return pdata.filter(d => d.is_coder === 'coder'); 
+      case 'female':   return pdata.filter(d => d.gender_binary === 'female'); 
+      case 'stem':     return pdata.filter(d => d.dept_students_binary === 'STEM'); 
+      case 'Non-stem': return pdata.filter(d => d.dept_students_binary === 'Non-STEM'); 
+      case 'coder,female': 
+        return pdata.filter(d => d.is_coder === 'coder' && d.gender_binary === 'female');
+      
+      case 'coder,stem': 
+        return pdata.filter(d => d.is_coder === 'coder' && d.dept_students_binary === 'STEM');
+      
+      case 'female,stem': 
+        return pdata.filter(d => d.gender_binary === 'female' && d.dept_students_binary === 'STEM');
+      
+      case 'female,Non-stem': 
+        return pdata.filter(d => d.gender_binary === 'female' && d.dept_students_binary === 'Non-STEM');
+      
+      case 'coder,Non-stem': 
+        return pdata.filter(d => d.is_coder === 'coder' && d.dept_students_binary === 'Non-STEM');
+      default:
+        return pdata.filter(d => d.is_coder === "")
+}}
+
+crosstab_dat_filter1 = crosstab_filter(form.extra_filter.join(","))
+
+crosstab_dat_filter2 = {
+    if (rm_nulls) {
+      return crosstab_dat_filter1.filter(d => d[form.dep_var] !== null && d[form.indep_var] !== null) 
+  } else {
+      return crosstab_dat_filter1
+  }
+}
+
+crosstab_dat_long = tidy(
+    crosstab_dat_filter2, 
+    select([form.indep_var, form.dep_var]),
+    count([form.indep_var, form.dep_var])
+)
+```
+
+Third variable: **${form.extra_filter[0] === undefined ? "None": form.extra_filter.join(", ")}**
+
+Percentage data
+```{ojs}
+crosstab_dat_w_pct = tidy(
+  crosstab_dat_long,
+  groupBy(form.do_pct_crosstab == 'DV (→)' ? form.dep_var : form.indep_var, [
+    mutateWithSummary({total: sum('n')})
+  ]),
+  mutate({ pct: d => (d.n / d.total)*100 }),
+  select(['-n', '-total'])
+)
+
+Inputs.table(
+  tidy(
+    crosstab_dat_w_pct,
+      pivotWider({
+        namesFrom: form.indep_var,
+        valuesFrom: 'pct'
+      })
+))
+```
+
+Raw data
+```{ojs}
+Inputs.table(tidy(
+  crosstab_dat_long, 
+  pivotWider({
+        namesFrom: form.indep_var,
+        valuesFrom: 'n'
+      }))
+)
+```
+
+
+Note: There are <font color="red">${d3.sum(crosstab_dat_long, d=> d.n)}</font>  respondents shown in the table.
+
+## Profile Data
+
+```{ojs}
+//| echo: false
+Inputs.table(tidy(pdata, select(['academia_status', 'nb_advisors', 'dept_students_lab', "pref_pronouns", "year_born", "ethnicity_binary", 'country_origin', 'us_state', 'reason_coding', 'how_did_you_learn_code','first_line_code', 'first_line_code_c', 'years_coding',  'freq_coding_proj', 'freq_coding_proj_c', 'freq_oss_proj', 'what_os', 'position_industry', 'use_lang'])))
+```
+
+## Questions
+
+```{r}
+#| echo: false
+source("lookups.R")
+tibble::enframe(question2labs_lookup, name="Question", value="Label")  |>
+  tidyr::unnest(cols = c(Label)) |>
+  dplyr::arrange(Label) |>
+  knitr::kable() |>
+  kableExtra::kable_styling("striped", full_width = T) |>
+  kableExtra::scroll_box(height = "500px")
+```
+
+
+:::
+
+## Costs & benefits
+
+```{ojs}
+viewof sel_dept_cb = Inputs.select([''].concat(
+  tidy(
+    pdata.filter(d => d["dept_students_lab"] !== null),
+    distinct('dept_students_lab')
+  ).map(d => d["dept_students_lab"])), {label: "Choose dept"})
+
+viewof by_attr_cb = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
+
+viewof do_pct_2 = Inputs.toggle({label: "Show %"}) 
+viewof rm_nulls_2 = Inputs.toggle({label: "Remove nulls", value: true}) 
+```
+
+::: {.panel-tabset}
+
+## Costs
+
+Smaller values are more negative attitude.
+
+```{ojs}
+plot_attr_v(coders, "enough_instit_support_ord", by_attr_cb, true, 
+"Institutional support", do_pct_2)
+plot_attr_v(coders, "more_time_learning_to_code_ord", by_attr_cb, false, "More time learning to code", do_pct_2)
+plot_attr_v(coders, "self_expect_time_coding_ord", by_attr_cb, false, "Self expectation time coding", do_pct_2)
+```
+
+## Benefits
+
+:::{.callout-note collapse="true"}
+Depending on other variables, the answers to these questions can be interepreted both as relative costs or benefits, e.g. thinking that expected level of programming skills is important in your field is a cost when you are not skilled yet. 
+:::
+
+```{ojs}
+plot_attr_v(coders, "value_learn_code_in_field_ord", by_attr_cb, true, "Coding on future opportunities", do_pct_2)
+plot_attr_v(coders, "value_comp_skills_wrt_domain_ord", by_attr_cb, false, "Value comp skills wrt domain", do_pct_2)
+```
+
+```{ojs}
+function plot_social_contacts(dat, by_attr) {
+  return Plot.plot({
+    grid: true,
+    x: {
+      label: "Social contact coding (%)  →",
+    },
+    y: { 
+      label: do_pct_2 ? " Frequency (%) ↑" : "# respondents ↑", 
+      percent: do_pct_2 ? true : false
+    },
+    marks: [
+      Plot.barY(
+        rm_nulls ? dat.filter(d => d["pct_social_contacts_coding"] !== null) : dat, 
+        Plot.groupX({ y: do_pct_2 ? "proportion" : "count" }, { 
+            x: "pct_social_contacts_coding",  fill: d => by_attr ? d[by_attr] : "grey"
+          })
+      ),
+      Plot.ruleY([0])
+    ]
+  })
+}
+
+plot_social_contacts(coders, by_attr_cb)
+```
+
+## OSS
+
+```{ojs}
+plot_attr_v(coders, "do_share_code_online", by_attr_cb, true, "", do_pct_2)
+plot_attr_v(coders, "value_comp_skills_wrt_domain", by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_accessibility_paper_code", by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_paper_code_citability", by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_share_code", by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_welcoming_community_ord", by_attr_cb, false, "Welcoming community", do_pct_2)
+```
+
+## Data
+
+```{ojs}
+cost_cols = ['pct_social_contacts_coding', 'comp_skills_factors_pursue_academia',
+'comp_skills_pro_benefits_s', 'enough_instit_support',
+'friends_help', 'perceived_benefits_coding', 'first_adv_expect_time_coding',
+'second_adv_expect_time_coding', 'reason_coding',  'value_comp_skills_wrt_domain', 'do_share_code_online', "value_learn_code_in_field"]
+
+Inputs.table(tidy(coders, select(cost_cols)))
+```
+
+:::
+
+
+<!-- ## Students typical week 
+
+:::{.column-page}
+
+```{ojs}
+agg_dat = tidy(
+  coders, 
+  select([startsWith('time')]), 
+  pivotLonger({
+    cols: [startsWith('time')],
+    namesTo: 'task',
+    valuesTo: 'val'
+  }),
+  count(['task', 'val']
+))
+
+
+Plot.plot({
+  width: 1000,
+  marginBottom: 100,
+  grid: true,
+  x: {
+    tickRotate: 45,
+    label: "",
+    domain: ['0 hour', '1-5 hours', '6-10 hours', '11-15 hours', null]
+  },
+  facet: {
+    data: agg_dat,
+    x: d => d.task.replace('time_', '')
+  },
+  marks: [
+    Plot.barY(
+      agg_dat,
+      {x: "val", y: "n", fill: d => d.val === null ? 'grey' : 'task'}
+    ),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+::: -->
+
+
+```{ojs}
+import { tidy, select, count, complete, filter, fullSeq, sum, mutateWithSummary, 
+         groupBy, pivotWider, startsWith, pivotLonger, mutate, distinct, summarize } from '@pbeshai/tidyjs'
+```

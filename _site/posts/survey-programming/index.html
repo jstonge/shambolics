@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jonathan St-Onge">
+<meta name="dcterms.date" content="2022-11-09">
+<meta name="description" content="The costs and benefits of learning to code in science vary across individuals and disciplines. We should have a better idea of these tradeoffs before selling anyone on coding.">
+
+<title>shambolics - Survey results (early release)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">shambolics</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Survey results (early release)</h1>
+<p class="subtitle lead">Preliminary results from a survey on the cost and benefits of learning to code</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Survey</div>
+    <div class="quarto-category">Programming</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>The costs and benefits of learning to code in science vary across individuals and disciplines. We should have a better idea of these tradeoffs before selling anyone on coding.</p>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jonathan St-Onge </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 9, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-include="false">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="21" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 20;"><span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>pdata <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data_clean.csv"</span>)<span class="op">.</span><span class="fu">csv</span>({ <span class="dt">typed</span><span class="op">:</span> <span class="kw">true</span> })</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">// useful vars</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>colnames <span class="op">=</span> d3<span class="op">.</span><span class="fu">sort</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(pdata[<span class="dv">0</span>]))</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>coders <span class="op">=</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">'coder'</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>coder_count <span class="op">=</span> <span class="fu">tidy</span>(pdata<span class="op">,</span> <span class="fu">count</span>(<span class="st">"is_coder"</span>))<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">n</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">// global filtering</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>filtered_dat <span class="op">=</span> sel_dept <span class="op">==</span> <span class="st">""</span> <span class="op">?</span> pdata <span class="op">:</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>] <span class="op">===</span> sel_dept)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>filtered_coders <span class="op">=</span> sel_dept <span class="op">==</span> <span class="st">""</span> <span class="op">?</span> coders <span class="op">:</span> coders<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>] <span class="op">===</span> sel_dept)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>We currently have <span><span id="ojs-element-id-1"></span></span> valid responses, from <span><span id="ojs-element-id-4"></span></span> different departments. There are <span><span id="ojs-element-id-2"></span></span> coders and <span><span id="ojs-element-id-3"></span></span> non-coders.</p>
+<section id="profiles" class="level2">
+<h2 class="anchored" data-anchor-id="profiles">Profiles</h2>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="41" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 40;"><span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>viewof sel_dept <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>([<span class="st">''</span>]<span class="op">.</span><span class="fu">concat</span>(</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>] <span class="op">!==</span> <span class="kw">null</span>)<span class="op">,</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(<span class="st">'dept_students_lab'</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  )<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>]))<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Choose dept"</span>})</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>viewof do_pct <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Show %"</span>}) </span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>viewof rm_nulls <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Remove nulls"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="kw">true</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Demographics</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Dev Profiles</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Tables</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Profile Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false">Questions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="59" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 58;"><span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>col_dems <span class="op">=</span> [<span class="st">"is_coder"</span><span class="op">,</span> <span class="st">"pref_pronouns"</span><span class="op">,</span> <span class="st">"year_born"</span><span class="op">,</span> <span class="st">"ethnicity_binary"</span><span class="op">,</span> </span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>            <span class="st">"dept_students_binary"</span><span class="op">,</span> <span class="st">"academia_status"</span>]</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>viewof by_attr <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>(col_dems<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"attributes"</span>})</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_attr_v</span>(dat<span class="op">,</span> val_col<span class="op">,</span> by_attr<span class="op">,</span> col_legend<span class="op">,</span> ylab<span class="op">,</span> do_pct) {</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>      <span class="dt">marginLeft</span><span class="op">:</span> ylab <span class="op">===</span> <span class="st">""</span> <span class="op">?</span> <span class="dv">175</span> <span class="op">:</span> <span class="dv">90</span><span class="op">,</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>      <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>      <span class="dt">color</span><span class="op">:</span> col_legend <span class="op">===</span> <span class="kw">true</span> <span class="op">?</span> { <span class="dt">legend</span><span class="op">:</span> by_attr <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span> } <span class="op">:</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> ylab }<span class="op">,</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> { </span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="dt">label</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">" Frequency (%) →"</span> <span class="op">:</span> <span class="st">"# respondents →"</span><span class="op">,</span> </span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        <span class="dt">percent</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>      <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">barX</span>(</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>          rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[val_col] <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> d[by_attr] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>          Plot<span class="op">.</span><span class="fu">groupY</span>({ <span class="dt">x</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">"proportion"</span> <span class="op">:</span> <span class="st">"count"</span> }<span class="op">,</span> { </span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>              <span class="dt">y</span><span class="op">:</span> val_col<span class="op">,</span>  <span class="dt">fill</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="st">"grey"</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>          })</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        )<span class="op">,</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>      ]</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(filtered_dat<span class="op">,</span> <span class="st">"pref_pronouns"</span><span class="op">,</span> by_attr<span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="86" data-source-offset="-942"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 85;"><span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(filtered_dat<span class="op">,</span> <span class="st">"academia_status"</span><span class="op">,</span> by_attr<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="87" data-source-offset="-1015"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 86;"><span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(filtered_dat<span class="op">,</span> <span class="st">"dept_students_lab"</span><span class="op">,</span> by_attr<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<section id="year-born" class="level4">
+<h4 class="anchored" data-anchor-id="year-born">Year born</h4>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="93" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 92;"><span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_yr_born</span>(dat<span class="op">,</span> by_attr) {</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> parseTime <span class="op">=</span> d3<span class="op">.</span><span class="fu">timeParse</span>(<span class="st">"%Y"</span>)<span class="op">;</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> formatTime <span class="op">=</span> d3<span class="op">.</span><span class="fu">timeFormat</span>(<span class="st">"%Y"</span>)</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> {</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">""</span><span class="op">,</span> </span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tickRotate</span><span class="op">:</span> <span class="dv">45</span><span class="op">,</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tickFormat</span><span class="op">:</span> d <span class="kw">=&gt;</span> <span class="fu">formatTime</span>(<span class="fu">parseTime</span>(d))</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { </span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">" Frequency (%) ↑"</span> <span class="op">:</span> <span class="st">"# respondents ↑"</span><span class="op">,</span> </span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>      <span class="dt">percent</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">rectY</span>(</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>        rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"year_born"</span>] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>        Plot<span class="op">.</span><span class="fu">binX</span>({ <span class="dt">y</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">"proportion"</span> <span class="op">:</span> <span class="st">"count"</span> }<span class="op">,</span> { </span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>          <span class="dt">x</span><span class="op">:</span> <span class="st">"year_born"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="st">"grey"</span><span class="op">,</span> </span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>          <span class="dt">thresholds</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">order</span><span class="op">:</span> by_attr </span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_yr_born</span>(filtered_dat<span class="op">,</span> by_attr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="duration-sec" class="level4">
+<h4 class="anchored" data-anchor-id="duration-sec">Duration (sec)</h4>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="127" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 126;"><span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_duration</span>(dat<span class="op">,</span> by_attr) {</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fy</span><span class="op">:</span> {</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">""</span><span class="op">,</span> </span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>    <span class="dt">facet</span><span class="op">:</span> { </span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>      <span class="dt">data</span><span class="op">:</span> rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"duration_sec"</span>] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span> </span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>      <span class="dt">marginRight</span><span class="op">:</span> <span class="dv">130</span><span class="op">,</span></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>      <span class="dt">marginTop</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { </span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>      <span class="dt">transform</span><span class="op">:</span> d <span class="kw">=&gt;</span> d <span class="op">/</span> <span class="dv">60</span><span class="op">,</span> </span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">"time(min)  →"</span><span class="op">,</span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>      <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span>d3<span class="op">.</span><span class="fu">max</span>(filtered_dat<span class="op">,</span> d <span class="kw">=&gt;</span> (d[<span class="st">"duration_sec"</span>] <span class="op">/</span> <span class="dv">60</span>) <span class="op">+</span> <span class="dv">2</span>)]</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { </span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">" Frequency (%) ↑"</span> <span class="op">:</span> <span class="st">"# respondents ↑"</span><span class="op">,</span> </span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>      <span class="dt">percent</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">rectY</span>(</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>        rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"duration_sec"</span>] <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> d[by_attr] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span> </span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>        Plot<span class="op">.</span><span class="fu">binX</span>({ <span class="dt">y</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">"proportion"</span> <span class="op">:</span> <span class="st">"count"</span> }<span class="op">,</span> {</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>          <span class="dt">x</span><span class="op">:</span> <span class="st">"duration_sec"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="st">"grey"</span><span class="op">,</span> <span class="dt">thresholds</span><span class="op">:</span> <span class="dv">20</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>          })</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_duration</span>(filtered_dat<span class="op">,</span> by_attr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Only showing coders.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="168" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 167;"><span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>viewof by_attr2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"pref_pronouns"</span><span class="op">,</span> <span class="st">"year_born"</span><span class="op">,</span> <span class="st">"ethnicity_binary"</span><span class="op">,</span> <span class="st">"dept_students_binary"</span><span class="op">,</span> <span class="st">"academia_status"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"attributes"</span>})</span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_attr_h</span>(dat<span class="op">,</span> val_col<span class="op">,</span> by_attr<span class="op">,</span> col_legend) {</span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">100</span><span class="op">,</span></span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>    <span class="dt">height</span><span class="op">:</span> <span class="dv">250</span><span class="op">,</span></span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>    <span class="dt">color</span><span class="op">:</span> col_legend <span class="op">===</span> <span class="kw">true</span> <span class="op">?</span> { <span class="dt">legend</span><span class="op">:</span> by_attr <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span> } <span class="op">:</span> <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">" Frequency (%) ↑"</span> <span class="op">:</span> <span class="st">"# respondents ↑"</span><span class="op">,</span> </span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a>      <span class="dt">percent</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> {</span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>      <span class="dt">tickRotate</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span></span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">"← more novices • more experience →"</span><span class="op">,</span></span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a>      <span class="dt">domain</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">sort</span>(dat<span class="op">,</span> d <span class="kw">=&gt;</span> d[<span class="vs">`</span><span class="sc">${</span>val_col<span class="sc">}</span><span class="vs">_c`</span>])<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d[val_col])</span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">barY</span>(</span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>        rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[val_col] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span> </span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>        Plot<span class="op">.</span><span class="fu">groupX</span>({ <span class="dt">y</span><span class="op">:</span> do_pct <span class="op">?</span> <span class="st">"proportion"</span> <span class="op">:</span> <span class="st">"count"</span> }<span class="op">,</span> { </span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>            <span class="dt">x</span><span class="op">:</span> val_col<span class="op">,</span>  <span class="dt">fill</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="st">"grey"</span></span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>          })</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(filtered_coders<span class="op">,</span> <span class="st">"self_id_as_coder"</span><span class="op">,</span> by_attr2<span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="st">"Self id as coder"</span><span class="op">,</span> do_pct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb9" data-startfrom="198" data-source-offset="-1011"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 197;"><span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(filtered_coders<span class="op">,</span> <span class="st">"what_os"</span><span class="op">,</span> by_attr2<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"What OS"</span><span class="op">,</span> do_pct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<p><strong>First line code</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb10" data-startfrom="202" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 201;"><span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_h</span>(filtered_coders<span class="op">,</span> <span class="st">"first_line_code"</span><span class="op">,</span> by_attr2<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"first line"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>Years coding</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb11" data-startfrom="207" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 206;"><span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_h</span>(filtered_coders<span class="op">,</span> <span class="st">"years_coding"</span><span class="op">,</span> by_attr2<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"years coding"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb12" data-startfrom="216" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 215;"><span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a>viewof form <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">form</span>({</span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a>  <span class="dt">extra_filter</span><span class="op">:</span> Inputs<span class="op">.</span><span class="fu">checkbox</span>([<span class="st">'coder'</span><span class="op">,</span> <span class="st">'female'</span><span class="op">,</span> <span class="st">'stem'</span><span class="op">,</span> <span class="st">'Non-stem'</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">'Only'</span>})<span class="op">,</span> </span>
+<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a>  <span class="dt">dep_var</span><span class="op">:</span> Inputs<span class="op">.</span><span class="fu">select</span>(colnames<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'self_id_as_coder'</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">'Dep var (DV)'</span>})<span class="op">,</span></span>
+<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a>  <span class="dt">indep_var</span><span class="op">:</span> Inputs<span class="op">.</span><span class="fu">select</span>(colnames<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'gender_binary'</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">'Indep var (IV)'</span>})<span class="op">,</span> </span>
+<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a>  <span class="dt">do_pct_crosstab</span><span class="op">:</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">'DV (→)'</span><span class="op">,</span> <span class="st">'IV (↓)'</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Show %"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">'IV (↓)'</span>})</span>
+<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-223"><a href="#cb12-223" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">crosstab_filter</span>(x) {</span>
+<span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> (x) {</span>
+<span id="cb12-225"><a href="#cb12-225" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">""</span><span class="op">:</span>         <span class="cf">return</span> pdata<span class="op">;</span> </span>
+<span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'coder'</span><span class="op">:</span>    <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">'coder'</span>)<span class="op">;</span> </span>
+<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'female'</span><span class="op">:</span>   <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">gender_binary</span> <span class="op">===</span> <span class="st">'female'</span>)<span class="op">;</span> </span>
+<span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'stem'</span><span class="op">:</span>     <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'STEM'</span>)<span class="op">;</span> </span>
+<span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'Non-stem'</span><span class="op">:</span> <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'Non-STEM'</span>)<span class="op">;</span> </span>
+<span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'coder,female'</span><span class="op">:</span> </span>
+<span id="cb12-231"><a href="#cb12-231" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">'coder'</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">gender_binary</span> <span class="op">===</span> <span class="st">'female'</span>)<span class="op">;</span></span>
+<span id="cb12-232"><a href="#cb12-232" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb12-233"><a href="#cb12-233" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'coder,stem'</span><span class="op">:</span> </span>
+<span id="cb12-234"><a href="#cb12-234" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">'coder'</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'STEM'</span>)<span class="op">;</span></span>
+<span id="cb12-235"><a href="#cb12-235" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb12-236"><a href="#cb12-236" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'female,stem'</span><span class="op">:</span> </span>
+<span id="cb12-237"><a href="#cb12-237" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">gender_binary</span> <span class="op">===</span> <span class="st">'female'</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'STEM'</span>)<span class="op">;</span></span>
+<span id="cb12-238"><a href="#cb12-238" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb12-239"><a href="#cb12-239" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'female,Non-stem'</span><span class="op">:</span> </span>
+<span id="cb12-240"><a href="#cb12-240" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">gender_binary</span> <span class="op">===</span> <span class="st">'female'</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'Non-STEM'</span>)<span class="op">;</span></span>
+<span id="cb12-241"><a href="#cb12-241" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb12-242"><a href="#cb12-242" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">'coder,Non-stem'</span><span class="op">:</span> </span>
+<span id="cb12-243"><a href="#cb12-243" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">'coder'</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">dept_students_binary</span> <span class="op">===</span> <span class="st">'Non-STEM'</span>)<span class="op">;</span></span>
+<span id="cb12-244"><a href="#cb12-244" aria-hidden="true" tabindex="-1"></a>      <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb12-245"><a href="#cb12-245" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">is_coder</span> <span class="op">===</span> <span class="st">""</span>)</span>
+<span id="cb12-246"><a href="#cb12-246" aria-hidden="true" tabindex="-1"></a>}}</span>
+<span id="cb12-247"><a href="#cb12-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-248"><a href="#cb12-248" aria-hidden="true" tabindex="-1"></a>crosstab_dat_filter1 <span class="op">=</span> <span class="fu">crosstab_filter</span>(form<span class="op">.</span><span class="at">extra_filter</span><span class="op">.</span><span class="fu">join</span>(<span class="st">","</span>))</span>
+<span id="cb12-249"><a href="#cb12-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-250"><a href="#cb12-250" aria-hidden="true" tabindex="-1"></a>crosstab_dat_filter2 <span class="op">=</span> {</span>
+<span id="cb12-251"><a href="#cb12-251" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (rm_nulls) {</span>
+<span id="cb12-252"><a href="#cb12-252" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> crosstab_dat_filter1<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[form<span class="op">.</span><span class="at">dep_var</span>] <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> d[form<span class="op">.</span><span class="at">indep_var</span>] <span class="op">!==</span> <span class="kw">null</span>) </span>
+<span id="cb12-253"><a href="#cb12-253" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb12-254"><a href="#cb12-254" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> crosstab_dat_filter1</span>
+<span id="cb12-255"><a href="#cb12-255" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-256"><a href="#cb12-256" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-257"><a href="#cb12-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-258"><a href="#cb12-258" aria-hidden="true" tabindex="-1"></a>crosstab_dat_long <span class="op">=</span> <span class="fu">tidy</span>(</span>
+<span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a>    crosstab_dat_filter2<span class="op">,</span> </span>
+<span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>([form<span class="op">.</span><span class="at">indep_var</span><span class="op">,</span> form<span class="op">.</span><span class="at">dep_var</span>])<span class="op">,</span></span>
+<span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>([form<span class="op">.</span><span class="at">indep_var</span><span class="op">,</span> form<span class="op">.</span><span class="at">dep_var</span>])</span>
+<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>Third variable: <strong><span><span id="ojs-element-id-5"></span></span></strong></p>
+<p>Percentage data</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb13" data-startfrom="269" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 268;"><span id="cb13-269"><a href="#cb13-269" aria-hidden="true" tabindex="-1"></a>crosstab_dat_w_pct <span class="op">=</span> <span class="fu">tidy</span>(</span>
+<span id="cb13-270"><a href="#cb13-270" aria-hidden="true" tabindex="-1"></a>  crosstab_dat_long<span class="op">,</span></span>
+<span id="cb13-271"><a href="#cb13-271" aria-hidden="true" tabindex="-1"></a>  <span class="fu">groupBy</span>(form<span class="op">.</span><span class="at">do_pct_crosstab</span> <span class="op">==</span> <span class="st">'DV (→)'</span> <span class="op">?</span> form<span class="op">.</span><span class="at">dep_var</span> <span class="op">:</span> form<span class="op">.</span><span class="at">indep_var</span><span class="op">,</span> [</span>
+<span id="cb13-272"><a href="#cb13-272" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutateWithSummary</span>({<span class="dt">total</span><span class="op">:</span> <span class="fu">sum</span>(<span class="st">'n'</span>)})</span>
+<span id="cb13-273"><a href="#cb13-273" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">,</span></span>
+<span id="cb13-274"><a href="#cb13-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>({ <span class="dt">pct</span><span class="op">:</span> d <span class="kw">=&gt;</span> (d<span class="op">.</span><span class="at">n</span> <span class="op">/</span> d<span class="op">.</span><span class="at">total</span>)<span class="op">*</span><span class="dv">100</span> })<span class="op">,</span></span>
+<span id="cb13-275"><a href="#cb13-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>([<span class="st">'-n'</span><span class="op">,</span> <span class="st">'-total'</span>])</span>
+<span id="cb13-276"><a href="#cb13-276" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-277"><a href="#cb13-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-278"><a href="#cb13-278" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(</span>
+<span id="cb13-279"><a href="#cb13-279" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>(</span>
+<span id="cb13-280"><a href="#cb13-280" aria-hidden="true" tabindex="-1"></a>    crosstab_dat_w_pct<span class="op">,</span></span>
+<span id="cb13-281"><a href="#cb13-281" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivotWider</span>({</span>
+<span id="cb13-282"><a href="#cb13-282" aria-hidden="true" tabindex="-1"></a>        <span class="dt">namesFrom</span><span class="op">:</span> form<span class="op">.</span><span class="at">indep_var</span><span class="op">,</span></span>
+<span id="cb13-283"><a href="#cb13-283" aria-hidden="true" tabindex="-1"></a>        <span class="dt">valuesFrom</span><span class="op">:</span> <span class="st">'pct'</span></span>
+<span id="cb13-284"><a href="#cb13-284" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb13-285"><a href="#cb13-285" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-10-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-10-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<p>Raw data</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb14" data-startfrom="289" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 288;"><span id="cb14-289"><a href="#cb14-289" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(<span class="fu">tidy</span>(</span>
+<span id="cb14-290"><a href="#cb14-290" aria-hidden="true" tabindex="-1"></a>  crosstab_dat_long<span class="op">,</span> </span>
+<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivotWider</span>({</span>
+<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a>        <span class="dt">namesFrom</span><span class="op">:</span> form<span class="op">.</span><span class="at">indep_var</span><span class="op">,</span></span>
+<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a>        <span class="dt">valuesFrom</span><span class="op">:</span> <span class="st">'n'</span></span>
+<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a>      }))</span>
+<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Note: There are <font color="red"><span><span id="ojs-element-id-6"></span></span></font> respondents shown in the table.</p>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb15" data-startfrom="305" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 304;"><span id="cb15-305"><a href="#cb15-305" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(<span class="fu">tidy</span>(pdata<span class="op">,</span> <span class="fu">select</span>([<span class="st">'academia_status'</span><span class="op">,</span> <span class="st">'nb_advisors'</span><span class="op">,</span> <span class="st">'dept_students_lab'</span><span class="op">,</span> <span class="st">"pref_pronouns"</span><span class="op">,</span> <span class="st">"year_born"</span><span class="op">,</span> <span class="st">"ethnicity_binary"</span><span class="op">,</span> <span class="st">'country_origin'</span><span class="op">,</span> <span class="st">'us_state'</span><span class="op">,</span> <span class="st">'reason_coding'</span><span class="op">,</span> <span class="st">'how_did_you_learn_code'</span><span class="op">,</span><span class="st">'first_line_code'</span><span class="op">,</span> <span class="st">'first_line_code_c'</span><span class="op">,</span> <span class="st">'years_coding'</span><span class="op">,</span>  <span class="st">'freq_coding_proj'</span><span class="op">,</span> <span class="st">'freq_coding_proj_c'</span><span class="op">,</span> <span class="st">'freq_oss_proj'</span><span class="op">,</span> <span class="st">'what_os'</span><span class="op">,</span> <span class="st">'position_industry'</span><span class="op">,</span> <span class="st">'use_lang'</span>])))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<div class="cell">
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; "><table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"> Question </th>
+   <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"> Label </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> What is your academic status? </td>
+   <td style="text-align:left;"> academia_status </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you agree to the above terms? </td>
+   <td style="text-align:left;"> agree_term </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Q_RecaptchaScore </td>
+   <td style="text-align:left;"> captcha_score </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When using other people's code, how do you cite their library/repository? </td>
+   <td style="text-align:left;"> cite_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When using other people's data, do you cite their library/repository? How? </td>
+   <td style="text-align:left;"> cite_data </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How likely you think that not knowing how to program will have an impact on future professional opportunities? </td>
+   <td style="text-align:left;"> coding_on_future_opportunities </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> If you have any suggestions/comments about the survey, please share them below! </td>
+   <td style="text-align:left;"> comments </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Now, thinking about the expectations in your field: would you say that the expected level of programming skills in your field is an important factor in your choice to pursue an academic career? </td>
+   <td style="text-align:left;"> comp_skills_factors_pursue_academia </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important do you think your programming skills were for your career? </td>
+   <td style="text-align:left;"> comp_skills_pro_benefits_p </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you think programming will bring you professional benefits in the future? </td>
+   <td style="text-align:left;"> comp_skills_pro_benefits_s </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important do you think your programming skills are to prospective group members? </td>
+   <td style="text-align:left;"> comp_skills_recruiting </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important programming skills are when hiring new group members? - Graduate students </td>
+   <td style="text-align:left;"> comp_skills_recruiting_grad </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important programming skills are when hiring new group members? - Postdoctoral researchers </td>
+   <td style="text-align:left;"> comp_skills_recruiting_postdoc </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important programming skills are when hiring new group members? - Undergraduate students </td>
+   <td style="text-align:left;"> comp_skills_recruiting_undergrad </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> List of Countries </td>
+   <td style="text-align:left;"> country_origin </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is your department? Please select all that apply. </td>
+   <td style="text-align:left;"> dept_prof </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is your program? </td>
+   <td style="text-align:left;"> dept_students </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you feel disadvantaged for not knowing how to code? </td>
+   <td style="text-align:left;"> disadv_not_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Distribution Channel </td>
+   <td style="text-align:left;"> distribution_channel </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> If you wish to delete your survey entry write "delete" below </td>
+   <td style="text-align:left;"> do_del </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you share your code online? </td>
+   <td style="text-align:left;"> do_share_code_online </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Duration (in seconds) </td>
+   <td style="text-align:left;"> duration_sec </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is your institutional email address? </td>
+   <td style="text-align:left;"> email </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> End Date </td>
+   <td style="text-align:left;"> end_survey </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you think you have enough institutional support (workshops, mentorships, online labs) to learn to program? </td>
+   <td style="text-align:left;"> enough_instit_support </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Which categories best describe you? </td>
+   <td style="text-align:left;"> ethnicity </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> At what age did you write your first line of code or program? (e.g., webpage, Hello World, Scratch project) </td>
+   <td style="text-align:left;"> first_line_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When you are working on projects (for school, work, fun)  how often  do you code? </td>
+   <td style="text-align:left;"> freq_coding_proj </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How much of the software that you use is open source? (please provide your best guess) </td>
+   <td style="text-align:left;"> freq_oss_proj </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you feel you have friends, colleagues, or supervisors who can help with your coding issues? </td>
+   <td style="text-align:left;"> friends_help </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How did you first learn to code? </td>
+   <td style="text-align:left;"> how_did_you_learn_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Finished </td>
+   <td style="text-align:left;"> is_finished </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Overall, would you like to have more time to improve your programming skills? </td>
+   <td style="text-align:left;"> more_time_learning_to_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is the name of your research group? </td>
+   <td style="text-align:left;"> name_research_group </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How many advisors do you have? </td>
+   <td style="text-align:left;"> nb_advisors </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What percentage of your social contacts are likely to participate in a project that require programming in the upcoming academic year. Social contacts are classmates and other peers that you have communicated with at least briefly within the last month, either face-to-face, or otherwise. - Click to write Choice 1 </td>
+   <td style="text-align:left;"> pct_social_contacts_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What benefits do you see in programming? </td>
+   <td style="text-align:left;"> perceived_benefits_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Which of the following describes industry positions you have held or currently hold? </td>
+   <td style="text-align:left;"> position_industry </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is your preferred pronouns? </td>
+   <td style="text-align:left;"> pref_pronouns </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Progress </td>
+   <td style="text-align:left;"> progress </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What qualities do you most value in software ? </td>
+   <td style="text-align:left;"> qualities_oss </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How often do you read programming books, either to improve your long-term coding skills or out of interest? </td>
+   <td style="text-align:left;"> read_prog_book </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you code for any of the following reasons? </td>
+   <td style="text-align:left;"> reason_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Recorded Date </td>
+   <td style="text-align:left;"> record_date </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Response ID </td>
+   <td style="text-align:left;"> response_id </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Response Type </td>
+   <td style="text-align:left;"> response_type </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Score </td>
+   <td style="text-align:left;"> score </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> For any of your current projects, do you consider that you spent too much time to code? (e.g. data cleaning, data visualization, gathering data, and so on)? </td>
+   <td style="text-align:left;"> self_expect_time_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you consider yourself to be a coder/programmer? </td>
+   <td style="text-align:left;"> self_id_as_coder </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Start Date </td>
+   <td style="text-align:left;"> start_survey </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Cleaning code (debugging, refactoring, renaming variables, etc.) </td>
+   <td style="text-align:left;"> time_cleaning_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Data cleaning (manually, e.g. using excel) </td>
+   <td style="text-align:left;"> time_data_clean_gui </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Data cleaning (programmatically) </td>
+   <td style="text-align:left;"> time_data_clean_prog </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Digital data collection (e.g. web scraping) </td>
+   <td style="text-align:left;"> time_digital_data_coll </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Experimental manipulation </td>
+   <td style="text-align:left;"> time_exp_manip </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Field data collection (e.g. interviews, surveys, questionnaires, observations, ethnographies, etc) </td>
+   <td style="text-align:left;"> time_field_data_coll </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Grant writing </td>
+   <td style="text-align:left;"> time_grant_writing </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Literature review </td>
+   <td style="text-align:left;"> time_lit_review </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Meetings </td>
+   <td style="text-align:left;"> time_meeting </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Writing thesis/paper </td>
+   <td style="text-align:left;"> time_paper_writing </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Coursework aside, how many hours you typically spend on the following tasks in a given week? (please provide your best guess) - Reading software-related content (blogs, books, forums, documentation) </td>
+   <td style="text-align:left;"> time_read_doc </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Do you consider yourself a member of an underrepresented group? </td>
+   <td style="text-align:left;"> underrep_group </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 50 States, D.C. and Puerto Rico </td>
+   <td style="text-align:left;"> us_state </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Which programming languages, scripting, and markup languages have you worked in over the past year? </td>
+   <td style="text-align:left;"> use_lang </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> User Language </td>
+   <td style="text-align:left;"> user_lang </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important do you think the following items are in academia? - Code associated with an article is easy to find online </td>
+   <td style="text-align:left;"> value_accessibility_paper_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - Active development </td>
+   <td style="text-align:left;"> value_active </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - A contributor's license agreement (CLA) </td>
+   <td style="text-align:left;"> value_cla </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - A code of conduct </td>
+   <td style="text-align:left;"> value_coc </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Compared to your domain expertise, how valued do you think your coding skills are around you today? </td>
+   <td style="text-align:left;"> value_comp_skills_wrt_domain </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - A contributing guide </td>
+   <td style="text-align:left;"> value_contrib_guide </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Overall, how important do you think it is to learn programming in your academic field today? </td>
+   <td style="text-align:left;"> value_learn_code_in_field </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - An open source license </td>
+   <td style="text-align:left;"> value_oss_license </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important do you think the following items are in academia? - Code associated with an article is citable. </td>
+   <td style="text-align:left;"> value_paper_code_citability </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - Responsive maintainers </td>
+   <td style="text-align:left;"> value_responsive_maintainers </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How important do you think the following items are in academia? - Sharing code associated with an academic paper </td>
+   <td style="text-align:left;"> value_share_code </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - A welcoming community </td>
+   <td style="text-align:left;"> value_welcoming_community </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> When thinking about whether to use open source software, how important are the following: - Widespread use </td>
+   <td style="text-align:left;"> value_widespread_use </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> What is the primary operating system in which you work? </td>
+   <td style="text-align:left;"> what_os </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> If you want to learn to program, what's stopping you? </td>
+   <td style="text-align:left;"> why_not_coding </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> In what year were you born? </td>
+   <td style="text-align:left;"> year_born </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> How many years have you been coding? </td>
+   <td style="text-align:left;"> years_coding </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="costs-benefits" class="level2">
+<h2 class="anchored" data-anchor-id="costs-benefits">Costs &amp; benefits</h2>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb16" data-startfrom="328" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 327;"><span id="cb16-328"><a href="#cb16-328" aria-hidden="true" tabindex="-1"></a>viewof sel_dept_cb <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>([<span class="st">''</span>]<span class="op">.</span><span class="fu">concat</span>(</span>
+<span id="cb16-329"><a href="#cb16-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>(</span>
+<span id="cb16-330"><a href="#cb16-330" aria-hidden="true" tabindex="-1"></a>    pdata<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>] <span class="op">!==</span> <span class="kw">null</span>)<span class="op">,</span></span>
+<span id="cb16-331"><a href="#cb16-331" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(<span class="st">'dept_students_lab'</span>)</span>
+<span id="cb16-332"><a href="#cb16-332" aria-hidden="true" tabindex="-1"></a>  )<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d[<span class="st">"dept_students_lab"</span>]))<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Choose dept"</span>})</span>
+<span id="cb16-333"><a href="#cb16-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-334"><a href="#cb16-334" aria-hidden="true" tabindex="-1"></a>viewof by_attr_cb <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"pref_pronouns"</span><span class="op">,</span> <span class="st">"year_born"</span><span class="op">,</span> <span class="st">"ethnicity_binary"</span><span class="op">,</span> <span class="st">"dept_students_binary"</span><span class="op">,</span> <span class="st">"academia_status"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"attributes"</span>})</span>
+<span id="cb16-335"><a href="#cb16-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-336"><a href="#cb16-336" aria-hidden="true" tabindex="-1"></a>viewof do_pct_2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Show %"</span>}) </span>
+<span id="cb16-337"><a href="#cb16-337" aria-hidden="true" tabindex="-1"></a>viewof rm_nulls_2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Remove nulls"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="kw">true</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Costs</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Benefits</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">OSS</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">Data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Smaller values are more negative attitude.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb17" data-startfrom="347" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 346;"><span id="cb17-347"><a href="#cb17-347" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"enough_instit_support_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">true</span><span class="op">,</span> </span>
+<span id="cb17-348"><a href="#cb17-348" aria-hidden="true" tabindex="-1"></a><span class="st">"Institutional support"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-14-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb18" data-startfrom="349" data-source-offset="-103"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 348;"><span id="cb18-349"><a href="#cb18-349" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"more_time_learning_to_code_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"More time learning to code"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-14-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb19" data-startfrom="350" data-source-offset="-216"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 349;"><span id="cb19-350"><a href="#cb19-350" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"self_expect_time_coding_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"Self expectation time coding"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-14-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Depending on other variables, the answers to these questions can be interepreted both as relative costs or benefits, e.g.&nbsp;thinking that expected level of programming skills is important in your field is a cost when you are not skilled yet.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb20" data-startfrom="360" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 359;"><span id="cb20-360"><a href="#cb20-360" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_learn_code_in_field_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="st">"Coding on future opportunities"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-15-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb21" data-startfrom="361" data-source-offset="-115"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 360;"><span id="cb21-361"><a href="#cb21-361" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_comp_skills_wrt_domain_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"Value comp skills wrt domain"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-15-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb22" data-startfrom="365" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 364;"><span id="cb22-365"><a href="#cb22-365" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_social_contacts</span>(dat<span class="op">,</span> by_attr) {</span>
+<span id="cb22-366"><a href="#cb22-366" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb22-367"><a href="#cb22-367" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb22-368"><a href="#cb22-368" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> {</span>
+<span id="cb22-369"><a href="#cb22-369" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> <span class="st">"Social contact coding (%)  →"</span><span class="op">,</span></span>
+<span id="cb22-370"><a href="#cb22-370" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb22-371"><a href="#cb22-371" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { </span>
+<span id="cb22-372"><a href="#cb22-372" aria-hidden="true" tabindex="-1"></a>      <span class="dt">label</span><span class="op">:</span> do_pct_2 <span class="op">?</span> <span class="st">" Frequency (%) ↑"</span> <span class="op">:</span> <span class="st">"# respondents ↑"</span><span class="op">,</span> </span>
+<span id="cb22-373"><a href="#cb22-373" aria-hidden="true" tabindex="-1"></a>      <span class="dt">percent</span><span class="op">:</span> do_pct_2 <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb22-374"><a href="#cb22-374" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb22-375"><a href="#cb22-375" aria-hidden="true" tabindex="-1"></a>    <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb22-376"><a href="#cb22-376" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">barY</span>(</span>
+<span id="cb22-377"><a href="#cb22-377" aria-hidden="true" tabindex="-1"></a>        rm_nulls <span class="op">?</span> dat<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d[<span class="st">"pct_social_contacts_coding"</span>] <span class="op">!==</span> <span class="kw">null</span>) <span class="op">:</span> dat<span class="op">,</span> </span>
+<span id="cb22-378"><a href="#cb22-378" aria-hidden="true" tabindex="-1"></a>        Plot<span class="op">.</span><span class="fu">groupX</span>({ <span class="dt">y</span><span class="op">:</span> do_pct_2 <span class="op">?</span> <span class="st">"proportion"</span> <span class="op">:</span> <span class="st">"count"</span> }<span class="op">,</span> { </span>
+<span id="cb22-379"><a href="#cb22-379" aria-hidden="true" tabindex="-1"></a>            <span class="dt">x</span><span class="op">:</span> <span class="st">"pct_social_contacts_coding"</span><span class="op">,</span>  <span class="dt">fill</span><span class="op">:</span> d <span class="kw">=&gt;</span> by_attr <span class="op">?</span> d[by_attr] <span class="op">:</span> <span class="st">"grey"</span></span>
+<span id="cb22-380"><a href="#cb22-380" aria-hidden="true" tabindex="-1"></a>          })</span>
+<span id="cb22-381"><a href="#cb22-381" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb22-382"><a href="#cb22-382" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
+<span id="cb22-383"><a href="#cb22-383" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb22-384"><a href="#cb22-384" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb22-385"><a href="#cb22-385" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-386"><a href="#cb22-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-387"><a href="#cb22-387" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_social_contacts</span>(coders<span class="op">,</span> by_attr_cb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb23" data-startfrom="393" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 392;"><span id="cb23-393"><a href="#cb23-393" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"do_share_code_online"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">true</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb24" data-startfrom="394" data-source-offset="-76"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 393;"><span id="cb24-394"><a href="#cb24-394" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_comp_skills_wrt_domain"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb25" data-startfrom="395" data-source-offset="-161"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 394;"><span id="cb25-395"><a href="#cb25-395" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_accessibility_paper_code"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb26" data-startfrom="396" data-source-offset="-248"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 395;"><span id="cb26-396"><a href="#cb26-396" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_paper_code_citability"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb27" data-startfrom="397" data-source-offset="-332"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 396;"><span id="cb27-397"><a href="#cb27-397" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_share_code"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">""</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb28" data-startfrom="398" data-source-offset="-405"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 397;"><span id="cb28-398"><a href="#cb28-398" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_attr_v</span>(coders<span class="op">,</span> <span class="st">"value_welcoming_community_ord"</span><span class="op">,</span> by_attr_cb<span class="op">,</span> <span class="kw">false</span><span class="op">,</span> <span class="st">"Welcoming community"</span><span class="op">,</span> do_pct_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb29" data-startfrom="404" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 403;"><span id="cb29-404"><a href="#cb29-404" aria-hidden="true" tabindex="-1"></a>cost_cols <span class="op">=</span> [<span class="st">'pct_social_contacts_coding'</span><span class="op">,</span> <span class="st">'comp_skills_factors_pursue_academia'</span><span class="op">,</span></span>
+<span id="cb29-405"><a href="#cb29-405" aria-hidden="true" tabindex="-1"></a><span class="st">'comp_skills_pro_benefits_s'</span><span class="op">,</span> <span class="st">'enough_instit_support'</span><span class="op">,</span></span>
+<span id="cb29-406"><a href="#cb29-406" aria-hidden="true" tabindex="-1"></a><span class="st">'friends_help'</span><span class="op">,</span> <span class="st">'perceived_benefits_coding'</span><span class="op">,</span> <span class="st">'first_adv_expect_time_coding'</span><span class="op">,</span></span>
+<span id="cb29-407"><a href="#cb29-407" aria-hidden="true" tabindex="-1"></a><span class="st">'second_adv_expect_time_coding'</span><span class="op">,</span> <span class="st">'reason_coding'</span><span class="op">,</span>  <span class="st">'value_comp_skills_wrt_domain'</span><span class="op">,</span> <span class="st">'do_share_code_online'</span><span class="op">,</span> <span class="st">"value_learn_code_in_field"</span>]</span>
+<span id="cb29-408"><a href="#cb29-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-409"><a href="#cb29-409" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(<span class="fu">tidy</span>(coders<span class="op">,</span> <span class="fu">select</span>(cost_cols)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-18-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-18-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ## Students typical week 
+
+:::{.column-page}
+
+
+
+
+<div class="cell">
+
+```{.js .cell-code .hidden startFrom="420" source-offset="-0"}
+agg_dat = tidy(
+  coders, 
+  select([startsWith('time')]), 
+  pivotLonger({
+    cols: [startsWith('time')],
+    namesTo: 'task',
+    valuesTo: 'val'
+  }),
+  count(['task', 'val']
+))
+
+
+Plot.plot({
+  width: 1000,
+  marginBottom: 100,
+  grid: true,
+  x: {
+    tickRotate: 45,
+    label: "",
+    domain: ['0 hour', '1-5 hours', '6-10 hours', '11-15 hours', null]
+  },
+  facet: {
+    data: agg_dat,
+    x: d => d.task.replace('time_', '')
+  },
+  marks: [
+    Plot.barY(
+      agg_dat,
+      {x: "val", y: "n", fill: d => d.val === null ? 'grey' : 'task'}
+    ),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+<div class="cell-output cell-output-display">
+
+<div >
+
+<div id="ojs-cell-19-1" data-nodetype="declaration">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="cell-output cell-output-display">
+
+<div >
+
+<div id="ojs-cell-19-2" data-nodetype="expression">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+::: -->
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb30" data-startfrom="458" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 457;"><span id="cb30-458"><a href="#cb30-458" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { tidy<span class="op">,</span> select<span class="op">,</span> count<span class="op">,</span> complete<span class="op">,</span> filter<span class="op">,</span> fullSeq<span class="op">,</span> sum<span class="op">,</span> mutateWithSummary<span class="op">,</span> </span>
+<span id="cb30-459"><a href="#cb30-459" aria-hidden="true" tabindex="-1"></a>         groupBy<span class="op">,</span> pivotWider<span class="op">,</span> startsWith<span class="op">,</span> pivotLonger<span class="op">,</span> mutate<span class="op">,</span> distinct<span class="op">,</span> summarize } <span class="im">from</span> <span class="st">'@pbeshai/tidyjs'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-20" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+{"contents":[
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${pdata.length}</span>`", "cellName":"ojs-element-id-1"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${coder_count[0]}</span>`", "cellName":"ojs-element-id-2"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${coder_count[1]}</span>`", "cellName":"ojs-element-id-3"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${tidy(pdata.filter(d => d[\"dept_students_lab\"] !== “\"), count(\"dept_students_lab”)).length}</span>`", "cellName":"ojs-element-id-4"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${form.extra_filter[0] === undefined ? \"None\": form.extra_filter.join(\",\")}</span>`", "cellName":"ojs-element-id-5"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${d3.sum(crosstab_dat_long, d=> d.n)}</span>`", "cellName":"ojs-element-id-6"}
+]}
+</script>
+</section>
+
+</main> <!-- /main -->
+
+<script type="ojs-module-contents">
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"pdata = FileAttachment(\"data_clean.csv\").csv({ typed: true })\n\n// useful vars\ncolnames = d3.sort(Object.keys(pdata[0]))\ncoders = pdata.filter(d => d.is_coder === 'coder')\ncoder_count = tidy(pdata, count(\"is_coder\")).map(d => d.n)\n\n// global filtering\nfiltered_dat = sel_dept == \"\" ? pdata : pdata.filter(d => d[\"dept_students_lab\"] === sel_dept)\nfiltered_coders = sel_dept == \"\" ? coders : coders.filter(d => d[\"dept_students_lab\"] === sel_dept)\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"viewof sel_dept = Inputs.select([''].concat(\n  tidy(\n    pdata.filter(d => d[\"dept_students_lab\"] !== null),\n    distinct('dept_students_lab')\n  ).map(d => d[\"dept_students_lab\"])), {label: \"Choose dept\"})\n\nviewof do_pct = Inputs.toggle({label: \"Show %\"}) \nviewof rm_nulls = Inputs.toggle({label: \"Remove nulls\", value: true}) \n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"col_dems = [\"is_coder\", \"pref_pronouns\", \"year_born\", \"ethnicity_binary\", \n            \"dept_students_binary\", \"academia_status\"]\n\nviewof by_attr = Inputs.radio(col_dems, {label: \"attributes\"})\n\nfunction plot_attr_v(dat, val_col, by_attr, col_legend, ylab, do_pct) {\n    return Plot.plot({\n      marginLeft: ylab === \"\" ? 175 : 90,\n      grid: true,\n      color: col_legend === true ? { legend: by_attr ? true : false } : null,\n      y: { label: ylab },\n      x: { \n        label: do_pct ? \" Frequency (%) →\" : \"# respondents →\", \n        percent: do_pct ? true : false\n      },\n      marks: [\n      Plot.barX(\n          rm_nulls ? dat.filter(d => d[val_col] !== null && d[by_attr] !== null) : dat,\n          Plot.groupY({ x: do_pct ? \"proportion\" : \"count\" }, { \n              y: val_col,  fill: d => by_attr ? d[by_attr] : \"grey\"\n          })\n        ),\n      ]\n  })\n}\n\nplot_attr_v(filtered_dat, \"pref_pronouns\", by_attr, true, \"\", do_pct)\nplot_attr_v(filtered_dat, \"academia_status\", by_attr, false, \"\", do_pct)\nplot_attr_v(filtered_dat, \"dept_students_lab\", by_attr, false, \"\", do_pct)\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"function plot_yr_born(dat, by_attr) {\n  const parseTime = d3.timeParse(\"%Y\");\n  const formatTime = d3.timeFormat(\"%Y\")\n  \n  return Plot.plot({\n    grid: true,\n    x: {\n      label: \"\", \n      tickRotate: 45,\n      tickFormat: d => formatTime(parseTime(d))\n      },\n    y: { \n      label: do_pct ? \" Frequency (%) ↑\" : \"# respondents ↑\", \n      percent: do_pct ? true : false\n      },\n    marks: [\n      Plot.rectY(\n        rm_nulls ? dat.filter(d => d[\"year_born\"] !== null) : dat,\n        Plot.binX({ y: do_pct ? \"proportion\" : \"count\" }, { \n          x: \"year_born\", r: 3, fill: d => by_attr ? d[by_attr] : \"grey\", \n          thresholds: 30, order: by_attr \n        })\n      ),\n      Plot.ruleY([0])\n    ]\n  })\n}\n\nplot_yr_born(filtered_dat, by_attr)\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"function plot_duration(dat, by_attr) {\n  return Plot.plot({\n    grid: true,\n    fy: {\n      label: \"\", \n    },\n    facet: { \n      data: rm_nulls ? dat.filter(d => d[\"duration_sec\"] !== null) : dat, \n      y: d => by_attr ? d[by_attr] : null,\n      marginRight: 130,\n      marginTop: 50,\n    },\n    x: { \n      transform: d => d / 60, \n      label: \"time(min)  →\",\n      domain: [0,d3.max(filtered_dat, d => (d[\"duration_sec\"] / 60) + 2)]\n    },\n    y: { \n      label: do_pct ? \" Frequency (%) ↑\" : \"# respondents ↑\", \n      percent: do_pct ? true : false\n    },\n    marks: [\n      Plot.rectY(\n        rm_nulls ? dat.filter(d => d[\"duration_sec\"] !== null && d[by_attr] !== null) : dat, \n        Plot.binX({ y: do_pct ? \"proportion\" : \"count\" }, {\n          x: \"duration_sec\", fill: d => by_attr ? d[by_attr] : \"grey\", thresholds: 20\n          })\n      ),\n      Plot.ruleY([0])\n    ]\n  })\n}\n\nplot_duration(filtered_dat, by_attr)\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"viewof by_attr2 = Inputs.radio([\"pref_pronouns\", \"year_born\", \"ethnicity_binary\", \"dept_students_binary\", \"academia_status\"], {label: \"attributes\"})\n\nfunction plot_attr_h(dat, val_col, by_attr, col_legend) {\n  return Plot.plot({\n    marginLeft: 100,\n    marginBottom: 50,\n    height: 250,\n    grid: true,\n    color: col_legend === true ? { legend: by_attr ? true : false } : null,\n    y: {\n      label: do_pct ? \" Frequency (%) ↑\" : \"# respondents ↑\", \n      percent: do_pct ? true : false\n      },\n    x: {\n      tickRotate: 10,\n      label: \"← more novices • more experience →\",\n      domain: d3.sort(dat, d => d[`${val_col}_c`]).map(d => d[val_col])\n    },\n    marks: [\n      Plot.barY(\n        rm_nulls ? dat.filter(d => d[val_col] !== null) : dat, \n        Plot.groupX({ y: do_pct ? \"proportion\" : \"count\" }, { \n            x: val_col,  fill: d => by_attr ? d[by_attr] : \"grey\"\n          })\n      )\n    ]\n  })\n}\n\nplot_attr_v(filtered_coders, \"self_id_as_coder\", by_attr2, true, \"Self id as coder\", do_pct)\nplot_attr_v(filtered_coders, \"what_os\", by_attr2, false, \"What OS\", do_pct)\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"plot_attr_h(filtered_coders, \"first_line_code\", by_attr2, false, \"first line\")\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"plot_attr_h(filtered_coders, \"years_coding\", by_attr2, false, \"years coding\")\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"viewof form = Inputs.form({\n  extra_filter: Inputs.checkbox(['coder', 'female', 'stem', 'Non-stem'], {label: 'Only'}), \n  dep_var: Inputs.select(colnames, {value: 'self_id_as_coder', label: 'Dep var (DV)'}),\n  indep_var: Inputs.select(colnames, {value: 'gender_binary', label: 'Indep var (IV)'}), \n  do_pct_crosstab: Inputs.radio(['DV (→)', 'IV (↓)'], {label: \"Show %\", value: 'IV (↓)'})\n})\n\nfunction crosstab_filter(x) {\n    switch (x) {\n      case \"\":         return pdata; \n      case 'coder':    return pdata.filter(d => d.is_coder === 'coder'); \n      case 'female':   return pdata.filter(d => d.gender_binary === 'female'); \n      case 'stem':     return pdata.filter(d => d.dept_students_binary === 'STEM'); \n      case 'Non-stem': return pdata.filter(d => d.dept_students_binary === 'Non-STEM'); \n      case 'coder,female': \n        return pdata.filter(d => d.is_coder === 'coder' && d.gender_binary === 'female');\n      \n      case 'coder,stem': \n        return pdata.filter(d => d.is_coder === 'coder' && d.dept_students_binary === 'STEM');\n      \n      case 'female,stem': \n        return pdata.filter(d => d.gender_binary === 'female' && d.dept_students_binary === 'STEM');\n      \n      case 'female,Non-stem': \n        return pdata.filter(d => d.gender_binary === 'female' && d.dept_students_binary === 'Non-STEM');\n      \n      case 'coder,Non-stem': \n        return pdata.filter(d => d.is_coder === 'coder' && d.dept_students_binary === 'Non-STEM');\n      default:\n        return pdata.filter(d => d.is_coder === \"\")\n}}\n\ncrosstab_dat_filter1 = crosstab_filter(form.extra_filter.join(\",\"))\n\ncrosstab_dat_filter2 = {\n    if (rm_nulls) {\n      return crosstab_dat_filter1.filter(d => d[form.dep_var] !== null && d[form.indep_var] !== null) \n  } else {\n      return crosstab_dat_filter1\n  }\n}\n\ncrosstab_dat_long = tidy(\n    crosstab_dat_filter2, \n    select([form.indep_var, form.dep_var]),\n    count([form.indep_var, form.dep_var])\n)\n"},{"methodName":"interpret","cellName":"ojs-cell-10","inline":false,"source":"crosstab_dat_w_pct = tidy(\n  crosstab_dat_long,\n  groupBy(form.do_pct_crosstab == 'DV (→)' ? form.dep_var : form.indep_var, [\n    mutateWithSummary({total: sum('n')})\n  ]),\n  mutate({ pct: d => (d.n / d.total)*100 }),\n  select(['-n', '-total'])\n)\n\nInputs.table(\n  tidy(\n    crosstab_dat_w_pct,\n      pivotWider({\n        namesFrom: form.indep_var,\n        valuesFrom: 'pct'\n      })\n))\n"},{"methodName":"interpret","cellName":"ojs-cell-11","inline":false,"source":"Inputs.table(tidy(\n  crosstab_dat_long, \n  pivotWider({\n        namesFrom: form.indep_var,\n        valuesFrom: 'n'\n      }))\n)\n"},{"methodName":"interpret","cellName":"ojs-cell-12","inline":false,"source":"Inputs.table(tidy(pdata, select(['academia_status', 'nb_advisors', 'dept_students_lab', \"pref_pronouns\", \"year_born\", \"ethnicity_binary\", 'country_origin', 'us_state', 'reason_coding', 'how_did_you_learn_code','first_line_code', 'first_line_code_c', 'years_coding',  'freq_coding_proj', 'freq_coding_proj_c', 'freq_oss_proj', 'what_os', 'position_industry', 'use_lang'])))\n"},{"methodName":"interpret","cellName":"ojs-cell-13","inline":false,"source":"viewof sel_dept_cb = Inputs.select([''].concat(\n  tidy(\n    pdata.filter(d => d[\"dept_students_lab\"] !== null),\n    distinct('dept_students_lab')\n  ).map(d => d[\"dept_students_lab\"])), {label: \"Choose dept\"})\n\nviewof by_attr_cb = Inputs.radio([\"pref_pronouns\", \"year_born\", \"ethnicity_binary\", \"dept_students_binary\", \"academia_status\"], {label: \"attributes\"})\n\nviewof do_pct_2 = Inputs.toggle({label: \"Show %\"}) \nviewof rm_nulls_2 = Inputs.toggle({label: \"Remove nulls\", value: true}) \n"},{"methodName":"interpret","cellName":"ojs-cell-14","inline":false,"source":"plot_attr_v(coders, \"enough_instit_support_ord\", by_attr_cb, true, \n\"Institutional support\", do_pct_2)\nplot_attr_v(coders, \"more_time_learning_to_code_ord\", by_attr_cb, false, \"More time learning to code\", do_pct_2)\nplot_attr_v(coders, \"self_expect_time_coding_ord\", by_attr_cb, false, \"Self expectation time coding\", do_pct_2)\n"},{"methodName":"interpret","cellName":"ojs-cell-15","inline":false,"source":"plot_attr_v(coders, \"value_learn_code_in_field_ord\", by_attr_cb, true, \"Coding on future opportunities\", do_pct_2)\nplot_attr_v(coders, \"value_comp_skills_wrt_domain_ord\", by_attr_cb, false, \"Value comp skills wrt domain\", do_pct_2)\n"},{"methodName":"interpret","cellName":"ojs-cell-16","inline":false,"source":"function plot_social_contacts(dat, by_attr) {\n  return Plot.plot({\n    grid: true,\n    x: {\n      label: \"Social contact coding (%)  →\",\n    },\n    y: { \n      label: do_pct_2 ? \" Frequency (%) ↑\" : \"# respondents ↑\", \n      percent: do_pct_2 ? true : false\n    },\n    marks: [\n      Plot.barY(\n        rm_nulls ? dat.filter(d => d[\"pct_social_contacts_coding\"] !== null) : dat, \n        Plot.groupX({ y: do_pct_2 ? \"proportion\" : \"count\" }, { \n            x: \"pct_social_contacts_coding\",  fill: d => by_attr ? d[by_attr] : \"grey\"\n          })\n      ),\n      Plot.ruleY([0])\n    ]\n  })\n}\n\nplot_social_contacts(coders, by_attr_cb)\n"},{"methodName":"interpret","cellName":"ojs-cell-17","inline":false,"source":"plot_attr_v(coders, \"do_share_code_online\", by_attr_cb, true, \"\", do_pct_2)\nplot_attr_v(coders, \"value_comp_skills_wrt_domain\", by_attr_cb, false, \"\", do_pct_2)\nplot_attr_v(coders, \"value_accessibility_paper_code\", by_attr_cb, false, \"\", do_pct_2)\nplot_attr_v(coders, \"value_paper_code_citability\", by_attr_cb, false, \"\", do_pct_2)\nplot_attr_v(coders, \"value_share_code\", by_attr_cb, false, \"\", do_pct_2)\nplot_attr_v(coders, \"value_welcoming_community_ord\", by_attr_cb, false, \"Welcoming community\", do_pct_2)\n"},{"methodName":"interpret","cellName":"ojs-cell-18","inline":false,"source":"cost_cols = ['pct_social_contacts_coding', 'comp_skills_factors_pursue_academia',\n'comp_skills_pro_benefits_s', 'enough_instit_support',\n'friends_help', 'perceived_benefits_coding', 'first_adv_expect_time_coding',\n'second_adv_expect_time_coding', 'reason_coding',  'value_comp_skills_wrt_domain', 'do_share_code_online', \"value_learn_code_in_field\"]\n\nInputs.table(tidy(coders, select(cost_cols)))\n"},{"methodName":"interpret","cellName":"ojs-cell-19","inline":false,"source":"agg_dat = tidy(\n  coders, \n  select([startsWith('time')]), \n  pivotLonger({\n    cols: [startsWith('time')],\n    namesTo: 'task',\n    valuesTo: 'val'\n  }),\n  count(['task', 'val']\n))\n\n\nPlot.plot({\n  width: 1000,\n  marginBottom: 100,\n  grid: true,\n  x: {\n    tickRotate: 45,\n    label: \"\",\n    domain: ['0 hour', '1-5 hours', '6-10 hours', '11-15 hours', null]\n  },\n  facet: {\n    data: agg_dat,\n    x: d => d.task.replace('time_', '')\n  },\n  marks: [\n    Plot.barY(\n      agg_dat,\n      {x: \"val\", y: \"n\", fill: d => d.val === null ? 'grey' : 'task'}\n    ),\n    Plot.ruleY([0])\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-20","inline":false,"source":"import { tidy, select, count, complete, filter, fullSeq, sum, mutateWithSummary, \n         groupBy, pivotWider, startsWith, pivotLonger, mutate, distinct, summarize } from '@pbeshai/tidyjs'\n"},{"methodName":"interpretQuiet","source":"shinyInput('sel_dept')"},{"methodName":"interpretQuiet","source":"shinyInput('do_pct')"},{"methodName":"interpretQuiet","source":"shinyInput('rm_nulls')"},{"methodName":"interpretQuiet","source":"shinyInput('by_attr')"},{"methodName":"interpretQuiet","source":"shinyInput('by_attr2')"},{"methodName":"interpretQuiet","source":"shinyInput('form')"},{"methodName":"interpretQuiet","source":"shinyInput('sel_dept_cb')"},{"methodName":"interpretQuiet","source":"shinyInput('by_attr_cb')"},{"methodName":"interpretQuiet","source":"shinyInput('do_pct_2')"},{"methodName":"interpretQuiet","source":"shinyInput('rm_nulls_2')"}]}
+</script>
+<script type="module">
+window._ojs.paths.runtimeToDoc = "../../posts/survey-programming";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
