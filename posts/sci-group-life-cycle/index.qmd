@@ -1,13 +1,15 @@
 ---
 title: "Scientific group life cycle"
-description: This model describes...
+description: This model describes the dilemma of learning to code in research groups when the cost of learning it depends on their surroundings.  
 format:
   html:
     echo: false
 editor: visual
 ---
 
+
 ## Algebraic model
+
 
 ::: {.callout-note collapse="true"}
 ## Model Sketch
@@ -16,18 +18,36 @@ editor: visual
 
 :::
 
-The key ingredients of the model are our resaerch groups $G$ with a number of non-programmers $n$ and programmers $p$. In a data-driven world, we assume that learning to code confer a large benfit programmers over non-programmer such that $\alpha << \beta$. There is a constant rate of influx of students who do not know how to learn to code in research group $\mu$. There is a cost of learning to code $c(p,n)$ which depends on the number of programmers and non-programmers in the group.
+There are research groups $G$ with a number of non-programmers $n$ and programmers $p$. In a data-driven world, we assume that learning to code confer a large benefit to programmers over non-programmer such that $\alpha << \beta$. There is a constant rate of influx of students who do not know how to learn to code in research groups $\mu$. There is a cost of learning to code $c(p,n)$, which depend on the number of programmers and non-programmers within group. We assume that programmers and non-programmers have different graduation rates, $\nu_p$ and $\nu_n$, with $\nu_p > \nu_n$. 
 
-Our master equation:
+We model the group life cycle with the following master equation:
 
 \begin{align*}
 \frac{d}{dt}G_{n,p} &= \mu(G_{n-1,p} - G_{n,p}) + \nu_n \Big((n+1)G_{n+1,p}-nG_{n,p}\Big) \\
-                           &+ \Big[ \tau(n+1,p-1)(1-c(p-1,n+1)G_{n+1,p-1} - \tau(n,p)G_{n,p} \Big] \\
-                   &+ \nu_p\Big((p+1)G_{n,p+1} - pG_{n,p} \Big)
+                           &+ \Big[ \tau_g(n+1,p-1)(1-c(n+1, p-1)G_{n+1,p-1} - \tau_g(n,p)G_{n,p} \Big] \\
+                   &+ \nu_p\Big((p+1)G_{n,p+1} - pG_{n,p} \Big) \\
+                   &+ \tau_g(n+1,p)(1-c(n+1,p))G_{n+1,p}
 \end{align*}
 
+Learning to code confers a collective benefits on individuals $\tau_g(n,p; \alpha, \beta) \propto \frac{\bar{Z}_{n,p}}{Z_{n,p}}$, where 
 
-## Cost functions
+$$\log(Z_{n,p}) \sim \alpha * n + \beta * p$$ 
+$$\log(\bar{Z}_{n,p}) \sim \alpha (n-1) +\beta (c * p + (1-c)(p+1))$$
+
+We can think of $\bar{Z}_{n,p}$ as the potential benefits over $Z_{n,p}$. Reorganizing the terms, we get:
+
+\begin{align*}
+\log[\tau_g(n,p; \alpha, \beta))] &= \alpha (n-1) +\beta (c * p + (1-c)(p+1)) - \alpha * n + \beta * p \\
+                                  &= -\alpha + \beta(1-c)
+\end{align*}
+
+Note that $\tau_g$ ends up being a function of $n, p$ through the cost function:
+$$c(n,p) = c_0*e^{-\frac{p}{n}}$$
+
+You can explore both functions below:
+
+::: {.callout-tip collapse="true"}
+#### Cost function
 
 
 ```{ojs}
@@ -37,9 +57,9 @@ Our master equation:
 function cost_prog(n, i, c_0) { return c_0 * Math.exp(-i/n); }
 
 max_gr_size = 20
-viewof N = Inputs.range([0, max_gr_size], {value: 20, step: 1, label: "group Size"})
-viewof coder = Inputs.range([1, max_gr_size], {value: 10, step: 1, label: "# coder"})
-viewof c_0 = Inputs.range([0, 5], {value: 1, step: 0.1, label: "c₀"})
+viewof N = Inputs.range([1, max_gr_size], {value: 20, step: 1, label: "group Size"})
+viewof coder = Inputs.range([0, max_gr_size], {value: 10, step: 1, label: "# coder"})
+viewof c_0 = Inputs.range([0, 1], {value: 0.95, step: 0.01, label: "c₀"})
 viewof nc = Inputs.range([1, max_gr_size], {value: (N-coder), step: 1., label: "# non-coder", disabled:true})
 ```
 
@@ -62,11 +82,15 @@ Plot.lineY(ys).plot({
 
 $p/n$ $\Rightarrow$ ${coder}`/` ${non_coder} = ${(coder/(non_coder)).toFixed(2)} <br><br>
 $c(n,p)$ = ${(cost_prog2(coder, N-coder)).toFixed(2)} (c=1 means that non-coders always fail to learn to code; c=0 means non-coders always succeed)<br><br>
+Non-programmers can still learn to code when $p=0$ because of $c_0$<br><br>
+I woudl expect a bigger difference when we go from no prorammers in the team to one programmer
 
 :::
 
-## Group benefits
+:::
 
+::: {.callout-tip collapse="true"}
+## Group benefits
 
 ```{ojs}
 //| panel: sidebar
@@ -101,13 +125,19 @@ Plot.lineY(tau_ys).plot({
 })
 ```
 
+$p/n$ $\Rightarrow$ ${coder}`/` ${non_coder} = ${(tau_coder/(tau_nc)).toFixed(2)}
+
 :::
 
+:::
+
+
+## Julia model
 
 ::: {.callout-tip collapse="true"}
 ## Initialization scheme
 
-```{julia}
+```julia
 using OrdinaryDiffEq, Plots, Distributions, RecursiveArrayTools
 
 function initialize_u0(;N::Int=20, M::Int=20, p::Float64=0.01)
@@ -138,55 +168,54 @@ function initialize_u0(;N::Int=20, M::Int=20, p::Float64=0.01)
 end
 
 μ  = 0.001   # inflow new students-non coders
-νₙ = 0.01   # death rate non-coders
-νₚ = 0.05   # death rate coders
+νₙ = 0.01    # death rate non-coders
+νₚ = 0.05    # death rate coders
 α  = 0.01    # benefits non coders
 β  = 0.1     # benefits coders
 p  = [μ, νₙ, νₚ, α, β]
 
 n,M = 20, 1000
-u₀, hm = initialize_u0(N=n, M=M, p=0.01) # initialisation - fraction de groupe
-tspan = (0., 100.)
+u₀, hm = initialize_u0(N=n, M=M, p=0.01)
+tspan = (0., 10.)
 
-hm
+hm # show p_n init mat
 ```
 
 
 :::
 
-## Julia model
+```julia
+#| echo: true
 
-```{julia}
 c(n, i) = 1 * exp(-i / n) # cost function
 τ(n, i, α, β) = exp(-α + β*(1 - c(n, i))) # group benefits
 
 function life_cycle_research_groups!(du, u, p, t)
-  G, N, P = u, length(u.x), length(first(u.x))
+  G, N, P = u, length(u.x), length(first(u.x)) # Note that there can be no coders but not non-coders
   μ, νₙ, νₚ, α, β = p
 
   for n=1:N, i=1:P
-    non_coder, coder, gr_size = n-1, i-1, N-1 # we distinguish indices from actual values.
+    coder, non_coder, gr_size = i-1, n, P-1   # we distinguish indices from actual values.
     
-    if n < gr_size
-      du.x[n][i] = τ(non_coder, coder, α, β)*G.x[n][i]*G.x[n][i]
-      du.x[n][i] += νₙ*((non_coder+1) * G.x[n+1][i] - non_coder * G.x[n][i]) 
-      du.x[n][i] += τ(n+1, i, α, β)*(1 - c(non_coder, coder))*G.x[n+1][i] 
-
-      non_coder > 0 && ( du.x[n][i] += μ*(G.x[n-1][i] - G.x[n][i])  )
-      coder > 0 && ( du.x[n][i] += τ(non_coder+1, coder-1, α, β)*(1 - c(non_coder+1, coder-1))*G.x[n+1][i-1])
-      i < coder && ( du.x[n][i] += νₚ*( (coder+1)*G.x[n][i+1] - coder*G[n][i] ) )
-
+    du.x[n][i] = -τ(non_coder, coder, α, β)*G.x[n][i] # 4th term
+    coder < gr_size && ( du.x[n][i] += νₚ*( (coder+1)*G.x[n][i+1] - coder*G.x[n][i] ) )  # 5th term
+    non_coder > 1 && ( du.x[n][i] += μ*(G.x[n-1][i] - G.x[n][i])  )         # 1st term
+    
+    if n < N
+      du.x[n][i] += τ(non_coder+1, coder, α, β)*(1 - c(non_coder+1, coder))*G.x[n+1][i]     # 6th term
+      du.x[n][i] += νₙ*( (non_coder+1)*G.x[n+1][i] - non_coder*G.x[n][i] )      # 2nd term
+      coder > 0 && ( du.x[n][i] += τ(non_coder+1, coder-1, α, β)*(1 - c(non_coder+1, coder-1))*G.x[n+1][i-1] ) # 3rd term 
     end
   end
 end
 ```
 
-```{julia}
+<!-- ```julia
 prob = ODEProblem(life_cycle_research_groups!, u₀, tspan, p)
 sol = solve(prob, Tsit5(), saveat = 1., reltol=1e-8, abstol=1e-8)
 ```
 
-```{julia}
+```julia
 N = length(sol[1].x)
 i = length(sol[1].x[1])
 I = zeros(N, length(sol.t))
@@ -199,10 +228,10 @@ for t in 1:length(sol.t)
 end
 ```
 
-```{julia}
+```julia
 new_run = []
 for n in 1:N
-  tmp_dat = [Dict("N" => n, "value" => I[n, i], "timesteps" => i) for i in 1:3000]
+  tmp_dat = [Dict("N" => n, "value" => I[n, i], "timesteps" => i) for i in 1:tspan[2]]
   x = round.([i["value"] for i in tmp_dat], digits=5) # To lighten the output file we only keep unique `y` values.
   idx = unique(z -> x[z], 1:length(x))
   push!(new_run, tmp_dat[idx] )
@@ -218,12 +247,13 @@ end
 open("data.json", "w") do f
   write(f, JSON.json(new_run))
 end
-```
+``` -->
 
 
 ## Output
 
-```{ojs}
+
+<!-- ```{ojs}
 data = FileAttachment("data.json").json()
 p = Object.keys(data).map(d => d.split("_")) //unpack params
 ```
@@ -238,13 +268,13 @@ viewof nu_n  = Inputs.range(minmax(p,0), {step: 0.05, label: "β", value:"0.07"}
 viewof nu_p  = Inputs.range(minmax(p,1), {step: 0.1,  label: "γ", value:"1.0"})
 viewof alpha = Inputs.range(minmax(p,2), {step: 0.15, label: "ρ", value:"0.1"})
 viewof beta  = Inputs.range(minmax(p,3), {step: 0.05, label: "b", value:"0.18"})
-```
+``` -->
 
 ::: {.panel-tabset}
 
 ## Plot
 
-```{ojs}
+<!-- ```{ojs}
 f = (x) => Number.isInteger(x) ? x.toPrecision(2) : x
 
 Plot.plot({
@@ -262,11 +292,12 @@ Plot.plot({
         })
   ]
 })
-```
-
+``` -->
 
 :::
 
+
 ##  Takeaways:
+
 
 
