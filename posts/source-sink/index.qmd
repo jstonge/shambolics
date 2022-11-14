@@ -5,31 +5,38 @@ format:
   html:
     echo: false
 editor: visual
-image: unions.jpg
+image: fig1_sourcesink.png
 ---
 
 ## Algebraic model
 
-The key ingredients of the model are our groups $G$ with the number of adopters $i$ and with an institution of level $\ell$. We assume that with higher levels of institutional strength, $\ell$, the institution will more effectively promote group-beneficial behavior, $\ell\beta$. But this is offset by a cost, $c$, of entertaining larger groups. For instance, think of the process of unionization, promoting behaviors that are costly at individual level. When unionization becomes more successful, the unions can become ungaingly. 
+::: {.callout-note collapse="true"}
+## Model Sketch
 
-First master equation:
+![](sourcesink_sketch.jpg)
+
+:::
+
+The key ingredients of the model are our groups $G$ with the number of adopters $i$ and with an institution of level $\ell$. We assume that with higher levels of institutional strength, $\ell$, the institution will more effectively promote group-beneficial behavior, $\ell$[$\beta$]{style="color: darkgreen;"}. As it gets better, each adopter in the group also gain a collective benefit [$b$]{style="color: seagreen;"}. But all of these toodily-doo perks are offset by an institutional implementation costs, [$c$]{style="color: darkred;"}, of entertaining larger groups. For instance, think of the process of unionization, promoting behaviors that are costly at individual level. When unionization becomes more successful, the unions can become ungaingly. Lastly adopters lose their behavioural trait at a rate [$\gamma$]{style="color: red;"}.
+
+First master equation[^longnote]:
 
 \begin{align*}
-\frac{d}{dt}G_{i,\ell}^{diff} &= \ell \beta [(i-1) + R](n - i + 1)G_{i-1,\ell} \\
-                              &- \ell \beta (i+R)(n-i) G_{i,\ell} \\
-                              &+ \gamma(i+1)G_{i+1,\ell} - \gamma i G_{i,\ell}
+\frac{d}{dt}G_{i,\ell}^{diff} &= \ell \mathbin{\color{darkgreen}{\beta}} [(i-1) + R](n - i + 1)G_{i-1,\ell} \\
+                              &- \ell\mathbin{\color{darkgreen}{\beta}} (i+R)(n-i) G_{i,\ell} \\
+                              &+ \mathbin{\color{red}{\gamma}}(i+1)G_{i+1,\ell} - \mathbin{\color{red}{\gamma}} i G_{i,\ell}
 \end{align*}
 
-where $R = \mathbin{\color{red}{\rho}} \sum_{i',\ell'} i'G_{i',\ell'}$ represents the global diffusion of behaviors and primes denote variable over which we sum to calculate global quantity. The sum over adopters at each level weighted by global behavioural diffusion [$\rho$]{style="color: red;"}.
+where $R = \mathbin{\color{blue}{\rho}} \sum_{i',\ell'} i'G_{i',\ell'}$ represents the global diffusion of behaviors and primes denote variable over which we sum to calculate global quantity. The sum over adopters at each level weighted by global behavioural diffusion [$\rho$]{style="color: blue;"}.
 
 Second master equation:
 
 \begin{align*}
-\frac{d}{dt}G_{i,\ell}^{select} &= \mathbin{\color{red}{\rho}} [G_{i,\ell-1}(Z_\ell Z_{\ell-1}^{-1} + \mathbin{\color{midnightblue}{\mu}}) + G_{i,\ell+1}(Z\ell Z_{\ell + 1}^{-1} + \mathbin{\color{midnightblue}{\mu}})] \\
-                                &-\mathbin{\color{red}{\rho}}(Z_{\ell-1}Z_\ell^{-1} + Z_{\ell+1}^{-1} + 2\mathbin{\color{midnightblue}{\mu}})G_{i,\ell}
+\frac{d}{dt}G_{i,\ell}^{select} &= \mathbin{\color{blue}{\rho}} [G_{i,\ell-1}(Z_\ell Z_{\ell-1}^{-1} + \mathbin{\color{midnightblue}{\mu}}) + G_{i,\ell+1}(Z\ell Z_{\ell + 1}^{-1} + \mathbin{\color{midnightblue}{\mu}})] \\
+                                &-\mathbin{\color{blue}{\rho}}(Z_{\ell-1}Z_\ell^{-1} + Z_{\ell+1}^{-1} + 2\mathbin{\color{midnightblue}{\mu}})G_{i,\ell}
 \end{align*}
 
-where $Z_\ell = \frac{\sum_{i'} exp(bi'-c\ell)G_{i',\ell}}{\sum_{i'}G_{i',\ell}}$. Note that we add a constant rate of transition [$\mu$]{style="color: midnightblue;"} to the selection proces.
+where $Z_\ell = \frac{\sum_{i'} exp(\mathbin{\color{seagreen}{b}}i'- \mathbin{\color{darkred}{c}}\ell)G_{i',\ell}}{\sum_{i'}G_{i',\ell}}$. Note that we add a constant rate of transition [$\mu$]{style="color: midnightblue;"} to the selection proces.
 
 Taken togetherm we have the set of master equations:
 
@@ -39,6 +46,35 @@ $$
 
 
 ## Julia model
+
+
+::: {.callout-tip collapse="true"}
+## Initialization scheme
+
+```julia
+function initialize_u0(;n::Int=20, L::Int=6, M::Int=20, p::Float64=0.01)
+  G = zeros(L, n+1)
+
+  for _ in 1:M
+    ℓ = rand(1:L) # pick a level
+    i = sum(collect(rand(Binomial(1, p), n))[1]) # how many total adopters?
+    G[ℓ, i+1] += 1 # everytime combination G[ℓ,i], count +1
+  end
+
+  G = G ./ M # normalized by tot number of groups
+
+  # ArrayPartition are nice because we can access the level such as G.x[ℓ][i]
+  return ArrayPartition(Tuple([G[ℓ,:] for ℓ=1:L]))
+end
+
+n, M = 20, 1000
+u₀ = initialize_u0(n=n, L=6, M=M, p=0.01)
+p = [β, γ, ρ, b, c, μ]
+tspan = (1.0, 4000)
+prob = ODEProblem(source_sink!, u₀, tspan, p)
+sol = solve(prob, DP5(), saveat = 1., reltol=1e-8, abstol=1e-8)
+```
+:::
 
 ```julia
 function source_sink!(du, u, p, t)
@@ -123,3 +159,17 @@ Plot.plot({
  - Within groups, the frequency of cooperative behaviour follows the strength of institutions (with ℓ = 1 in light beige and ℓ = 6 in dark red).
  - Qualitatively, no institutions are possible if institutional costs are too high, and the behaviour never spreads.
  - The time dynamics of global behavioural frequency and behaviour in groups can include patterns of surge and collapse.
+
+
+ [^longnote]: A sidenote on master equations for non-physicists. The citation for master equations in the original paper is the following:
+
+    > Hébert-Dufresne, L., Noël, P.-A., Marceau, V., Allard, A., & Dubé, L. J. (2010). Propagation dynamics on networks featuring complex topologies. Physical Review E, 82(3), 036115. https://doi.org/10.1103/PhysRevE.82.036115
+
+    The term ''master equation'' is not mentionned once in the paper. But they do talk about "_a mean-field description used to coherently couple the dynamics of the network elements (nodes, vertices, individuals...) and their recurrent topological patterns (subgraphs, groups...)_" that yields a set of ODEs for the time evolution of the system. Another paper writen by Guillaume St-Onge et al. is a more generous in their description of master equation:
+
+    > St-Onge, G., Thibeault, V., Allard, A., Dubé, L. J., & Hébert-Dufresne, L. (2021). Master equation analysis of mesoscopic localization in contagion dynamics on higher-order networks. Physical Review E, 103(3), 032301. https://doi.org/10.1103/PhysRevE.103.032301
+
+    In it, section II does a great job of describing what master equations are and why they are powerful modeling tools. Relevant to this model, we learn that the size of a group is determined by drawing from a group size distribution. This is what we do in our intialization scheme above. We also learn that these 3 following papers are relevant to understand master equations:
+
+    > Lindquist, J., Ma, J., van den Driessche, P., & Willeboordse, F. H. (2011). Effective degree network disease models. Journal of Mathematical Biology, 62(2), 143–164. https://doi.org/10.1007/s00285-010-0331-2 <br><br> Gleeson, J. P. (2011). High-Accuracy Approximation of Binary-State Dynamics on Networks. Physical Review Letters, 107(6), 068701. https://doi.org/10.1103/PhysRevLett.107.068701 <br><br> Marceau, V., Noël, P.-A., Hébert-Dufresne, L., Allard, A., & Dubé, L. J. (2010). Adaptive networks: Coevolution of disease and topology. Physical Review E, 82(3), 036116. https://doi.org/10.1103/PhysRevE.82.036116
+
