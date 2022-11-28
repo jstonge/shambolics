@@ -89,6 +89,218 @@ But you can play around with other settings to see how it varies.
 
 [See Patrick Mineault notebook](https://observablehq.com/@patrickmineault/interactive-demo-in-pure-js)
 
+## The many lives of statistical tests
+
+Sometimes I feel that the popularity of statistical testing is about outsourcing statistical work of busy scientists to flow charts. In research methods courses focusing on statistical testing I feel there is an understanding that these are limited, but given time and interest of students, it's better than nothing. And if you're sticking to experimental setups, that might be all you need. I am not going to do a rant. But I want to supplement the usual search method class with alternative perspectives explained as simply as possible:
+
+ - The [Frequentist approach](https://en.wikipedia.org/wiki/Frequentist_probability). This if often the first encounter with inferential statistics in social socience. As long as you are in an experimental set-up this might be fine. You need to think about probability as long-run probability.
+ - The [linear models approach](https://lindeloev.github.io/tests-as-linear/). Instead of starting from statistical tests, we start from linear models and explain which models map onto which tests. This approach promotes flexibility at the costs of having to learn the underlying ideas of linear models.
+ - [Hypothesis testing but Bayesian](https://www.allendowney.com/blog/2020/04/). No need to remember the nonsense that we "fail to reject the null" and that 0.95 confidence interval does not mean that we are "95% confident that our results are significant".
+ - The [Bootstrap approach](http://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html). This is a great coding exercice and saves you time from remembering all the different tests.
+
+Note that we use the following emojis to encode data types:
+
+ - 💡 : Yes/no, 2 levels, success/failure, bias/fair... nominal data.
+ - 📊 : Yes/no/maybe, >2 levels, might be ordinal or nominal.
+ - 📏 : continuous/scalar/uncountable data.
+
+
+::: {.panel-tabset}
+
+```{r}
+library(tidyverse)
+
+d = readr::read_csv("data_clean.csv")
+
+get_table <- function(tbl_long, predictors, outcome_var) {
+ tbl_long |> 
+  tidyr::pivot_wider(names_from = predictors, values_from = "n") |>
+  dplyr::select(-{{outcome_var}}) |> 
+  as.matrix()
+}  
+
+summarize_mod <- function(a,b) {
+  dplyr::bind_rows(
+    broom::glance(a) |> 
+      dplyr::select(p.value) |> 
+      dplyr::mutate(model = "chisq.test"),
+    tibble::as_tibble(b) |> 
+      dplyr::rename("p.value"=`Pr(>Chi)`) |> 
+      dplyr::select(p.value) |> 
+      tidyr::drop_na() |> 
+      dplyr::mutate(model = "glm") |>
+      dplyr::slice(dplyr::n())
+  )
+}
+
+plot_continuous <- function(dep_var, indep_var) {
+  means <- d |> select({{indep_var}}, {{dep_var}}) |>
+    drop_na() |>
+    group_by({{ indep_var }}) |>
+    summarize(mean_grouped = mean({{dep_var}})) |>
+    pull(mean_grouped)
+
+  d |>
+    select({{dep_var}}, {{indep_var}}) |>
+    drop_na() |>
+    ggplot(aes(x = {{dep_var}})) + 
+      geom_histogram(aes(y=..density.., fill = {{indep_var}}), 
+                    binwidth = 2, origin = -0.5, color = "black", alpha = 0.8) +
+      geom_density(aes(x = {{dep_var}}, fill = {{indep_var}}), alpha = 0.5) +
+      geom_vline(aes(xintercept = means[1]), linetype="dashed") +
+      geom_vline(aes(xintercept = means[2]), linetype="dashed") +
+      theme_bw() +
+      scale_x_continuous(breaks = seq(0,100,10)) +
+      theme(axis.text = element_text(size=15)) +
+      scale_fill_manual(values =  c("red", "midnightblue"))
+}
+```
+
+## 💡 ~ 💡
+
+```{r}
+#| warning: false
+#| message: false
+sex <- d$gender_binary
+early_first_line <- d$first_line_code_before_18 # yes/no.
+
+crosstabs <- table(sex, early_first_line)
+d_long <- tibble::as_tibble(crosstabs) 
+
+d_mat <- get_table(d_long, "sex", "early_first_line")
+
+d_long$is_male <- ifelse(d_long$sex == "male", 1,0)
+d_long$early_first_line_yes <- ifelse(d_long$early_first_line == "yes", 1,0)
+```
+
+### NHST
+```{r}
+#| code-fold: true
+#| code-summary: "R code"
+#| warning: false
+#| echo: true
+
+a <- chisq.test(d_mat) # p-value > 0.05
+```
+
+### Linear models
+```{r}
+#| code-fold: true
+#| code-summary: "R code"
+#| echo: true
+
+# Using glm to do a log-linear model
+full = glm(n ~ early_first_line * sex, family = poisson(), data = d_long) 
+b = anova(full, test = 'Rao') #  similar to our two-way ANOVA
+```
+
+### Summary
+
+```{r}
+#| code-fold: true
+summarize_mod(a,b)
+```
+
+## 📊 ~ 💡
+
+```{r}
+sex <- d$gender_binary
+self_id_as_coder <- d$self_id_as_coder # yes/no/maybe. Arguably ordinal.
+
+crosstabs <- table(sex, self_id_as_coder)
+
+d_long <- tibble::as_tibble(crosstabs) 
+
+d_mat <- get_table(d_long, "sex", "self_id_as_coder")
+
+d_long$is_male <- ifelse(d_long$sex == "male", 1,0)
+d_long$self_id_as_coder_yes <- ifelse(d_long$self_id_as_coder == "yes", 1,0)
+```
+
+### NHST
+```{r}
+#| code-fold: true
+#| code-summary: "R code"
+#| warning: false
+#| echo: true
+a <- chisq.test(d_mat) # p-value > 0.05
+```
+
+### Linear models
+```{r}
+#| code-fold: true
+#| code-summary: "R code"
+#| echo: true
+full = glm(n ~ self_id_as_coder * sex, family = poisson(), data = d_long) # log-linear model
+b = anova(full, test = 'Rao') #  similar to our two-way ANOVA
+```
+
+### Summary
+
+```{r}
+#| code-fold: true
+
+summarize_mod(a,b)
+```
+
+## 📏 ~ 💡
+
+![](sketch.jpg){width=75%}
+
+```{r}
+plot_continuous(pct_social_contacts_coding, dept_students_binary)
+plot_continuous(pct_social_contacts_coding, gender_binary)
+```
+
+### NHST
+```{r}
+group <- d |> 
+  select(gender_binary, pct_social_contacts_coding) |>
+  drop_na() |>
+  pull(gender_binary)
+
+value <- d |> 
+  select(gender_binary, pct_social_contacts_coding) |>
+  drop_na() |>
+  pull(pct_social_contacts_coding)
+
+y <- d |> 
+  select(gender_binary, pct_social_contacts_coding) |>
+  drop_na() |>
+  filter(gender_binary == "female") |>
+  pull(pct_social_contacts_coding) 
+
+y2 <- d |> 
+  select(gender_binary, pct_social_contacts_coding) |>
+  drop_na() |>
+  filter(gender_binary == "male") |>
+  pull(pct_social_contacts_coding) 
+
+a = t.test(y, y2, var.equal = TRUE)
+```
+
+### Linear models
+```{r}
+group_y2 = ifelse(group == 'male', 1, 0)  # 1 if group == y2, 0 otherwise
+b = lm(value ~ 1 + group_y2)  # Using our hand-made dummy regressor
+# c = lm(value ~ 1 + I(group == 'male'))
+```
+
+### Summary
+
+```{r}
+dplyr::bind_rows(
+    broom::glance(a) |> 
+      dplyr::select(p.value, estimate, conf.low, conf.high) |> 
+      dplyr::mutate(model = "t.test"),
+    broom::tidy(b) |> 
+      dplyr::select(p.value,) |>  
+      dplyr::mutate(model = "glm")
+  )
+```
+
+
+:::
 
 [^longnote]: The mapping for the confidence interval and standard deviation comes from the properties of the normal distribution: 
 

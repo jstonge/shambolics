@@ -23,11 +23,67 @@ pdata = FileAttachment("data_clean.csv").csv({ typed: true })
 // useful vars
 colnames = d3.sort(Object.keys(pdata[0]))
 coders = pdata.filter(d => d.is_coder === 'coder')
+non_coders = pdata.filter(d => d.is_coder === 'non coder')
 coder_count = tidy(pdata, count("is_coder")).map(d => d.n)
 
 // global filtering
 filtered_dat = sel_dept == "" ? pdata : pdata.filter(d => d["dept_students_lab"] === sel_dept)
 filtered_coders = sel_dept == "" ? coders : coders.filter(d => d["dept_students_lab"] === sel_dept)
+```
+
+```{ojs}
+//| include: false
+//| echo: false
+function plot_attr_h(dat, val_col, by_attr, col_legend) {
+  return Plot.plot({
+    marginLeft: 100,
+    marginBottom: 50,
+    height: 250,
+    grid: true,
+    color: col_legend === true ? { legend: by_attr ? true : false } : null,
+    y: {
+      label: do_pct ? " Frequency (%) ↑" : "# respondents ↑", 
+      percent: do_pct ? true : false
+      },
+    x: {
+      tickRotate: 10,
+      label: "← more novices • more experience →",
+      domain: d3.sort(dat, d => d[`${val_col}_c`]).map(d => d[val_col])
+    },
+    marks: [
+      Plot.barY(
+        rm_nulls ? dat.filter(d => d[val_col] !== null) : dat, 
+        Plot.groupX({ y: do_pct ? "proportion" : "count" }, { 
+            x: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
+          })
+      )
+    ]
+  })
+}
+
+function plot_attr_v(dat, val_col, by_attr, col_legend, ylab, do_pct) {
+    return Plot.plot({
+      marginLeft: ylab === "" ? 175 : 90,
+      grid: true,
+      color: col_legend === true ? { legend: by_attr ? true : false } : null,
+      y: { 
+        label: ylab,
+        // domain: d3.sort(dat, d => d[`${val_col}_ord`]).map(d => d[val_col])
+        },
+      x: { 
+        label: do_pct ? " Frequency (%) →" : "# respondents →", 
+        percent: do_pct ? true : false
+      },
+      marks: [
+      Plot.barX(
+          rm_nulls ? dat.filter(d => d[val_col] !== null && d[by_attr] !== null) : dat,
+          Plot.groupY({ x: do_pct ? "proportion" : "count" }, { 
+              y: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
+          })
+        ),
+      ]
+  })
+}
 ```
 
 
@@ -60,27 +116,6 @@ col_dems = ["is_coder", "pref_pronouns", "year_born", "ethnicity_binary",
             "dept_students_binary", "academia_status"]
 
 viewof by_attr = Inputs.radio(col_dems, {label: "attributes"})
-
-function plot_attr_v(dat, val_col, by_attr, col_legend, ylab, do_pct) {
-    return Plot.plot({
-      marginLeft: ylab === "" ? 175 : 90,
-      grid: true,
-      color: col_legend === true ? { legend: by_attr ? true : false } : null,
-      y: { label: ylab },
-      x: { 
-        label: do_pct ? " Frequency (%) →" : "# respondents →", 
-        percent: do_pct ? true : false
-      },
-      marks: [
-      Plot.barX(
-          rm_nulls ? dat.filter(d => d[val_col] !== null && d[by_attr] !== null) : dat,
-          Plot.groupY({ x: do_pct ? "proportion" : "count" }, { 
-              y: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
-          })
-        ),
-      ]
-  })
-}
 
 plot_attr_v(filtered_dat, "pref_pronouns", by_attr, true, "", do_pct)
 plot_attr_v(filtered_dat, "academia_status", by_attr, false, "", do_pct)
@@ -166,33 +201,6 @@ Only showing coders.
 
 ```{ojs}
 viewof by_attr2 = Inputs.radio(["gender_binary", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], {label: "attributes"})
-
-function plot_attr_h(dat, val_col, by_attr, col_legend) {
-  return Plot.plot({
-    marginLeft: 100,
-    marginBottom: 50,
-    height: 250,
-    grid: true,
-    color: col_legend === true ? { legend: by_attr ? true : false } : null,
-    y: {
-      label: do_pct ? " Frequency (%) ↑" : "# respondents ↑", 
-      percent: do_pct ? true : false
-      },
-    x: {
-      tickRotate: 10,
-      label: "← more novices • more experience →",
-      domain: d3.sort(dat, d => d[`${val_col}_c`]).map(d => d[val_col])
-    },
-    marks: [
-      Plot.barY(
-        rm_nulls ? dat.filter(d => d[val_col] !== null) : dat, 
-        Plot.groupX({ y: do_pct ? "proportion" : "count" }, { 
-            x: val_col,  fill: d => by_attr ? d[by_attr] : "grey"
-          })
-      )
-    ]
-  })
-}
 
 plot_attr_v(filtered_coders, "self_id_as_coder", by_attr2, true, "Self id as coder", do_pct)
 plot_attr_v(filtered_coders, "what_os", by_attr2, false, "What OS", do_pct)
@@ -360,6 +368,7 @@ viewof sel_dept_cb = Inputs.select([''].concat(
 
 viewof by_attr_cb = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], { label: "attributes" })
 viewof do_pct_2 =   Inputs.toggle({ label: "Show %" }) 
+viewof show_labs =   Inputs.toggle({ label: "Show Labels" }) 
 viewof rm_nulls_2 = Inputs.toggle({ label: "Remove nulls", value: true }) 
 ```
 
@@ -370,9 +379,26 @@ viewof rm_nulls_2 = Inputs.toggle({ label: "Remove nulls", value: true })
 Smaller values are more negative attitude.
 
 ```{ojs}
-plot_attr_v(coders, "enough_instit_support_ord",      by_attr_cb, true,  "Institutional support",        do_pct_2)
-plot_attr_v(coders, "more_time_learning_to_code_ord", by_attr_cb, false, "More time learning to code",   do_pct_2)
-plot_attr_v(coders, "self_expect_time_coding_ord",    by_attr_cb, false, "Self expectation time coding", do_pct_2)
+plot_attr_v(coders, 
+  show_labs ? "enough_instit_support" : "enough_instit_support_ord",      
+  by_attr_cb, true,  
+  show_labs ? "" : "Institutional support",
+  do_pct_2
+)
+plot_attr_v(coders,   
+  show_labs ? "more_time_learning_to_code": "more_time_learning_to_code_ord", 
+  by_attr_cb, 
+  false, 
+  show_labs ? "" : "More time learning to code",   
+  do_pct_2
+)
+plot_attr_v(coders, 
+ show_labs ? "self_expect_time_coding" : "self_expect_time_coding_ord", 
+    by_attr_cb, 
+    false, 
+    show_labs ? "" : "Self expectation time coding", 
+    do_pct_2
+)
 ```
 
 ## Benefits
@@ -382,8 +408,7 @@ Depending on other variables, the answers to these questions can be interepreted
 :::
 
 ```{ojs}
-plot_attr_v(coders, "value_learn_code_in_field_ord",    by_attr_cb, true, "Coding on future opportunities", do_pct_2)
-plot_attr_v(coders, "value_comp_skills_wrt_domain_ord", by_attr_cb, false, "Value comp skills wrt domain",  do_pct_2)
+plot_attr_v(coders, show_labs ? "value_comp_skills_wrt_domain" : "value_comp_skills_wrt_domain_ord", by_attr_cb, false, show_labs ? "" : "Value comp skills wrt domain",  do_pct_2)
 ```
 
 ```{ojs}
@@ -414,13 +439,14 @@ plot_social_contacts(coders, by_attr_cb)
 
 ## OSS
 
+#### Attitude Open science & Open source
 ```{ojs}
 plot_attr_v(coders, "do_share_code_online",           by_attr_cb, true,  "", do_pct_2)
-plot_attr_v(coders, "value_comp_skills_wrt_domain",   by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_accessibility_paper_code", by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_paper_code_citability",    by_attr_cb, false, "", do_pct_2)
-plot_attr_v(coders, "value_share_code",               by_attr_cb, false, "", do_pct_2)
+plot_attr_v(coders, "value_paper_code_citability_ord",    by_attr_cb, false, "Code Citability", do_pct_2)
+plot_attr_v(coders, "value_accessibility_paper_code_ord", by_attr_cb, false, "Accessibility paper code", do_pct_2)
+plot_attr_v(coders, "value_share_code_ord",               by_attr_cb, false, "Code Sharing", do_pct_2)
 plot_attr_v(coders, "value_welcoming_community_ord",  by_attr_cb, false, "Welcoming community", do_pct_2)
+plot_attr_v(coders, "value_widespread_use_ord",  by_attr_cb, false, "Widespread use", do_pct_2)
 ```
 
 ## Data
@@ -438,7 +464,7 @@ Inputs.table(coders, { columns: cost_cols })
 :::
 
 
-<!-- ## Students typical week 
+## Students typical week 
 
 :::{.column-page}
 
@@ -478,7 +504,49 @@ Plot.plot({
 })
 ```
 
-::: -->
+:::
+
+## What do non-coders think about coding?
+
+```{ojs}
+viewof do_pct_nc =   Inputs.toggle({ label: "Show %" }) 
+viewof show_labs_nc =   Inputs.toggle({ label: "Show Labels" })
+viewof by_attr_nc = Inputs.radio(["pref_pronouns", "year_born", "ethnicity_binary", "dept_students_binary", "academia_status"], { label: "attributes" })
+```
+
+```{ojs}
+non_coders.map(d => d.value_learn_code_in_field_ord)
+```
+
+
+```{ojs}
+
+Plot.plot({
+      marginLeft: 175,
+      grid: true,
+      // y: { 
+        // domain: d3.sort(non_coders, d => d["value_learn_code_in_field_ord"]).map(d => d["value_learn_code_in_field"])
+        // },
+      x: { 
+        label: " Frequency (%) →", 
+      },
+      marks: [
+      Plot.barX(
+          non_coders.filter(d => d["value_learn_code_in_field_ord"] !== null && d["value_learn_code_in_field_ord"] !== "NA"),
+          Plot.groupY({ x: "count" }, { 
+              y: "value_learn_code_in_field_ord" })
+        ),
+      ]
+  })
+```
+
+
+
+```{ojs}
+plot_attr_v(non_coders, 
+show_labs_nc ? "value_learn_code_in_field" : "value_learn_code_in_field_ord",    by_attr_nc, true, show_labs_nc ? "" : "Coding on future opportunities", do_pct_nc)
+```
+
 
 
 ```{ojs}
