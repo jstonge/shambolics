@@ -2,11 +2,13 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/source-sink/index.html",
-      "/posts/sci-group-life-cycle/index.html",
       "/posts/survey-programming/index.html",
-      "/posts/modeling-survey-prog/index.html",
-      "/posts/interactive-stats/index.html"
+      "/posts/rise_of_comp2/index.html",
+      "/posts/s2orc_viz/index.html",
+      "/posts/rise_of_comp3/index.html",
+      "/posts/rise_of_comp/index.html",
+      "/posts/interactive-stats/index.html",
+      "/posts/allotax-in-quarto/index.html"
     ]
   }
 ]

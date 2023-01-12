@@ -1,1 +1,1 @@
-Sitemap: https://quartopub.com/sites/jstonge/shambolics/sitemap.xml
+Sitemap: https://jstonge.quarto.pub/shambolics/sitemap.xml

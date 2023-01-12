@@ -1,0 +1,147 @@
+---
+title: "S2ORC Viz"
+description: |
+  I always forget about the s2orc database details. Lets have them here.
+categories:
+  - Visualization
+  - NLP
+  - S2ORC
+  - Interactive
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false
+image: cover.png
+---
+
+- `Abstracts and pdf parsed` shows the total number of papers and the number of papers for which either the abstract or pdf is parsed. 
+- `s2fos v. mag` is a showdown between the semantic scholar classification scheme and the microsoft academic graph one. Papers are grouped by fields and year, and we keep track of the parsing extent for each.
+
+```{ojs}
+import {addTooltips} from "@mkfreeman/plot-tooltip"
+```
+
+```{ojs}
+data = FileAttachment("count_field_and_decade.csv").csv({ typed: true })
+```
+
+```{ojs}
+viewof schema = Inputs.select(["s2fos", "mag", "both"], { label: "Schema" })
+viewof show_pct = Inputs.toggle({label: "Normalize"})
+```
+
+::: {.panel-tabset} 
+
+
+
+## Abstracts and pdf parsed
+
+:::{.column-page}
+
+```{ojs}
+p1 = Plot.plot({
+    marginLeft: 100,
+    height: 600,
+    width: 1200,
+    marginBottom: 100,
+    x: { label: null, tickRotate: 45 },
+    y: { 
+      grid: true, 
+      percent: show_pct ? true : false, 
+      label: show_pct ? "↑ rep. (%)" : "↑ n papers"
+     },
+    marks: [
+      Plot.barY(data.filter(d => d.year < 2020), Plot.groupX({y: "sum"}, { x: "year", y: d => schema == 'both' ? d["n"] : d[`n_${schema}`], fill: "parsing", order: "sum", offset: show_pct ? "expand" : null }))
+    ]
+})
+p1.legend("color")
+```
+
+
+:::
+
+## s2fos v. mag
+
+```{ojs}
+viewof mark_type = Inputs.select(["stacked", "line"], { label: "Plot type" })
+viewof parsing = Inputs.select(["abstract", "pdf", "all"], { label: "Parsing extent" })
+viewof chosen_group = Inputs.select(["STEM", "Social Science", "Misc"], { label: "Group" })
+```
+
+:::{.column-page}
+
+```{ojs}
+
+data_f = data.filter(d => d.group == chosen_group && d.year < 2020 && d.parsing == parsing)
+
+line_plot = () => {
+  const xy_norm = Plot.normalizeY({
+          x: "year",  y:  d => schema == 'both' ? d["n"] : d[`n_${schema}`], stroke: "field", title: "field", basis: "first"
+      })
+  const xy = {
+          x: "year",  y:  d => schema == 'both' ? d["n"] : d[`n_${schema}`], stroke: "field", title: "field"
+      }
+  return addTooltips(Plot.plot({
+      marginLeft: 100,
+      height: 600,
+      width: 1200,
+      marginBottom: 50,
+      x: { label: null, tickRotate: 45 },
+      y: { 
+        percent: show_pct ? true : false, 
+        grid: true, 
+        label: show_pct ? "↑ Norm. over first value, showing relative growth" : "↑ n papers" },
+      marks: [
+        Plot.line(data_f, show_pct ? xy_norm : xy)
+      ]
+  }))
+}
+
+stack_plot = () => {
+  const xy = { x: "year", y: d => schema == 'both' ? d["n"] : d[`n_${schema}`], z: "field", order: "sum",  offset: show_pct ? "expand" : null }
+
+  return addTooltips(Plot.plot({
+        marginLeft: 100,
+        height: 600,
+        width: 1200,
+        marginBottom: 50,
+        x: { label: null, tickRotate: 45 },
+        y: { 
+          percent: show_pct ? true : false, 
+          grid: true, 
+          label: show_pct ? "↑ rep. (%)" : "↑ tot papers" },
+        marks: [
+          Plot.barY(data_f, Plot.stackY({...xy, fill: "field", title: d => `${d.field} (${d.n})` })),
+        ]
+    }))
+}
+
+
+p3 = mark_type == 'stacked' ? stack_plot() : line_plot()
+
+p3.legend("color")
+```
+
+:::
+
+## raw data
+
+```{ojs}
+Inputs.table(data)
+```
+
+:::
+
+### Remarks
+ - Biology is an encompassing field. I wish we could divide it further.
+ - In my opinion the biggest difference beween `mag`and `s2fos` schema is that the later track the emergerce of computer science, which is nice.
+
+### Notes
+
+Classifying articles into fields is non-trivial. But at least there is work on the topic. 
+
+For a while, the [microsoft academic graph (mag)](https://www.microsoft.com/en-us/research/project/academic/) was standard. Many researchers used the [top mag fields of study](https://www.microsoft.com/en-us/research/project/academic/articles/expanding-concept-understanding-in-microsoft-academic-graph/) as their main taxonomy. Now that the mag project at microsoft is deprecated (Dec. 31, 2021.; see [here](https://www.microsoft.com/en-us/research/project/academic/articles/microsoft-academic-to-expand-horizons-with-community-driven-approach/)), AllenAI's semantic scholar is arguably one of the best contender to become the next standard. Contrary to MAG, they provide a unified api for the citation graphs of papers and they released a fraction of their overall paper nodes as parsed text. [Announced after mag deprecation](https://blog.allenai.org/announcing-s2fos-an-open-source-academic-field-of-study-classifier-9d2f641949e5), the semantic scholar databse did some more work on the classification scheme, which can be found [here](https://github.com/allenai/s2_fos). This is what we use and compare here, as did other before us.
+
+We note that all the current schemes agree that papers have overlapping fields and are hierarchical. This is something that the mag field made explicit through the use of a hierarhical algorithm for unsupervised topic classification. The `s2_fos` scheme drops the hierarchy and focus on the top fields using a (simpler) classifier. 

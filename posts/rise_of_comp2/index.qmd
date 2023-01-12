@@ -1,0 +1,210 @@
+---
+title: "The rise of computational works 2"
+description: |
+  A new hope.
+categories:
+  - Visualization
+  - NLP
+  - S2ORC
+  - Interactive
+  - SciSci
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false 
+image: embeddings.png 
+---
+
+#### TODO
+ - [ ] Add the possibility to locate selected papers in the dot plot.
+ - [ ] Add the possibility to locate selected topics in the dot plot.
+ - [ ] Add the possibility to locate papers from selected years or venues.
+ - [ ] Add a table that we can filter based on selected topics or title.
+
+### Specter embeddings of computational papers (early)
+
+```{ojs}
+viewof type_cat = Inputs.select(['topic', 'field', 'year'], {value: 'field', label: "cluster type"})
+viewof sel_field = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
+viewof sel_topics = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
+```
+
+```{ojs}
+viewof c = rangeSlider(background_data, d=>d.year)
+viewof t = rangeSlider(background_data, d=>d.topic)
+```
+
+```{ojs}
+fields = ['Art', 'Education', 'Economics', 'Environmental-Science', 'Geography', 'Geology', 'History', 'Law', 'Linguistics', 'Mathematics', 'Philosophy', 'Physics', 'Political-Science', 'Psychology', 'Sociology']
+```
+
+
+```{ojs}
+viewof input_title = html`<input placeholder="Title.">`
+```
+
+```{ojs}
+embedding_plot = {
+  const background_mark = (is_colored) => {  
+            return { x: "x", y: "y", fill: is_colored ? type_cat : "grey",  opacity: 0.2, r: "citationCount" }
+        }
+  
+  const subset_mark = {
+          x: "x", y: "y", fill: type_cat, r: "citationCount", 
+          opacity: subset === undefined ? 0.3 : 1, 
+          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+    }
+
+  const field_mark = {
+          x: "x", y: "y", opacity: 0.3, r: "citationCount",
+          fill: sel_field[0] === undefined ? type_cat : 'red', 
+          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+        }
+  
+  const year_mark = {
+          x: "x", y: "y", opacity: 0.8, r: "citationCount", 
+          fill: type_cat, 
+          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+        }
+
+  const background_plot = () => Plot.plot({
+      inset: 8, height: 800, width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      color: { type: "categorical", scheme: "paired" },
+      marks: [  Plot.dot(background_data,  background_mark(true)  ) ]
+    })
+  
+  const subset_plot = () => Plot.plot({
+      inset: 8, height: 800,  width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      color: { type: "categorical", scheme: "paired" },
+      marks: [
+        Plot.dot(background_data,  background_mark(false)  ),
+        Plot.dot(subset, subset_mark )
+        ]
+    })
+  
+  const field_plot = () => Plot.plot({
+      inset: 8, height: 800, width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      color: { type: "categorical", scheme: "paired" },
+      marks: [
+        Plot.dot(background_data,  background_mark(false)  ),
+        Plot.dot(data_by_field, field_mark )
+        ]
+    })
+  
+  const year_plot = () => Plot.plot({
+      inset: 8, height: 800, width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      marks: [
+        Plot.dot(background_data,  background_mark(false)  ),
+        Plot.dot(yearly_data, year_mark  )
+        ]
+    })  
+
+  const subset_and_field_plot = () => Plot.plot({
+      inset: 8, height: 800, width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      color: { type: "categorical", scheme: "paired" },
+      marks: [
+        Plot.dot(background_data,  background_mark(false)  ),
+        Plot.dot(data_by_field, field_mark  ),
+        Plot.dot(subset, subset_mark )
+        ]
+    })
+
+  if (subset === undefined && sel_field[0] === undefined) {
+    return year_plot()
+  } else if (subset !== undefined && sel_field[0] === undefined) {
+    return subset_plot()
+  } else if (subset === undefined && sel_field[0] !== undefined) {
+    return field_plot()
+  } else {
+    return subset_and_field_plot()
+  }
+}
+
+embedding_plot.legend("color")
+```
+
+Note that topics here is a cluster of documents that are similar with respect to title, abstract and citations. This is different than vanilla topics that cluster together text exclusively based on content. 
+
+By adding document-level relatedness, we hope that we will be able to distinguish different facets of how the idea of `computational` is used in the literature. For instance, say that in philosophy there is much discussion about the `computational theory of the mind`. Philosophers won't be citing the same papers than computational papers in political science that cite, say, some methodological papers on how best to construct embeddings in their field. If we are right, then conceptual papers should be fairly easy to distinguish and remove. 
+
+#### table
+```{ojs}
+Inputs.table(background_data, {columns: ['topic', 'field', 'year', 'citationCount', 'title']})
+```
+
+```{ojs}
+db = DuckDBClient.of({ 
+	data: await FileAttachment("umap_embedding.csv").csv({typed:true})
+})
+
+background_data = db.sql`
+  SELECT * 
+  FROM data 
+  WHERE (citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5) 
+  USING SAMPLE 20000
+`
+
+data_by_field = db.sql`
+  SELECT * 
+  FROM data 
+  WHERE (citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND field = ${sel_field})
+`
+
+yearly_data = db.sql`
+  SELECT * 
+  FROM data 
+  WHERE (citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
+  USING SAMPLE 20000
+`
+```
+
+```{ojs}
+title_search = debounce(viewof input_title)
+
+subset = {
+  let s = Inputs.select([{title: 'Type above more than 2 letters...', eft: 0}], 
+                         {format: d => d.title, labedatal: "Titles found"}) 
+  if (title_search.length > 2) {
+    const sql = `SELECT * FROM data 
+                 WHERE ( contains(lower(title), lower('${title_search}')) AND citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})`
+    return await db.query(sql)
+  } 
+}
+```
+
+
+
+#### Limitations
+
+ - We currenlty only show a sample 20K documents (out of 156K).
+ - Papers must 
+
+```{ojs}
+function getTitleCase(str) {
+  return str.split('-').map(d => d.charAt(0).toUpperCase() + d.slice(1).toLowerCase()).join('-')
+}
+```
+
+```{ojs}
+import {Plot} from "@mkfreeman/plot-tooltip"
+import {debounce} from "@mbostock/debouncing-input"
+import {rangeSlider} from "@bumbeishvili/utils"
+```
+

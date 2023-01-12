@@ -1,0 +1,88 @@
+---
+title: "The rise of computational works 3"
+description: |
+  The computational works strike back
+categories:
+  - Visualization
+  - NLP
+  - S2ORC
+  - Interactive
+  - SciSci
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false    
+image: rise_comp.png
+---
+
+```{ojs}
+import {Plot} from "@mkfreeman/plot-tooltip"
+```
+
+## Rise of programming?
+
+:::{.column-page}
+
+```{ojs}
+//| panel: sidebar
+viewof select = Inputs.select(fields, { multiple: true, value: ['linguistics', 'philosophy', 'history'] })
+viewof show_pct = Inputs.toggle({label: "normalize"})
+```
+
+```{ojs}
+//| panel: fill
+data_f = which(rin(data.map(d => d.field), select)).map(i => data[i]).filter(d => d.year > 1970)
+
+line_plot = () => {
+  
+  const xy_norm = {
+          x: "year",  y:  'pct_comp', stroke: "field", title: "field"
+      }
+    
+  const xy = {
+          x: "year",  y:  'n_comp', stroke: "field", title: "field"
+      }
+
+  return Plot.plot({
+      marginLeft: 50,
+      height: 600,
+      width: 800,
+      marginBottom: 50,
+      x: { label: null, tickRotate: 45 },
+      y: { 
+        percent: show_pct ? true : false, 
+        grid: true, 
+        label: show_pct ? "↑ %" : "↑ n papers" },
+      marks: [
+        Plot.line(data_f, show_pct ? xy_norm : xy)
+      ]
+  })
+}
+
+lp = line_plot()
+
+lp.legend("color")
+```
+
+:::
+
+```{ojs}
+data = FileAttachment("comp_normalized.csv").csv({ typed: true })
+
+fields = ['mathematics', 'geology', 'environmental science', 'art','history', 'linguistics', 'psychology',  'education', 'geography', 'physics', 'law', 'sociology', 'economics', 'political science', 'philosophy']
+
+function rin(arr1, arr2) {
+  return Array.from(arr1, (x) => {
+    return arr2.indexOf(x) == -1 ? false : true
+  })
+}
+
+function which(x) {
+  return x.reduce(
+      (out, bool, index) => bool ? out.concat(index) : out, 
+      []
+    )
+}
+```

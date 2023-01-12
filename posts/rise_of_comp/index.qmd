@@ -1,0 +1,113 @@
+---
+title: "The rise of computational works 1"
+description: |
+  Where, how, and when did computational stuff became popular in science?
+categories:
+  - Visualization
+  - NLP
+  - S2ORC
+  - Interactive
+  - SciSci
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false    
+image: timeline.png
+---
+
+> These days there’s a computational version of everything. Computational biology, computational musicology,computational archaeology,and so on, ad infinitum. Even movies are going digital. Dan Jurafsky, **2006**
+
+Already in 2006, there was a feeling that science was becoming more and more computational. But the rise of computational works is not evenly distributed. While some fields have a long history of using computer science to meet their computational needs, others are concerned that the process of representing their objects of study in a digital format may distort them. Yet others think that programming, say in the humanities, is mostly about acquiring marketable skills that transfer to industry, and as such it goes against long-term values of humanists. 
+
+Unlike previous technologies, programming is able to creep into any field as it permeates many facets of scientific work, e.g. statistics, communication, visualization, simulation, data collection, etc. While it is true that some objects of study are more challenging to represent on computers, the rate at which computational methods are nevertheless being adopted by computational enthusiasts could create a wedge between them and more reluctant fields. This imbalance might even lead to a situation where the adoption of computational tools gives certain individuals or groups a disproportionate amount of influence, especially in fields undergoing a significant shift towards computational works. For example, there is evidence that institutions with more resources to fund larger research groups already increase disproportionately faculty productivity. What if institutions with a greater labor advantage also benefit the most from this computational turn. Those who embrace computational tools may have an advantage in terms of visibility and funding, potentially allowing them to more easily disseminate their ideas.
+
+A strong disparity in methods might have important consequences on the evolution of ideas in science. We ask ourselves, is the rise of computational work is a source of epistemic inequality? Does it benefit groups already favored because of their greater labor resources and institutional prestige? If the cost of learning programming is low enough for some individuals, and those individuals cluster together, will we see a gap forming even within the field? Will field of studies that are more computational spill over into other fields?
+
+To assess whether the rise of computational work has an effect on the evolution of ideas in science, we need to be able to identify computational works. Without this first step, we won't be able to measure the effects of groups adopting computational methods, or how labor advantages interact with the rise of programming. There are surprisingly few studies quantifying the relative adoption of computational works in different fields. Recent advances in the availability of large-scale data and NLP tools make this possibility more accessible than ever before.
+
+We define computational works as projects that seek to understand complex systems using visualizations, simulations, and/or inference processes that require computers and programming languages. Here a few examples, slightly biased from my experience, in chronological order:
+
+```{ojs}
+plot = Plot.plot({
+  y: {ticks: null},
+  width,
+  marks: [
+    Plot.text(
+      data_manual,
+      Plot.dodgeY({
+        x: "date",
+        text: "author",
+        title: d => `${d.author} (${d.date.getFullYear()}):\n${d.desc.slice(0, 130).concat('\n', d.desc.slice(130))}`,
+        r: 30,
+        fill: "category",
+        lineWidth: 7,
+        anchor: "middle"
+      })
+    ),
+    Plot.ruleY([0], {dy: 175}),
+    Plot.ruleX(d3.range(1960,2020,5), {x:d => (new Date(`${d}-01-01`)), opacity: 0.3, lineType: 'dashed'})
+  ]
+})
+
+plot.legend("color")
+```
+
+All of these papers share the fact that they could not have been done without _extensive_ computers and related computer skills. By extensive, I mean that these papers wouldn't be doable without computers and programming skills because it would require too much time or effort.^[There was a time when women were the computers. The original Monte Carlo algorithm was calculated by them during WWII. The calculations were simple enough that it was technically possible for humans to perform them. The trajectory of the first Apollo mission was also computed by women. But as we get deeper into the second half of the 20th century, this is no longer the case] In cases where computer science and mathematics have an application, or are used in a field, it typically requires skills that go beyond a traditional curriculum. For example, Burrows' analysis of Jane Austen's text required skills that go beyond the literary studies curriculum. 
+
+Note that some articles are computational in the sense that they deal with computational stuff, but they remain conceptual. We include them because papers with computational methods ought to cite them.
+
+Ok, so how are we gonna classify computational works? Here is the plan schema:
+
+![](schema_pipeline.jpg)
+
+First, we look at articles containing the `computational` keyword, which will include variations of it because `s2_search` is a kind of elastic search. This is imperfect but it should be better than asking for `digital` or `programming`. Then, we project these paper embeddings into lower dimensions with `umap`. Finally, we use `hdbscan`, a density-based clustering algorithm, to cluster similar papers. 
+
+That's it. The hope is that because document embeddings are informed by title, abstract, and citations, papers that are more computational ought to cluster together. We will evaluate the performance of our pipeline on the subset of papers that we manually identified as computational while reviewing the literature.
+
+We already did some of that, which you can find [here](https://jstonge.quarto.pub/shambolics/posts/rise_of_comp2/).
+
+:::{.callout-warning}
+## Notes on the pipeline:
+
+ - We don't use full texts at the moment, but we could.
+ - We place a lot of hope on `Spectre` embeddings, as we expect to distinguish between types of computational papers based on citation patterns.
+ - We're going to have a lot of false positives and negatives as a result of the first step. This should be improved.
+:::
+
+#### Refs for the methods:
+- [allenai/s2orc](https://github.com/allenai/s2orc) ([paper](https://arxiv.org/abs/1911.02782))
+- [allenai/s2search](https://github.com/allenai/s2search) ([blog post](https://blog.allenai.org/building-a-better-search-engine-for-semantic-scholar-ea23a0b661e7))
+- [allenai/specter](https://github.com/allenai/specter) ([paper](https://arxiv.org/pdf/2004.07180.pdf))
+- We based our `specter2top` step on [ddangelov/Top2Vec](https://github.com/ddangelov/Top2Vec) ([paper](http://arxiv.org/abs/2008.09470))
+  - [umap](https://github.com/lmcinnes/umap)
+  - [hdbScan](https://github.com/scikit-learn-contrib/hdbscan)
+
+```{ojs}
+data_manual = [
+  {'author': 'Lorenz', 'date': new Date('1963-01-01'), 'desc': 'Determining nonperiodic flow by way of numerical solution of convection equations', 'category': 'Numerical simulations'},
+  {'author': 'Gillepsie', 'date': new Date('1976-01-01'), 'desc': 'Simulating the stochastic time evolution of coupled chemical reactions using the Monte Carlo simulation procedure.', 'category': 'Numerical simulations'},
+  {'author': 'Busa', 'date': new Date('1980-01-01'), 'desc': ' Counting words from Thomas Aquinas body of work to better understand Aquinas his philosophical assumptions and truths.', 'category': 'Digital Humanities'},
+  {'author': 'Diaconis & Efron', 'date': new Date('1983-01-01'), 'desc': 'Use of the bootstrap to estimate the correlation coefficient from the data, thus replacing the traditional statistical procedures making assumptions of normality on the data.', 'category': 'Statistical Inference'},
+  {'author': 'Burrows', 'date': new Date('1989-01-01'), 'desc': ' A statistical analysis, or computer-assisted analysis, of literary texts using frequency analysis.', 'category': 'Digital humanities', 'field': 'Literature'},
+    {'author': 'Gelman & Rubin', 'date': new Date('1992-01-01'), 'desc': ' The use and pitfalls of using the Gibbs sampler to summarize multivariate distributions underlying data analysis.', 'category': 'Statistical Inference'},
+  {'author': 'Papert', 'date': new Date('1996-01-01'), 'desc': 'Computational thinking is a popular idea in education of how computers can be the basis of a new type of education in society and science.', 'category': 'Computational thinking', 'field': 'Education'},
+  {'author': 'Tisue & Wilenski', 'date': new Date('2004-01-01'), 'desc': 'Studying complex systems using multi-agent programming languages.', 'category': 'ABMs'},
+  {'author': 'Adamic & Glance', 'date': new Date('2005-01-01'), 'desc': 'Analyzing blog posts from political bloggers as a way to better understand the role of polarization between conservatives and liberals in the U.S Presidential Election of 2004.', 'category': 'Computational Social Science', 'field': 'Political Science'},
+  {'author': 'Kossinets & Watts', 'date': new Date('2006-01-01'), 'desc': 'Analyzing large social networks using tools from network theory.', 'category': 'Computational Social Science'},
+  {'author': 'Hall, Jurafsky & Manning', 'date': new Date('2008-01-01'), 'desc': 'Understanding the evolution of ideas in the field of computational linguistics using topic modeling on all of the ACL anthology', 'category': 'Computational Linguistics', 'field': 'SciSci'},
+  {'author': 'Michel et al.', 'date': new Date('2011-01-01'), 'desc': 'Google books.', 'category': 'Computational Social Science', incorporated: true},
+  {'author': 'Grimmer & Steward', 'date': new Date('2013-01-01'), 'desc': 'It is also an example of replicable work, where the code and data are available on the Harvard Dataverse.', 'category': 'Computational Social Science', 'field': 'Political Science', reproducible: true},
+  {'author': 'Recasens, Danescu-Niculescu-Mizil, & Jurafsky', 'date': new Date('2013-01-01'), 'desc': 'TODO', 'category': 'Computational Linguistics', incorporated: true},
+  {'author': 'Barbera', 'date': new Date('2015-01-01'), 'desc': 'It is also an example of replicable work, where the code and data are available on GITHUB.', 'category': 'Computational Social Science', 'field': 'Political Science', reproducible: true, github: true}
+  ]
+```
+
+```{ojs}
+import {Plot} from "@mkfreeman/plot-tooltip"
+```
+
+
+
+

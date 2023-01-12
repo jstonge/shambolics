@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.37">
+<meta name="generator" content="quarto-99.9.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -96,26 +101,29 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="./index.html">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">shambolics</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html">About</a>
+    <a class="nav-link" href="./about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -135,6 +143,7 @@ ul.task-list{list-style: none;}
   <div class="quarto-title-meta">
 
       
+    
       
     </div>
     
@@ -144,7 +153,7 @@ ul.task-list{list-style: none;}
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="CDAE">CDAE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Interactive">Interactive <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Modeling">Modeling <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Programming">Programming <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Survey">Survey <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(7)</span></div><div class="category" data-category="Allotaxonometer">Allotaxonometer <span class="quarto-category-count">(1)</span></div><div class="category" data-category="CDAE">CDAE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Interactive">Interactive <span class="quarto-category-count">(6)</span></div><div class="category" data-category="NLP">NLP <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Programming">Programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="S2ORC">S2ORC <span class="quarto-category-count">(4)</span></div><div class="category" data-category="SciSci">SciSci <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Survey">Survey <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Visualization">Visualization <span class="quarto-category-count">(4)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -157,49 +166,7 @@ ul.task-list{list-style: none;}
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1669557093325" data-listing-reading-time-sort="6.265">
-<div class="thumbnail">
-<p><a href="./posts/source-sink/index.html"> <img src="./posts/source-sink/fig1_sourcesink.png" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/source-sink/index.html">
-<h3 class="no-anchor listing-title">
-Source-sink behavioural dynamics limit institutional evolution in a group structured society
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-<p>This model describes behaviors that require institutional strength to get off the ground. But as you add institutional levels to your collective, there is a cost. The model finds organizational free-riding, with some organizations preferring others to pay the cost of institutional strength while benefiting the behaviors emerging from those.</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/source-sink/index.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1668800298533" data-listing-reading-time-sort="6.83">
-<div class="thumbnail">
-<p><a href="./posts/sci-group-life-cycle/index.html"> <img src="./posts/sci-group-life-cycle/sci-group-sketch.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/sci-group-life-cycle/index.html">
-<h3 class="no-anchor listing-title">
-Scientific group life cycle
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-<p>This model describes the dilemma of learning to code in research groups when the cost of learning to code depends on the relative number of coders and non-coders in the group.</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/sci-group-life-cycle/index.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="Survey,Programming" data-listing-date-sort="1669525200000" data-listing-file-modified-sort="1669127386365" data-listing-reading-time-sort="13.45">
+<div class="quarto-post image-right" data-index="0" data-categories="Survey,Programming" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1671387575287" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14.31">
 <div class="thumbnail">
 <p><a href="./posts/survey-programming/index.html"> <img src="./posts/survey-programming/soapboxing.jpg" class="thumnail-image"> </a></p>
 </div>
@@ -229,7 +196,7 @@ Programming
 <div class="metadata">
 <a href="./posts/survey-programming/index.html">
 <div class="listing-date">
-Nov 27, 2022
+Jan 12, 2023
 </div>
 <div class="listing-author">
 Jonathan St-Onge
@@ -237,44 +204,46 @@ Jonathan St-Onge
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="Survey,Programming,Modeling" data-listing-date-sort="1669525200000" data-listing-file-modified-sort="1669139708410" data-listing-reading-time-sort="7.505">
+<div class="quarto-post image-right" data-index="1" data-categories="Visualization,NLP,S2ORC,Interactive,SciSci" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1673565799043" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6.79">
 <div class="thumbnail">
-<a href="./posts/modeling-survey-prog/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/modeling-survey-prog/index.html"></a></p>
+<p><a href="./posts/rise_of_comp2/index.html"> <img src="./posts/rise_of_comp2/embeddings.png" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
-<a href="./posts/modeling-survey-prog/index.html">
+<a href="./posts/rise_of_comp2/index.html">
 <h3 class="no-anchor listing-title">
-Survey modeling (early release)
+The rise of computational works 2
 </h3>
 <div class="listing-subtitle">
-Preliminary modeling of a survey on the cost and benefits of learning to code
+
 </div>
 </a>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Survey'); return false;">
-Survey
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('Programming'); return false;">
-Programming
+<div class="listing-category" onclick="window.quartoListingCategory('NLP'); return false;">
+NLP
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('Modeling'); return false;">
-Modeling
+<div class="listing-category" onclick="window.quartoListingCategory('S2ORC'); return false;">
+S2ORC
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Interactive'); return false;">
+Interactive
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('SciSci'); return false;">
+SciSci
 </div>
 </div>
-<a href="./posts/modeling-survey-prog/index.html">
+<a href="./posts/rise_of_comp2/index.html">
 <div class="listing-description">
-<p>The costs and benefits of learning to code in science vary across individuals and disciplines. We should have a better idea of these tradeoffs before selling anyone on coding.</p>
+<p>A new hope.</p>
 </div>
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/modeling-survey-prog/index.html">
+<a href="./posts/rise_of_comp2/index.html">
 <div class="listing-date">
-Nov 27, 2022
+Jan 12, 2023
 </div>
 <div class="listing-author">
 Jonathan St-Onge
@@ -282,7 +251,145 @@ Jonathan St-Onge
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="CDAE,Interactive" data-listing-date-sort="1669525200000" data-listing-file-modified-sort="1668641149088" data-listing-reading-time-sort="6.64">
+<div class="quarto-post image-right" data-index="2" data-categories="Visualization,NLP,S2ORC,Interactive" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1672935794228" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4.365">
+<div class="thumbnail">
+<p><a href="./posts/s2orc_viz/index.html"> <img src="./posts/s2orc_viz/cover.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/s2orc_viz/index.html">
+<h3 class="no-anchor listing-title">
+S2ORC Viz
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('NLP'); return false;">
+NLP
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('S2ORC'); return false;">
+S2ORC
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Interactive'); return false;">
+Interactive
+</div>
+</div>
+<a href="./posts/s2orc_viz/index.html">
+<div class="listing-description">
+<p>I always forget about the s2orc database details. Lets have them here.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/s2orc_viz/index.html">
+<div class="listing-date">
+Jan 12, 2023
+</div>
+<div class="listing-author">
+Jonathan St-Onge
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="Visualization,NLP,S2ORC,Interactive,SciSci" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1673374043464" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1.505">
+<div class="thumbnail">
+<p><a href="./posts/rise_of_comp3/index.html"> <img src="./posts/rise_of_comp3/rise_comp.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/rise_of_comp3/index.html">
+<h3 class="no-anchor listing-title">
+The rise of computational works 3
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('NLP'); return false;">
+NLP
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('S2ORC'); return false;">
+S2ORC
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Interactive'); return false;">
+Interactive
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('SciSci'); return false;">
+SciSci
+</div>
+</div>
+<a href="./posts/rise_of_comp3/index.html">
+<div class="listing-description">
+<p>The computational works strike back</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/rise_of_comp3/index.html">
+<div class="listing-date">
+Jan 12, 2023
+</div>
+<div class="listing-author">
+Jonathan St-Onge
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="Visualization,NLP,S2ORC,Interactive,SciSci" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1673553070802" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7.185">
+<div class="thumbnail">
+<p><a href="./posts/rise_of_comp/index.html"> <img src="./posts/rise_of_comp/timeline.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/rise_of_comp/index.html">
+<h3 class="no-anchor listing-title">
+The rise of computational works 1
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('NLP'); return false;">
+NLP
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('S2ORC'); return false;">
+S2ORC
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Interactive'); return false;">
+Interactive
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('SciSci'); return false;">
+SciSci
+</div>
+</div>
+<a href="./posts/rise_of_comp/index.html">
+<div class="listing-description">
+<p>Where, how, and when did computational stuff became popular in science?</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/rise_of_comp/index.html">
+<div class="listing-date">
+Jan 12, 2023
+</div>
+<div class="listing-author">
+Jonathan St-Onge
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="CDAE,Interactive" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1668641149088" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6.64">
 <div class="thumbnail">
 <p><a href="./posts/interactive-stats/index.html"> <img src="./posts/interactive-stats/sneeches.jpg" class="thumnail-image"> </a></p>
 </div>
@@ -312,7 +419,45 @@ Interactive
 <div class="metadata">
 <a href="./posts/interactive-stats/index.html">
 <div class="listing-date">
-Nov 27, 2022
+Jan 12, 2023
+</div>
+<div class="listing-author">
+Jonathan St-Onge
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="Allotaxonometer,Interactive" data-listing-date-sort="1673499600000" data-listing-file-modified-sort="1672933219138" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2.495">
+<div class="thumbnail">
+<p><a href="./posts/allotax-in-quarto/index.html"> <img src="./posts/allotax-in-quarto/allo.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/allotax-in-quarto/index.html">
+<h3 class="no-anchor listing-title">
+ALLotaxonometer
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Allotaxonometer'); return false;">
+Allotaxonometer
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Interactive'); return false;">
+Interactive
+</div>
+</div>
+<a href="./posts/allotax-in-quarto/index.html">
+<div class="listing-description">
+<p>Allotaxonometer was exclusive to matlab. Not anymore.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/allotax-in-quarto/index.html">
+<div class="listing-date">
+Jan 12, 2023
 </div>
 <div class="listing-author">
 Jonathan St-Onge
@@ -366,7 +511,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -394,31 +556,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
