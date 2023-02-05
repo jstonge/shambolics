@@ -1,0 +1,48 @@
+---
+title: "Airlines Complaints TripAdvisors"
+description: |
+  We know people complain. But how, when, and why? 
+categories:
+  - nlp
+date: today
+author: Jonathan St-Onge
+editor: visual
+listing:
+  contents: unlisted_posts
+format: 
+    html:
+        echo: false 
+---
+
+```{r}
+library(reactable)
+```
+
+::: {.column-screen-inset}
+```{r}
+#| message: false
+reactable(
+  arrow::read_parquet("complaints.parquet") |>
+    dplyr::select(
+      date_pub, commenters, titles, routes, lang, airline,
+      type_f, class_f, ratings, city, state, country, word_count, contribs, 
+      helpful_votes, reviews),
+  defaultColDef = colDef(
+    minWidth = 140,
+    headerStyle = list(background = "#f7f7f8")
+  ),
+  columns = list(
+    reviews = colDef(minWidth = 840, filterable = FALSE),
+    titles = colDef(minWidth = 200),
+    ratings = colDef(minWidth = 85),
+    contribs = colDef(minWidth = 95),
+    date_pub = colDef(minWidth = 100),
+    helpful_votes = colDef(minWidth = 140)
+  ),
+  filterable = TRUE,
+  highlight = TRUE,
+  defaultPageSize = 5,
+  bordered = TRUE
+  )
+```
+:::

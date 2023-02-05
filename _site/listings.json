@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/charting_a_phd/index.html",
       "/posts/survey-programming/index.html",
       "/posts/rise_of_comp2/index.html",
       "/posts/s2orc_viz/index.html",
@@ -10,5 +11,9 @@
       "/posts/interactive-stats/index.html",
       "/posts/allotax-in-quarto/index.html"
     ]
+  },
+  {
+    "listing": "/unlisted_posts/complaints/index.html",
+    "items": []
   }
 ]

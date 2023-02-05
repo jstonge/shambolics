@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo counting abstract by decade
+echo counting abstract
 seq 1950 10 2020 | parallel python count_by_field_and_decade.py --decade {} -q abstract && python count2csv.py -q abstract && rm -rf out_files
 
 echo counting pdf
