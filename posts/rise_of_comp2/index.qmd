@@ -17,30 +17,37 @@ format:
 image: embeddings.png 
 ---
 
+::: {.callout-warning}
+It takes some time for everything to load. Be patien.
+:::
+
+
 #### TODO
- - [x] Add the possibility to locate papers containing keywords in title.
- - [ ] Add the possibility to locate a list of selected papers in the dot plot.
- - [x] Add the possibility to locate selected topics in the dot plot.
- - [x] Add the possibility to locate papers from selected years.
- - [ ] Add the possibility to locate papers from selected venues.
- - [x] Add a table that we can filter based on selected topics and/or title.
+ - see [project](https://github.com/users/jstonge/projects/8)
 
 ### Specter embeddings of computational papers (early)
 
 ```{ojs}
-viewof type_cat = Inputs.select(['topic', 'field', 'year'], {value: 'field', label: "cluster type"})
+viewof type_cat = Inputs.select(['topic', 'field', 'year', 'selected'], {value: 'field', label: "cluster type"})
 
 viewof sel_field = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
 
 viewof input_title = html`<input placeholder="Title.">`
 
-viewof c = rangeSlider(background_data, d=>d.year)
+viewof c = rangeSlider(background_data, d => d.year)
 
-viewof t = rangeSlider(background_data, d=>d.topic)
+viewof t = rangeSlider(background_data, d => d.topic)
+
+viewof toggle = Inputs.toggle({label: "show paper ids"})
+
 ```
 
+There are ${paperIds_data.length} paper from paperIds.
+
+::: {.column-screen-inset}
 ```{ojs}
 embedding_plot = {
+  
   const background_mark = (is_colored) => {  
             return { x: "x", y: "y", fill: is_colored ? type_cat : "grey",  opacity: 0.2, r: "citationCount" }
         }
@@ -53,7 +60,6 @@ embedding_plot = {
 
   const field_mark = {
           x: "x", y: "y", opacity: 0.3, r: "citationCount",
-          // fill: sel_field[0] === undefined ? type_cat : 'red', 
           fill: type_cat === 'field' ? 'red' : type_cat,
           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
         }
@@ -62,6 +68,11 @@ embedding_plot = {
           x: "x", y: "y", opacity: 0.8, r: "citationCount", 
           fill: type_cat, 
           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+        }
+  
+  const paperIds_mark = {
+          x: "x", y: "y", opacity: 1, r: "citationCount", fill: 'lab',
+          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}\nlab: ${d.lab}`
         }
 
   const background_plot = () => Plot.plot({
@@ -108,6 +119,17 @@ embedding_plot = {
         ]
     })  
 
+  const paperIds_plot = () => Plot.plot({
+      inset: 8, height: 800, width: 1200,
+      y: { label: "", ticks: null },
+      x: { label: "", ticks: null },
+      r: { range: [1.5, 10] },
+      marks: [
+        Plot.dot(background_data,  background_mark(false)  ),
+        Plot.dot(paperIds_data, paperIds_mark)
+        ]
+    })  
+
   const subset_and_field_plot = () => Plot.plot({
       inset: 8, height: 800, width: 1200,
       y: { label: "", ticks: null },
@@ -116,24 +138,32 @@ embedding_plot = {
       color: { type: "categorical", scheme: "paired" },
       marks: [
         Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(data_by_field, field_mark  ),
-        Plot.dot(subset, subset_mark )
+        Plot.dot(data_by_field, field_mark),
+        Plot.dot(subset, subset_mark)
         ]
     })
 
   if (subset === undefined && sel_field[0] === undefined) {
+    if (toggle) {
+      return paperIds_plot()
+    }
     return year_plot()
   } else if (subset !== undefined && sel_field[0] === undefined) {
     return subset_plot()
   } else if (subset === undefined && sel_field[0] !== undefined) {
     return field_plot()
+  } else if (subset === undefined && sel_field[0] === undefined && type_cat === 'selected') {
+    return paperIds_plot()
   } else {
     return subset_and_field_plot()
   }
+  
+
 }
 
-embedding_plot.legend("color")
+type_cat === 'selected' ? svg`` : embedding_plot.legend("color")
 ```
+:::
 
 Note that the topics here are custers of documents that are similar with respect to title, abstract, and citations. This is different from vanilla topics that cluster together exclusively based on content.
 
@@ -141,50 +171,40 @@ By adding document-level relatedness, we hope that we will be able to distinguis
 
 #### table
 ```{ojs}
-Inputs.table(subset === undefined ? yearly_data : subset, {columns: ['topic', 'field', 'year', 'citationCount', 'title']})
-```
-
-#### topic heatmap
-```{ojs}
-Plot.plot({
-  width: 1200,
-  marginLeft: 130,
-  x: {tickRotate: 45, label: null},
-  color: {
-    scheme: "bupu",
-    legend: true
-  },
-  marks: [
-    Plot.cell(table_data, {x: "year", y: "topic", fill: "n"})
-  ]
-})
+Inputs.table(subset === undefined ? yearly_data : subset, {columns: ['topic', 'field', 'year', 'venue', 'citationCount', 'title']})
 ```
 
 
 ```{ojs}
 db = DuckDBClient.of({ 
-	data: await FileAttachment("umap_embedding.csv").csv({typed:true})
+	data: await FileAttachment("umap_embedding_2NCOMP.csv").csv({typed:true}),
+  classifyComp: await FileAttachment("classify-comp-proj-tidy.csv").csv({typed:true})
 })
 
 background_data = db.sql`
   SELECT * 
-  FROM data 
-  WHERE (citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5) 
-  USING SAMPLE 20000
+  FROM data  
+  USING SAMPLE 10000
 `
 
 data_by_field = db.sql`
   SELECT * 
   FROM data 
-  WHERE (citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND field = ${sel_field} AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
+  WHERE (citationCount > 0 AND field = ${sel_field} AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
 `
 
 yearly_data = db.sql`
   SELECT * 
   FROM data 
-  WHERE (x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
-  USING SAMPLE 20000
+  WHERE (year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
+  USING SAMPLE 10000
 `
+
+paperIds_data = db.query(
+    `SELECT * 
+     FROM data 
+     INNER JOIN classifyComp ON data.paperId = classifyComp.paper_id;
+`)
 
 table_data = db.sql`
   SELECT year, topic, COUNT()::INT as n
@@ -195,6 +215,7 @@ table_data = db.sql`
 `
 ```
 
+
 ```{ojs}
 title_search = debounce(viewof input_title)
 
@@ -204,7 +225,7 @@ subset = {
   if (title_search.length > 2) {
     
     return await db.query(`SELECT * FROM data 
-                 WHERE ( contains(lower(title), lower('${title_search}')) AND citationCount > 0 AND x >= -8.5 AND x <= 8.5 AND y >= -10.5 AND y <= 7.5 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})`)
+                 WHERE ( contains(lower(title), lower('${title_search}')) AND citationCount > 0 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})`)
   } 
 }
 ```
@@ -212,11 +233,11 @@ subset = {
 
 #### Limitations
 
- - The backgrond data is a sample of 20K documents (out of 156K).
+ - The background data is a sample of 20K documents (out of 156K).
  - When searching a title, we look at all the data (not the 20K subset)
- - We overlay filtered data on top of the background data, which is also a subset of 20K. 
+ - We overlay filtered data on top of the background data, which is also a subset of 20K.
 
-#### "Degree of freedom"
+#### "Degrees of freedom"
  - With `hdbscan`, we can reduce the number of topics so that we have coarser grain topics.
  - With `umap`, we can choose the number of dimensions to reduce
 
@@ -228,5 +249,5 @@ import {rangeSlider} from "@bumbeishvili/utils"
 ```
 
 ```{ojs}
-fields = ['Art', 'Education', 'Economics', 'Environmental-Science', 'Geography', 'Geology', 'History', 'Law', 'Linguistics', 'Mathematics', 'Philosophy', 'Physics', 'Political-Science', 'Psychology', 'Sociology']
+fields = ['Art', 'Biology', 'Business', 'Chemistry', 'Computer-Science', 'Education', 'Economics', 'Environmental-Science', 'Geography', 'Geology', 'History', 'Law', 'Linguistics', 'Mathematics', 'Philosophy', 'Physics', 'Political-Science', 'Psychology', 'Sociology', ]
 ```

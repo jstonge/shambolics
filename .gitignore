@@ -18,3 +18,9 @@ posts/rise_of_comp3/count_field_and_decade.csv
 posts/s2orc_viz/count_field_and_decade.csv
 posts/survey-programming/data_clean.csv
 _site/search.json
+
+posts/rise_of_comp2/umap_embedding_2NCOMP.*
+posts/rise_of_comp2/classify-comp-proj.*
+posts/rise_of_comp2/paperIds.csv
+
+unlisted_posts/complaints/*parquet

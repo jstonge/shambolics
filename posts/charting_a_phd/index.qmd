@@ -1,0 +1,120 @@
+---
+title: "Charting a PhD"
+description: |
+  What should I study? Why do I care?
+categories:
+  - PhD
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false
+---
+
+#### Constellation of ideas from different fields I care about:
+
+- `orange:` science of science/bibliometry/sociology of science
+- `red:` open source software (OSS) in science
+- `green:` computer and internet history
+- `blue:` OSS studies
+
+::: {.callout-caution collapse="true" icon=false}
+## 1. Computational science is already here, it's just not evenly distributed. 
+
+This is a feeling that many people share, but I did not see many qunatative study about it. We know that the spread of computational works is uneven. Physics, chemistry, materials science and perhaps parts of ecology are at the forefront, while social sciences and humanities have only recently begun to embrace computational works  (see [[wing_computational_2006]], [[horn_pragmatics_2006]], [[lazer_social_2009]], [[berry_computational_2011]]). 
+:::
+
+::: {.callout-warning collapse="true" icon=false}
+## 2. Prestigious institions have greater labor advantage, leading to larger research group size, which lead to greater productivity 
+`scisci/prestige:` see [[zhang_labor_2022]]
+:::
+
+::: {.callout-warning collapse="true" icon=false}
+## 3. Women are met with systemic challenges at research university 
+
+`scisci/gender:` For instance, we can think of balancing personal life and productivity, more generally especially when it comes to parenting and maternity leaves ( [[cole_productivity_1984]], [[morgan_unequal_2021]]). There are alsosystemic inequalities that remain with respect to citation behaviors ([[lariviere_bibliometrics_2013]]). 
+:::
+
+::: {.callout-warning collapse="true" icon=false}
+## 4. Computational thinking education has not caught up in fields traditionally unrelated to computing 
+`scisci/training:` see [[butcher_persistent_2007]], [[anderson_student_2016]], [[touchon_mismatch_2016]][^1] 
+:::
+
+::: {.callout-important collapse="true" icon=false}
+## 5. Many people are calling for improved coding practices to make code more reproducible and transparent. 
+`oss-in-sci:` Computational education is no longer limited to techniques. This means that people should not learn the basics of coding but also have a more extensive knowledge of different software engineering tools ([[prlic_ten_2012]], [[wilson_good_2017]],[[minocher_estimating_2021]], [[culina_low_2020]], [[trisovic_large-scale_2022]]).
+:::
+
+::: {.callout-warning collapse="true" icon=false}
+## 6. Universities in general, and the humanities in particular, are confronted with the growing neoliberal vision of knowledge production. 
+`scisci x DH:` There is a tendency to focus on quantitative metrics such as citations and visibility to quantify research values, which could have an effect on who is hired and how funding is allocated ([[piper_there_2016]], [[piper_publication_2017]], more bibliometric stuff, also in recurrent reason of why to code in DH).
+:::
+
+::: {.callout-warning collapse="true" icon=false}
+## 7. The relationships between more qualitative science and computer science is complicated.
+`scisci x DH:` as they don't necessary share the same goals ( [[wallach_computational_2018]]), coding might play other roles than advancing knowledge ([[allington_neoliberal_2016]], [[gold_scandal_2019]]) and qualitative knowledge, by definition, is not trivial to encode on a computer.
+:::
+
+::: {.callout-tip collapse="true" icon=false}
+## 8. Women+ have been pushed out from computer science in the 1980s 
+
+`comp-history:` See [[abbate_recoding_2012]], [[hicks_programmed_2018]] [[thompson_coders_2020]]. This is visible in gender-biased word embeddings trained on recent language corpora ([[bolukbasi_man_2016]]). In recent years, people have fight to change this state of affairs but this is far from a victory [[laberge_subfield_2022]]. 
+:::
+
+::: {.callout-note collapse="true" icon=false}
+## 10. As with other online communities, there is toxicity in the open source world, especially when it comes to identity politics.
+`oss-studies:` To understand toxicity, one must go back to some facets of the hacker culture and transition from hacker cultures to brogrammers, e.g. humors, showing skills, ethics, etc ([[coleman_coding_2013]], [[miller_did_2022]]). See [[skud_being_2011]], [[balali_newcomers_2018]], [[trinkenreich_womens_2022]], as well as  [[lakhani_why_2003]], [[shah_motivation_2006]] for motivation in OSS. 
+:::
+
+::: {.callout-tip collapse="true" icon=false}
+## 11. In the 1980s, computing began to be seen as a male activity. 
+`comp-history:` The male bias means a generation of girls were less and less in contact with computers.
+:::
+
+::: {.callout-tip collapse="true" icon=false}
+## 12. Many "digital natives" are no hackers. 
+`comp-history:` Although computing was seen as male activity, it does not mean that all males were hackers. Starting in the 1980s, computers were tied to videogames and computer became accessible via graphical interfaces. Many "digital natives" are no hackers ([[osullivan_programming_2015]]). This situation is arguably tied to smaller and smaller computer chips that did not invite the newer generations to hack their technologies ([Rasberry Pi talk](https://www.youtube.com/watch?v=Yl8RwxNQTxk) ). 
+:::
+
+#### Connecting the facts:
+
+> TODO
+
+#### RQs:
+
+- Do we see a rise in computational works across fields? Which fields experienced faster growth? Which fields are lagging?
+- Is the rise of programming within field is driven by one or a few institutions? Are these institutions historically related to computing and the Internet development?
+
+```{mermaid}
+flowchart LR
+labor_advantage --> productivity 
+labor_advantage --> computational --> productivity
+inst_prestige --> labor_advantage
+```
+
+- What is the effect of groups taking a computational turn on team diversity (e.g. gender and fields of provenance) v. popularity/productivity? Something like:
+
+```{mermaid}
+flowchart LR
+computational --> fieldOfStudy_team
+computational --> gender_team
+computational --> citation
+```
+
+- Can we detect a wedge forming between computational groups within fields traditionally unrelated to computer science and traditional research groups? 
+- Do computational groups are significantly receiving more funding because they are now doing computational works? Can we show something like:
+
+```{mermaid}
+flowchart LR
+computational --> trustworthiness --> selected 
+computational --> newsworthiness --> selected
+```
+
+
+::: {.callout-note collapse="true" appearance="simple" icon=false}
+## 1.  Is privileged early access to digital infracture gave an early advantage to prestigious institions, even more so with the rise of computational works?
+`comp-history:` Some institutions had privileged access to the internet and digital infrastructure before others, which mean they benefited from digital technologies for a longer time. These institutions might be tied to prestige status. As the internet became delocalized, the relative importance of being the first to be on the internet might have been decreasing.
+::: 
+
+[^1]: Note that some of the articles are about the gap between statistical education in ecology and current methods used nowadays. Underlying this argument lies a gap between traditional statistics and often computational methods requiring to various to know how to program. 
