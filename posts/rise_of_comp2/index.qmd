@@ -18,7 +18,7 @@ image: embeddings.png
 ---
 
 ::: {.callout-warning}
-It takes some time for everything to load. Be patien.
+It takes a while for everything to load. Be patient.
 :::
 
 
@@ -29,141 +29,248 @@ It takes some time for everything to load. Be patien.
 
 ```{ojs}
 viewof type_cat = Inputs.select(['topic', 'field', 'year', 'selected'], {value: 'field', label: "cluster type"})
+viewof sel_field = Inputs.select([''].concat(Object.keys(lookup)), {label: "Type field"})
+// viewof sel_field = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
 
-viewof sel_field = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
+// viewof input_title = html`<input placeholder="Title.">`
 
-viewof input_title = html`<input placeholder="Title.">`
+// viewof c = rangeSlider(background_data, d => d.year)
 
-viewof c = rangeSlider(background_data, d => d.year)
+viewof year_min = Inputs.range([1950, 2020], {label: 'year min', value: 1950})
+viewof year_max = Inputs.range([1951, 2020], {label: 'year max', value: 2020})
 
-viewof t = rangeSlider(background_data, d => d.topic)
+// viewof toggle = Inputs.toggle({label: "show paper ids"})
 
-viewof toggle = Inputs.toggle({label: "show paper ids"})
+```
 
+```{ojs}
+viewof reset = html`<button>Reset`
+
+plot_embedding = () => {
+  const zoom = d3.zoom()
+      .scaleExtent([0.5, 32])
+      .on("zoom", zoomed);
+
+  const svg = d3.create("svg")
+      .attr("viewBox", [0, 0, width, height]);
+
+  const gGrid = svg.append("g");
+
+  // Background data
+
+  const gDotB = svg.append("g")
+        .attr("fill", "none")
+        .attr("class", "circles")
+        .attr("stroke-linecap", "round");
+
+  gDotB.selectAll("circle")
+      .data(background_data)
+      .join("circle")
+        .attr("cx", d => x(d.x))
+        .attr("cy", d => y(d.y))
+        .attr("fill", 'grey')
+        .attr("opacity", 0.3)
+        .attr("r", d => r(d.citationCount));
+
+  // Yearly data
+
+  const gDot = svg.append("g")
+      .attr("fill", "none")
+      .attr("class", "circles")
+      .attr("stroke-linecap", "round");
+
+  gDot.append("style").text(hover_css);
+
+  gDot.selectAll("circle")
+    .data(yearly_data)
+    .join("circle")
+      .attr("cx", d => x(d.x))
+      .attr("cy", d => y(d.y))
+      .attr("fill", d => sel_field === "" ? z(d[type_cat]) : 'grey')
+      .attr("opacity", d => sel_field === "" ? 0.5 : 0.3)
+      .attr("r", d => r(d.citationCount))
+    .append("title")
+      .text(d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`);
+  
+  // Field data
+
+  const gDotF = svg.append("g")
+        .attr("fill", "none")
+        .attr("class", "circles")
+        .attr("stroke-linecap", "round");
+
+  gDotF.append("style").text(hover_css);
+
+  if (sel_field !== '') {
+    
+    gDotF.selectAll("circle")
+      .data(data_by_field)
+      .join("circle")
+        .attr("cx", d => x(d.x))
+        .attr("cy", d => y(d.y))
+        .attr("fill", d => sel_field === "" ? 'black' : 'red')
+        .attr("opacity", d => sel_field === "" ? 0 : 0.4)
+        .attr("r", d => r(d.citationCount))
+      .append("title")
+        .text(d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`);
+  }
+  
+  const gx = svg.append("g");
+
+  const gy = svg.append("g");
+
+  svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
+
+  function zoomed({transform}) {
+    const zx = transform.rescaleX(x).interpolate(d3.interpolateRound);
+    const zy = transform.rescaleY(y).interpolate(d3.interpolateRound);
+    gDot.attr("transform", transform).attr("stroke-width", 2 / transform.k);
+    gDotF.attr("transform", transform).attr("stroke-width", 2 / transform.k);
+    gDotB.attr("transform", transform).attr("stroke-width", 2 / transform.k);
+    gx.call(xAxis, zx);
+    gy.call(yAxis, zy);
+    gGrid.call(grid, zx, zy);
+  }
+
+  return Object.assign(svg.node(), {
+    reset() {
+      svg.transition()
+          .duration(750)
+          .call(zoom.transform, d3.zoomIdentity);
+    }
+  });
+}
+```
+
+::: {.column-screen-inset}
+
+```{ojs}
+chart = plot_embedding()
+```
+
+:::
+
+```{ojs}
+reset, chart.reset()
+
+// embedding_plot = {
+ 
+//   const background_mark = (is_colored) => {  
+//             return { x: "x", y: "y", fill: is_colored ? type_cat : "grey",  opacity: 0.2, r: "citationCount" }
+//         }
+  
+//   const subset_mark = {
+//           x: "x", y: "y", fill: type_cat, r: "citationCount", 
+//           opacity: subset === undefined ? 0.3 : 1, 
+//           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+//     }
+
+//   const field_mark = {
+//           x: "x", y: "y", opacity: 0.3, r: "citationCount",
+//           fill: type_cat === 'field' ? 'red' : type_cat,
+//           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+//         }
+  
+//   const year_mark = {
+//           x: "x", y: "y", opacity: 0.8, r: "citationCount", 
+//           fill: type_cat, 
+//           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
+//         }
+  
+//   const paperIds_mark = {
+//           x: "x", y: "y", opacity: 1, r: "citationCount", fill: 'lab',
+//           title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}\nlab: ${d.lab}`
+//         }
+
+//   const background_plot = () => Plot.plot({
+//       inset: 8, height: height, width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       color: { type: "categorical", scheme: "paired" },
+//       marks: [  Plot.dot(background_data,  background_mark(true)  ) ]
+//     })
+  
+//   const subset_plot = () => Plot.plot({
+//       inset: 8, height: height,  width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       color: { type: "categorical", scheme: "paired" },
+//       marks: [
+//         Plot.dot(background_data,  background_mark(false)  ),
+//         Plot.dot(subset, subset_mark )
+//         ]
+//     })
+  
+//   const field_plot = () => Plot.plot({
+//       inset: 8, height: height, width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       color: { type: "categorical", scheme: "paired" },
+//       marks: [
+//         Plot.dot(background_data,  background_mark(false)  ),
+//         Plot.dot(data_by_field, field_mark )
+//         ]
+//     })
+  
+//   const year_plot = () => Plot.plot({
+//       inset: 8, height: height, width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       marks: [
+//         Plot.dot(background_data,  background_mark(false)  ),
+//         Plot.dot(yearly_data, year_mark  )
+//         ]
+//     })  
+
+//   const paperIds_plot = () => Plot.plot({
+//       inset: 8, height: height, width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       marks: [
+//         Plot.dot(background_data,  background_mark(false)  ),
+//         Plot.dot(paperIds_data, paperIds_mark)
+//         ]
+//     })  
+
+//   const subset_and_field_plot = () => Plot.plot({
+//       inset: 8, height: height, width: width,
+//       y: { label: "", ticks: null },
+//       x: { label: "", ticks: null },
+//       r: { range: [1.5, 10] },
+//       color: { type: "categorical", scheme: "paired" },
+//       marks: [
+//         Plot.dot(background_data,  background_mark(false)  ),
+//         Plot.dot(data_by_field, field_mark),
+//         Plot.dot(subset, subset_mark)
+//         ]
+//     })
+
+//   if (subset === undefined && sel_field[0] === undefined) {
+//     if (toggle) {
+//       return paperIds_plot()
+//     }
+//     return year_plot()
+//   } else if (subset !== undefined && sel_field[0] === undefined) {
+//     return subset_plot()
+//   } else if (subset === undefined && sel_field[0] !== undefined) {
+//     return field_plot()
+//   } else if (subset === undefined && sel_field[0] === undefined && type_cat === 'selected') {
+//     return paperIds_plot()
+//   } else {
+//     return subset_and_field_plot()
+//   } 
+
+// }
+
+// type_cat === 'selected' ? svg`` : embedding_plot.legend("color")
 ```
 
 There are ${paperIds_data.length} paper from paperIds.
-
-::: {.column-screen-inset}
-```{ojs}
-embedding_plot = {
-  
-  const background_mark = (is_colored) => {  
-            return { x: "x", y: "y", fill: is_colored ? type_cat : "grey",  opacity: 0.2, r: "citationCount" }
-        }
-  
-  const subset_mark = {
-          x: "x", y: "y", fill: type_cat, r: "citationCount", 
-          opacity: subset === undefined ? 0.3 : 1, 
-          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
-    }
-
-  const field_mark = {
-          x: "x", y: "y", opacity: 0.3, r: "citationCount",
-          fill: type_cat === 'field' ? 'red' : type_cat,
-          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
-        }
-  
-  const year_mark = {
-          x: "x", y: "y", opacity: 0.8, r: "citationCount", 
-          fill: type_cat, 
-          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}`
-        }
-  
-  const paperIds_mark = {
-          x: "x", y: "y", opacity: 1, r: "citationCount", fill: 'lab',
-          title: d => `${d.title} (${d.field})\n# citations: ${d.citationCount}\nYear: ${d.year}\ntopic: ${d.topic}\nlab: ${d.lab}`
-        }
-
-  const background_plot = () => Plot.plot({
-      inset: 8, height: 800, width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      color: { type: "categorical", scheme: "paired" },
-      marks: [  Plot.dot(background_data,  background_mark(true)  ) ]
-    })
-  
-  const subset_plot = () => Plot.plot({
-      inset: 8, height: 800,  width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      color: { type: "categorical", scheme: "paired" },
-      marks: [
-        Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(subset, subset_mark )
-        ]
-    })
-  
-  const field_plot = () => Plot.plot({
-      inset: 8, height: 800, width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      color: { type: "categorical", scheme: "paired" },
-      marks: [
-        Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(data_by_field, field_mark )
-        ]
-    })
-  
-  const year_plot = () => Plot.plot({
-      inset: 8, height: 800, width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      marks: [
-        Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(yearly_data, year_mark  )
-        ]
-    })  
-
-  const paperIds_plot = () => Plot.plot({
-      inset: 8, height: 800, width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      marks: [
-        Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(paperIds_data, paperIds_mark)
-        ]
-    })  
-
-  const subset_and_field_plot = () => Plot.plot({
-      inset: 8, height: 800, width: 1200,
-      y: { label: "", ticks: null },
-      x: { label: "", ticks: null },
-      r: { range: [1.5, 10] },
-      color: { type: "categorical", scheme: "paired" },
-      marks: [
-        Plot.dot(background_data,  background_mark(false)  ),
-        Plot.dot(data_by_field, field_mark),
-        Plot.dot(subset, subset_mark)
-        ]
-    })
-
-  if (subset === undefined && sel_field[0] === undefined) {
-    if (toggle) {
-      return paperIds_plot()
-    }
-    return year_plot()
-  } else if (subset !== undefined && sel_field[0] === undefined) {
-    return subset_plot()
-  } else if (subset === undefined && sel_field[0] !== undefined) {
-    return field_plot()
-  } else if (subset === undefined && sel_field[0] === undefined && type_cat === 'selected') {
-    return paperIds_plot()
-  } else {
-    return subset_and_field_plot()
-  }
-  
-
-}
-
-type_cat === 'selected' ? svg`` : embedding_plot.legend("color")
-```
-:::
 
 Note that the topics here are custers of documents that are similar with respect to title, abstract, and citations. This is different from vanilla topics that cluster together exclusively based on content.
 
@@ -171,7 +278,7 @@ By adding document-level relatedness, we hope that we will be able to distinguis
 
 #### table
 ```{ojs}
-Inputs.table(subset === undefined ? yearly_data : subset, {columns: ['topic', 'field', 'year', 'venue', 'citationCount', 'title']})
+Inputs.table(yearly_data, {columns: ['topic', 'field', 'year', 'venue', 'citationCount', 'title']})
 ```
 
 
@@ -190,44 +297,41 @@ background_data = db.sql`
 data_by_field = db.sql`
   SELECT * 
   FROM data 
-  WHERE (citationCount > 0 AND field = ${sel_field} AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
+  WHERE (field = ${sel_field} AND year >= ${year_min} AND year <= ${year_max} AND citationCount > 0)
 `
 
 yearly_data = db.sql`
   SELECT * 
   FROM data 
-  WHERE (year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
-  USING SAMPLE 10000
+  WHERE (year >= ${year_min} AND year <= ${year_max} AND citationCount > 0)
+  USING SAMPLE 20000
 `
 
-paperIds_data = db.query(
-    `SELECT * 
-     FROM data 
-     INNER JOIN classifyComp ON data.paperId = classifyComp.paper_id;
-`)
+// paperIds_data = db.query(
+//     `SELECT * 
+//      FROM data 
+//      INNER JOIN classifyComp ON data.paperId = classifyComp.paper_id;
+// `)
 
 table_data = db.sql`
   SELECT year, topic, COUNT()::INT as n
   FROM data 
-  WHERE (year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})
+  WHERE (year >= ${year_min} AND year <= ${year_max})
   GROUP BY
     year, topic
 `
-```
 
+// title_search = debounce(viewof input_title)
 
-```{ojs}
-title_search = debounce(viewof input_title)
-
-subset = {
-  let s = Inputs.select([{title: 'Type above more than 2 letters...', eft: 0}], 
-                         {format: d => d.title, labedatal: "Titles found"}) 
-  if (title_search.length > 2) {
+// subset = {
+//   let s = Inputs.select([{title: 'Type above more than 2 letters...', eft: 0}], 
+//                          {format: d => d.title, labedatal: "Titles found"}) 
+//   if (title_search.length > 2) {
     
-    return await db.query(`SELECT * FROM data 
-                 WHERE ( contains(lower(title), lower('${title_search}')) AND citationCount > 0 AND year >= ${c.range[0]} AND year <= ${c.range[1]} AND topic >= ${t.range[0]} AND topic <= ${t.range[1]})`)
-  } 
-}
+//     return await db.query(`SELECT * FROM data 
+//                  WHERE ( contains(lower(title), lower('${title_search}')) AND citationCount > 0 AND year >= ${year_min} AND year <= ${year_max}`)
+//   } 
+// }
 ```
 
 
@@ -244,10 +348,86 @@ subset = {
 
 ```{ojs}
 import {Plot} from "@mkfreeman/plot-tooltip"
-import {debounce} from "@mbostock/debouncing-input"
-import {rangeSlider} from "@bumbeishvili/utils"
 ```
 
 ```{ojs}
 fields = ['Art', 'Biology', 'Business', 'Chemistry', 'Computer-Science', 'Education', 'Economics', 'Environmental-Science', 'Geography', 'Geology', 'History', 'Law', 'Linguistics', 'Mathematics', 'Philosophy', 'Physics', 'Political-Science', 'Psychology', 'Sociology', ]
+
+lookup = {
+  const out = {}
+  for (let i=0; i < fields.length; i++) {
+    out[fields[i]] = i
+  }
+  return out
+}
+
+hover_css = `
+    .circles {
+      stroke: transparent;
+      stroke-width: 0.1px;
+    }
+    .circles circle:hover {
+      stroke: black;
+    }
+  `
+
+height = 600
+width = 1200
+k = height / width
+margin = ({top: 12, right: 10, bottom: 26, left: 26})
+
+xMin = d3.min(yearly_data, d=>d.x)
+xMax = d3.max(yearly_data, d=>d.x)
+yMin = d3.min(yearly_data, d=>d.y)
+yMax = d3.max(yearly_data, d=>d.y)
+
+extent_x = d3.extent(yearly_data, d => d.x)
+extent_y = d3.extent(yearly_data, d => d.y)
+
+x = d3.scaleLinear()
+  .domain([extent_x[0]-3, extent_x[1]+3])
+  .range([0, width])
+
+y = d3.scaleLinear()
+  .domain([(extent_y[0] * k)-3, (extent_y[1] * k)+3])
+  .range([height, 0])
+
+r = d3.scaleLog()
+  .domain(d3.extent(yearly_data.map(d => d.citationCount)))
+  .range( [0.5, 1.3] )
+
+z = d3.scaleOrdinal()
+  .domain(yearly_data.map(d => d[type_cat]))
+  .range(d3.schemePaired)
+
+yAxis = (g, y) => g
+  .call(d3.axisRight(y).ticks(12 * k))
+  .call(g => g.select(".domain").attr("display", "none"))
+
+xAxis = (g, x) => g
+    .attr("transform", `translate(0,${height})`)
+
+grid = (g, x, y) => g
+    .attr("stroke", "currentColor")
+    .attr("stroke-opacity", 0.1)
+    .call(g => g
+      .selectAll(".x")
+      .data(x.ticks(12))
+      .join(
+        enter => enter.append("line").attr("class", "x").attr("y2", height),
+        update => update,
+        exit => exit.remove()
+      )
+        .attr("x1", d => 0.5 + x(d))
+        .attr("x2", d => 0.5 + x(d)))
+    .call(g => g
+      .selectAll(".y")
+      .data(y.ticks(12 * k))
+      .join(
+        enter => enter.append("line").attr("class", "y").attr("x2", width),
+        update => update,
+        exit => exit.remove()
+      )
+        .attr("y1", d => 0.5 + y(d))
+        .attr("y2", d => 0.5 + y(d)));
 ```
