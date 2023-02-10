@@ -13,17 +13,18 @@ format:
     html:
       toc: true
       echo: false
+image: mongo.png
 ---
 
 I currently use the [vscode plug-in](https://code.visualstudio.com/docs/azure/mongodb) to interact with mongoDB. I like it b/c it is a middle between mongoDB Compass and the commandline.
 
 Key refs:
 
- - `install mongosh:` [mongodb-zsh/install/](https://www.mongodb.com/docs/mongodb-zsh/install/)
+ - `install mongosh:` [mongodb-js/install/](https://www.mongodb.com/docs/mongodb-js/install/)
  - `data modeling:` [manual/core/data-modeling-introduction/](https://www.mongodb.com/docs/manual/core/data-modeling-introduction/)
  - `operators`: [reference/operator/query/](https://www.mongodb.com/docs/manual/reference/operator/query/)
  - `Monitoring DB`: [percona/monitoring-mongodb-collection-stats-with-percona-monitoring-and-management/](https://www.percona.com/blog/monitoring-mongodb-collection-stats-with-percona-monitoring-and-management/)
- - `Update documents`: [mongodb-zsh/crud/update/](https://www.mongodb.com/docs/mongodb-zsh/crud/update/)
+ - `Update documents`: [mongodb-js/crud/update/](https://www.mongodb.com/docs/mongodb-js/crud/update/)
  - `Queries`:
     - [manual/tutorial/query-array-of-documents/](https://www.mongodb.com/docs/manual/tutorial/query-array-of-documents/)
  - `indexes`: 
@@ -34,6 +35,7 @@ Key refs:
     - [bmc/mongodb-indexes](https://www.bmc.com/blogs/mongodb-indexes/)
  - `best practices:`
     - [basics/best-practices](https://www.mongodb.com/basics/best-practices)
+    - [/m201-mongodb-performance/lesson-2-mongodb-indexes](https://learn.mongodb.com/learn/course/m201-mongodb-performance/lesson-2-mongodb-indexes/learn?page=1)
 
 
 ## Basics
@@ -43,7 +45,7 @@ Connect to papersDB
 ::: {.panel-tabset}
 ## mongosh
 
-```zsh
+```js
 [direct: mongos] test> use('papersDB');
 ```
 
@@ -58,34 +60,57 @@ db = client["papersDB"]
 :::
 
 Looking at collections within our DB
-```zsh
+```js
 [direct: mongos] test> show collections;
 ```
 
 Look at already existing indexes
-```zsh
+
+::: {.panel-tabset}
+
+## mongosh
+```js
 [direct: mongos] papersDB> db.metadata.getIndexes()
 ```
 
-estimate count document based on year is super quick
-```zsh
+## python
+```python
+db.metadata.index_information()
+```
+:::
+
+estimate total count documents...
+```js
 [direct: mongos] papersDB> db.metadata.estimatedDocumentCount()
+```
+
+or count documents based on a particular query:
+```js 
+[direct: mongos] papersDB> db.metadata.countDocuments({year: 2018})
 ```
 
 you can 'explain' queries. Super useful to understand how mongoDB works and query performances.
 
-```zsh
+```js
 [direct: mongos] papersDB> var exp = db.metadata.explain("executionStats")
-[direct: mongos] papersDB> exp.find({title: "Scale-free networks are rare"}) // executionTimeMillis: 14827; totalDocsExamined: 19,786,006
-[direct: mongos] papersDB> db.metadata.createIndex({year: -1}); // create index based on age
+[direct: mongos] papersDB> exp.find({title: "Scale-free networks are rare"}) //  totalDocsExamined: 19,786,006
+[direct: mongos] papersDB> db.metadata.createIndex({year: -1}); // create index based on 
 [direct: mongos] papersDB> exp.find({title: "Scale-free networks are rare", year: 2018}).limit(1) // executionTimeMillis: 3851; totalKeysExamined: 786,497
 ```
-
 dropping indexes
 
-```zsh
+::: {.panel-tabset}
+
+## mongosh
+```js
 [direct: mongos] papersDB> db.metadata.dropIndex("year_-1")
 ```
+
+## python
+```python
+db.metadata.drop_index("year_-1")
+```
+:::
 
 ## Useful queries
 
@@ -95,7 +120,7 @@ dropping indexes
 ::: {.panel-tabset}
 ## mongosh
 
-```zsh
+```js
 [direct: mongos] papersDB> db.pdf_parses.findOne({ paper_ID: "77497072"});
 ```
 
@@ -108,14 +133,14 @@ db.metadata.find_one({ "paper_ID": "77497072"})
 :::
 
 2-find papers based on `paper_id` and year
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.findOne({ year: {$gt: 2015, $lt: 2022}, paper_id: "f1b4361a1978e93018c5fdfe4856250152676ffb" })
 ```
 
 3-Query papers with `body_text`
 see [stack overflow](https://stackoverflow.com/questions/14789684/find-mongodb-records-where-array-field-is-not-empty)
 
-```zsh
+```js
 [direct: mongos] papersDB> db.pdf_parses.findOne({ body_text: { $gt: true, $type: 'array', $ne: [] }})
 ```
 
@@ -125,7 +150,7 @@ see [stack overflow](https://stackoverflow.com/questions/14789684/find-mongodb-r
 ::: {.panel-tabset}
 
 ## mongosh
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.findOne({ 'authors.0.first': "Aaron" })
 [direct: mongos] papersDB> db.metadata.findOne({ 'authors.first': "Aaron" })
 [direct: mongos] papersDB> db.metadata.findOne({ 'authors.last': "Clauset" })
@@ -144,11 +169,11 @@ WHERE authors.last = "Clauset";
 
 
 Create index based on descending year
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.createIndex({year: -1});
 ```
 From Percona, this allows to improve all the queries that find documents with a condition and the year field, like the following:
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.find( { year : 2018 } ) 
 [direct: mongos] papersDB> db.metadata.find( { title : "Scale-free networks are rare", year : 2018 } )
 [direct: mongos] papersDB> db.metadata.find( { year : { $gt : 2020} } )
@@ -157,7 +182,7 @@ From Percona, this allows to improve all the queries that find documents with a 
 
 Create index based on authors (Multikey indexes)
 
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.createIndex( { authors: 1 } )
 [direct: mongos] papersDB> db.metadata.find( { authors.last: "Clauset" } )
 ```
@@ -165,7 +190,7 @@ Create index based on authors (Multikey indexes)
 Create index based on year and `has_body_text` (include a Partial indexes and Unique)
 In order for the partial index to be used the queries must contain a condition on the year and body_text field.
 
-```zsh
+```js
 [direct: mongos] papersDB> db.metadata.createIndex(
    { "paper_id": 1 },
    { unique: true },
@@ -177,13 +202,13 @@ In order for the partial index to be used the queries must contain a condition o
 
 Create index based on year (asc) and bounded by 1950-60
 
-```zsh
+```js
 [direct: mongos] papersDB> exp.find({"year": {$gte: 1950, $lte: 1960}, "paper_id": "77490322"}).limit(1) // executionTimeMillis: 360429; totalKeysExamined: 2024098
 [direct: mongos] papersDB> db.metadata.createIndex({year:1}, { partialFilterExpression: { year : { $gte: 1950, $lte: 1960 } } });
 [direct: mongos] papersDB> exp.find({"year": {$gte: 1950, $lte: 1960}, "paper_id": "77490322"}).limit(1) // executionTimeMillis: 68676; totalKeysExamined: 406162
 ```
 
-Create index based partial filter expression
+Create index with `partialFilterExpression`
 
 ::: {.panel-tabset}
 ## python
@@ -196,17 +221,32 @@ db.metadata.create_index(
  partialFilterExpression={ "year" : { "$gte": 1950, "$lte": 1960 }, "abstract": {"$type": "string"} }
 )
 ```
+
+With this one, we get to `totalDocsExamined: 79,721` examined (v. `totalDocsExamined: 720,475`).
+
 :::
 
 ## Updating documents
 
 1- Update s2fos 
-```zsh
+
+::: {.panel-tabset}
+
+## mongosh
+```js
 db.metadata.updateOne({paper_id: '84881204', year: {$gte: 1950, $lte: 1960}}, {'$set': {'s2fos_field_of_study': ['Medicine']}}})
 ```
 
+## python
+```python
+q = {"paper_id": '84881204', "year": { "$gte": 1950, "$lte": 1960 }}
+new_values = {"$set": { "s2fos_field_of_study": ['Medicine']} }
+db.metadata.update_one(q, new_values)
+```
+:::
+
 2- Remove a field
-```zsh
+```js
 db.metadata.updateOne({paper_id: '84881204', year: {$gte: 1950, $lte: 1960}}, {$unset: {s2fos: ""}})
 ```
 
@@ -216,7 +256,7 @@ db.metadata.updateOne({paper_id: '84881204', year: {$gte: 1950, $lte: 1960}}, {$
 
 Find duplicated rows (not sure it is working yet)
 
-```zsh
+```js
 [direct: mongos] papersDB> const aggregation = [
     {"$group" : { "_id": "$paper_id", "count": { "$sum": 1 } } },
     {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }, 
@@ -232,7 +272,7 @@ Find duplicated rows (not sure it is working yet)
 Embed one collection into a second collection 
 not sure it is working yet, this is a chatgpt answer
 
-```zsh
+```js
 [direct: mongos] papersDB> db.collection1.update({name: "John Doe"}, {$set: {address: db.collection2.findOne({address: "123 Main St"})}})
 ```
 

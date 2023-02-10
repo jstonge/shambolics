@@ -12,6 +12,12 @@ format:
         echo: false
 ---
 
+#### Summary
+
+As computing becomes more affordable, data more accessible, and the Web continues to grow, a growing number of scientists are shifting towards computational approaches. But the adoption of computational practices is not evenly distributed. Our concern is the potential negative effects on the future of science that the relative cost-benefits of adopting computational practices may have. Knowing that gender-bias in society increase the chance of male working with computers early on, or that researchers at prestigious institutions benefit significantly from advanced digital infrastructure, we expect that nonmeritocratic factors will exert a greater influence on the dissemination of ideas with the rise of computational science, accruing the success of individuals and institutions in proportion to their initial level of wealth.
+
+As there are more and more incentive to code in science, we investigate the tension between individuals and groups in a scientific context.
+
 #### Constellation of ideas from different fields I care about:
 
 - `orange:` science of science/bibliometry/sociology of science
@@ -22,7 +28,7 @@ format:
 ::: {.callout-caution collapse="true" icon=false}
 ## 1. Computational science is already here, it's just not evenly distributed. 
 
-This is a feeling that many people share, but I did not see many qunatative study about it. We know that the spread of computational works is uneven. Physics, chemistry, materials science and perhaps parts of ecology are at the forefront, while social sciences and humanities have only recently begun to embrace computational works  (see [[wing_computational_2006]], [[horn_pragmatics_2006]], [[lazer_social_2009]], [[berry_computational_2011]]). 
+This is a feeling that many people share, but I did not see many quantitative study about it. We know that the spread of computational works is uneven. Physics, chemistry, materials science and perhaps parts of ecology are at the forefront, while social sciences and humanities have only recently begun to embrace computational works  (see [[wing_computational_2006]], [[horn_pragmatics_2006]], [[lazer_social_2009]], [[berry_computational_2011]]). 
 :::
 
 ::: {.callout-warning collapse="true" icon=false}

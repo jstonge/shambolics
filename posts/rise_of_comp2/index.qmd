@@ -29,7 +29,7 @@ It takes a while for everything to load. Be patient.
 
 ```{ojs}
 viewof type_cat = Inputs.select(['topic', 'field', 'year', 'selected'], {value: 'field', label: "cluster type"})
-viewof sel_field = Inputs.select([''].concat(Object.keys(lookup)), {label: "Type field"})
+viewof sel_field = Inputs.select([''].concat(Object.keys(lookup)), {label: "Type field", multiple: true})
 // viewof sel_field = Inputs.select([''].concat(fields), {value: '', label: "choose field"})
 
 // viewof input_title = html`<input placeholder="Title.">`
@@ -40,7 +40,6 @@ viewof year_min = Inputs.range([1950, 2020], {label: 'year min', value: 1950})
 viewof year_max = Inputs.range([1951, 2020], {label: 'year max', value: 2020})
 
 // viewof toggle = Inputs.toggle({label: "show paper ids"})
-
 ```
 
 ```{ojs}
