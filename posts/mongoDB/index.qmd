@@ -164,6 +164,29 @@ WHERE authors.last = "Clauset";
 ```
 :::
 
+5-Query `concept_oa` based on common ancestors
+
+::: {.panel-tabset}
+
+## compass
+```js
+{$and: [{'ancestors.display_name': 'Ecology'}, {'ancestors.display_name': 'Computer science'}]}
+```
+:::
+
+
+
+### Regex queries
+
+```js
+db.s2orc.find({
+   content.text: {
+      $regex: /data availability statement/i
+   }
+})
+```
+
+
 
 ## Creating index 
 
@@ -226,6 +249,21 @@ With this one, we get to `totalDocsExamined: 79,721` examined (v. `totalDocsExam
 
 :::
 
+## Text queries
+
+To do text queries, you must create an index first:
+
+```js
+[direct: mongos] papersDB> db['publication-venues'].createIndex( { name: "text" } )
+```
+
+then you can query as follow
+
+```js
+[direct: mongos] papersDB> db['publication-venues'].find({ $text: {$search: "ecology", $caseSensitive: false} }).limit(1)
+```
+
+
 ## Updating documents
 
 1- Update s2fos 
@@ -264,6 +302,16 @@ Find duplicated rows (not sure it is working yet)
 ]
 
 [direct: mongos] papersDB> db.pdf_parses.aggregate(aggregation);
+```
+
+### Lookups is an aggregate query
+
+```js
+[direct: mongos]db.s2orc.aggregate([
+   { $lookup: {
+      from: "papers", localField: "corpusid", foreignField: "corpusid", as: "paper_metadata"
+      } }
+   ])
 ```
 
 ## Document embeddings
