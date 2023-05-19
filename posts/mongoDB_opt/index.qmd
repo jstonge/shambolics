@@ -1,0 +1,644 @@
+---
+title: "How to accelerate MongoDB"
+description: |
+  Optimization, optimization, optimization,...
+categories:
+  - ref
+  - mongoDB
+execute:
+  cache: true
+date: today
+author: Jonathan St-Onge
+editor: visual
+image: mongo.png
+---
+
+# Case study on how top optimize mongoDB query
+
+We want to perform a `$lookup` from (s2orc) `papers`to `works_oa` (openAlex) to check how many `DOIs` match across collections.
+
+```{python}
+#| echo: false 
+from creds import client
+from bson.objectid import ObjectId
+from pymongo import ASCENDING, UpdateOne
+from pprint import pprint
+import time
+db = client['papersDB']
+```
+
+```{python}
+#| echo: false
+#| eval: false
+def reinitialize_test_db():
+    [db.paper_test.drop_index(i) for i in db.paper_test.index_information() if i != "_id_"]
+    [db.works_oa_test.drop_index(i) for i in db.works_oa_test.index_information() if i != "_id_"]
+    db.works_oa_test.update_many({}, { '$unset': { 'mag': '' } })
+    db.paper_test.update_many({}, { '$unset': { 'doi': '' } })
+
+reinitialize_test_db()
+```
+
+## mongoDB helpers
+
+```{python}
+# Step in the aggregation pipeline that we'll use often
+return_top_5 = { "$limit": 5 }
+only_keep_existing_matches = { "$match": { "matches": { "$ne": [] } } }
+```
+
+## Creating a simplify subset for experimentation
+
+It is a good idea to start simple with simple collections. 
+
+Schema from openalex database:
+
+```{python}
+#| eval: false
+#| code-fold: true
+db.works_oa_test.insert_many( list(db.works_oa.find(
+    { "publication_year": 1960 },
+    { "concepts": 1, "publication_date": 1, "doi": 1, "ids": 1 }
+    ))
+)
+
+db.paper_test.insert_many( list(db.papers.find(
+    { "year": 1960, "s2fieldsofstudy": { "$type": "array" } },
+    { "externalids": 1, "s2fieldsofstudy": 1 }
+    ))
+)
+```
+
+```{python}
+print(f"S2orc has {db.paper_test.count_documents({})} papers with `DOI` in 1960")
+print(f"OpenAlex has {db.works_oa_test.count_documents({})} papers with `DOI` in 1960")
+```
+
+### Vanilla query
+
+We want to match by `doi`. We start by exmamining the data:
+
+```{python}
+pprint(db.paper_test.find_one({ "externalids.DOI": { "$type": "string" } }))
+```
+
+```{python}
+pprint(db.works_oa_test.find_one())
+```
+
+We're off to a bad start. We note that the `s2orc` DB don't keep the address prefix of the DOI. We find easier to add the missing prefix in `s2orc` than remove it from `openalex`.
+
+```{python}
+#| code-fold: true
+start_time = time.time()
+db.paper_test.update_many(
+    {},
+    [
+        { "$set": { 
+            "doi": { 
+                "$cond": [
+                    { "$ne": ["$externalids.DOI", None] },
+                    { "$concat": ["https://doi.org/", "$externalids.DOI"] },
+                    None
+                ]
+                }
+            } }
+    ]
+)
+print("Setting a field on ~400K took --- %s seconds ---" % (time.time() - start_time))
+```
+
+We can now proceed to our first lookup. As a very first step, note that we will match only on existing dois on the `paper_test` (s2orc) side. If not, this is not even gonna run because the output is too large:
+
+```{python}
+#| eval: false
+start_time = time.time()
+
+s2orc_doi_is_string = { "$match": { "doi": { "$type": "string" }} }
+
+s2orc_to_oa_doi_lookup ={
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "as": "matches"
+      }
+   }
+
+pipeline = [
+   s2orc_doi_is_string,
+   s2orc_to_oa_doi_lookup,
+   only_keep_existing_matches,
+]
+
+assert 'doi' in db.paper_test.find_one().keys(), 'missing field in paper test'
+assert 'doi' in db.works_oa_test.find_one().keys(), 'missing field in oa'
+
+res = list(db.paper_test.aggregate( pipeline ))
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+```
+
+We ended up cancelling the task because it was still too long (> 3mins is too long for me). I just wanted to show this step to mention that when we work with mongoDB (our databases in general), indexes make a world of difference.
+
+::: {.callout-tip}
+Assigning descriptive names to variables for each aggregation stage enhances the reader's comprehension of the purpose of the stage while emphasizing the similarities between the optimization variations being performed. For example, the example below clearly demonstrates that we are executing the same pipeline both with and without indexes.
+:::
+
+
+### Indexes
+
+#### Only on `doi`
+
+Here's how we go about creating indexes
+
+```{python}
+db.works_oa_test.create_index([("doi", ASCENDING)])
+db.paper_test.create_index([("doi", ASCENDING)])
+```
+
+Matching `paper_test` on `works_oa` again:
+
+```{python}
+start_time = time.time()
+
+s2orc_doi_is_string = { "$match": { "doi": { "$type": "string" }} }
+
+s2orc_to_oa_doi_lookup ={
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_doi_is_string,
+    s2orc_to_oa_doi_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(len(res))
+```
+
+Also, lets check if the other way around is faster
+
+```{python}
+start_time = time.time()
+
+oa_doi_is_string = { "$match": { "doi": { "$type": "string" }} }
+
+oa_to_s2orc_doi_lookup = {
+      "$lookup": {
+         "from": "paper_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "as": "matches"
+      }
+   }
+
+res = list(db.works_oa_test.aggregate( [
+    oa_doi_is_string,
+    oa_to_s2orc_doi_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(len(res))
+```
+
+Looking up `paper_test` in `works_oa` took 28 seconds, while it took 30 seconds for the reverse direction. This make sense considering that `paper_test` contains fewer papers. If the information we are interested in resides in `paper_test`, it is better to prioritize that direction. For example, if our focus is on text analysis and we only have text data for papers in `paper_test` (`S2ORC`), then the additional papers in `openAlex` become irrelevant since we know that there is no corresponding text available for those papers. 
+
+#### Trying out the concise method for lookup introduced in MongoDB 5.0
+
+```{python}
+start_time = time.time()
+
+concise_s2orc_to_oa_doi_lookup = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "let": { "s2orc_doi": "$doi" },
+         "pipeline": [ {
+            "$match": {
+               "$expr": { "$eq": [ "$$s2orc_doi", "$doi" ] }
+            }
+         } ],
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_doi_is_string,
+    concise_s2orc_to_oa_doi_lookup,
+    only_keep_existing_matches
+] )) 
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+It took longer, which is not great. But this approach let us filter doi in the `foreign` collection, potentially reducing the items we have to search:
+
+```{python}
+
+start_time = time.time()
+
+oa_doi_is_string_pipeline = [ {
+    "$match": {
+        "doi": { "$type": "string" } ,
+        "$expr": { "$eq": [ "$$s2orc_doi", "$doi" ] }
+        }
+    } ]
+
+concise_s2orc_to_oa_doi_lookup = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "let": { "s2orc_doi": "$doi" },
+         "pipeline": oa_doi_is_string_pipeline,
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_doi_is_string,
+    concise_s2orc_to_oa_doi_lookup,
+    only_keep_existing_matches
+] )) 
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+For some reason, it didn't help that much. Perhaps because of the change in variable done by `let`? In general, we will prefer the traditional method. The concise method is useful when you need more complex query (see [documentation](https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/#std-label-lookup-concise-correlated-subquery))
+
+
+#### Filtering by `concepts`
+
+How does filtering by concept improve our query? Lets start by creating an indexes, as we know this is just better (for now):
+
+```{python}
+db.works_oa_test.create_index([("concepts.display_name", ASCENDING)])
+```
+
+```{python}
+start_time = time.time()
+
+oa_filter = { '$match': { 'concepts.display_name': 'Biology',  'doi': { "$type" : "string"} } }
+
+res = list(db.works_oa_test.aggregate( [
+    oa_filter,
+    oa_to_s2orc_doi_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+This is much better, obviously! What if we only look at `concepts.display_name` at `level=0`, given that `Biology` happens only at that level.
+
+```{python}
+db.works_oa_test.drop_index([("concepts.display_name", ASCENDING)])
+db.works_oa_test.create_index([("concepts.display_name", ASCENDING)], partialFilterExpression = { "concepts.level" : 0})
+```
+
+```{python}
+start_time = time.time()
+
+res = list(db.works_oa_test.aggregate( [
+    oa_filter,
+    oa_to_s2orc_doi_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+
+For some reason, it didn't really help. We'll go back to the original index:
+
+```{python}
+db.works_oa_test.drop_index([("concepts.display_name", ASCENDING)])
+db.works_oa_test.create_index([("concepts.display_name", ASCENDING)])
+```
+
+Now, doing the same for `s2fieldsofstudy` from `paper_test` collection:
+
+```{python}
+db.paper_test.create_index([("s2fieldsofstudy.category", ASCENDING)])
+```
+
+```{python}
+start_time = time.time()
+
+s2orc_filter = { '$match': { 's2fieldsofstudy.category': 'Biology', 'doi': { "$type" : "string"}  } }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_filter,
+    s2orc_to_oa_doi_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+Ok, now that we have indexes `dois` and `fields` on both collections, do we save time by using concise method?
+
+```{python}
+start_time = time.time()
+
+oa_filter_pipeline = [ {
+    "$match": { 
+        "concepts.display_name": "Biology",  
+        "$expr":  {
+            "$eq": [ "$$s2orc_doi", "$doi" ]
+            }
+        }
+    } ]
+
+concise_s2orc_to_oa_doi_lookup_concise = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "let": { "s2orc_doi": "$doi" },
+         "pipeline": oa_filter_pipeline,
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+   s2orc_filter,
+   concise_s2orc_to_oa_doi_lookup_concise,
+   only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+It didn't help that much, but didn't make it worst either. 
+
+#### Compound indexes
+
+What if we add a compound indexes instead of having independent ones?
+
+```{python}
+db.works_oa_test.drop_index([("doi", ASCENDING)])
+db.works_oa_test.drop_index([("concepts.display_name", ASCENDING)])
+db.works_oa_test.create_index([("concepts.display_name", ASCENDING), ("doi", ASCENDING)])
+
+db.paper_test.drop_index([("doi", ASCENDING)])
+db.paper_test.drop_index([("s2fieldsofstudy.category", ASCENDING)])
+db.paper_test.create_index([("s2fieldsofstudy.category", ASCENDING), ("doi", ASCENDING)])
+```
+
+```{python}
+start_time = time.time()
+
+res = list(db.paper_test.aggregate( [
+   s2orc_filter,
+   concise_s2orc_to_oa_doi_lookup_concise,
+   only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+About the same. Maybe this is because these are small collections. We'll go back to independent index for the moment:
+
+```{python}
+db.works_oa_test.drop_index([("concepts.display_name", ASCENDING), ("doi", ASCENDING)])
+db.works_oa_test.create_index([("concepts.display_name", ASCENDING)])
+db.works_oa_test.create_index([("doi", ASCENDING)])
+
+db.paper_test.drop_index([("s2fieldsofstudy.category", ASCENDING), ("doi", ASCENDING)])
+db.paper_test.create_index([("s2fieldsofstudy.category", ASCENDING)])
+db.paper_test.create_index([("doi", ASCENDING)])
+```
+
+
+### Beyond DOIs
+
+Ok, remember that we have ids other than DOIs: 
+
+```{python}
+db.paper_test.find_one({ "doi":  None, "externalids.MAG": { "$ne": None } })
+```
+
+Is there papers with `mag` ids but no `doi`?
+
+```{python}
+res = list(db.works_oa_test.find({ "doi":  None, "ids.mag": { "$ne": None } }, {"ids": 1, "doi": 1}))
+print(f"# papers with mag id but no doi : {len(res)}")
+res[0]
+```
+
+We have enough hits that we should take that into account. But waiit a minute, we also note that both collections don't have the same types for their `mag` field. We'll fix that by converting `works_oa_test` field to become string (and create indexes at the same time):
+
+```{python}
+db.works_oa_test.update_many(
+    {},
+    [
+        { "$addFields": { "mag": { "$toString": "$ids.mag" } } }
+    ]
+)
+
+db.works_oa_test.create_index([("mag", ASCENDING)])
+db.paper_test.create_index([("externalids.MAG", ASCENDING)])
+```
+
+What we really care about is getting papers that have `mag` but no `doi`:
+
+```{python}
+start_time = time.time()
+
+s2orc_paper_filter = {
+            "$match": { 
+               "doi": { "$type": "null" }, 
+               "$expr":  { 
+                    "$eq": [ "$$works_oa_mag", "$externalids.MAG" ] 
+                }
+            }
+         }
+
+works_oa2paper_lookup_concise = {
+      "$lookup": {
+         "from": "paper_test",
+         "localField": "mag",
+         "foreignField": "externalids.MAG",
+         "let": { "works_oa_mag": "$mag" },
+         "pipeline": [ s2orc_paper_filter ],
+         "as": "matches"
+      }
+   }
+
+oa_bio_filter_mag_is_string = {"$match": {"concepts.display_name": "Biology", "mag": { "$type": "string" }}}
+
+res = list(db.works_oa_test.aggregate( [
+    oa_bio_filter_mag_is_string,
+    works_oa2paper_lookup_concise,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+Because this is the 1960s, note that we have many papers with `MAG` but no `DOIs`. This takes longer. Looking only from the s2orc side, we know it should be better:
+
+```{python}
+start_time = time.time()
+
+works_s2orc2oa_lookup = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "externalids.MAG",
+         "foreignField": "mag",
+         "as": "matches"
+      }
+   }
+
+s2orc_bio_filter_mag_is_string = { "$match": {"s2fieldsofstudy.category": "Biology", "externalids.MAG": { "$type": "string" }, "doi": { "$type": "null" } } }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_bio_filter_mag_is_string,
+    works_s2orc2oa_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+Again, using the concise metho and combining the filters:
+
+```{python}
+start_time = time.time()
+
+oa_paper_filter = {
+            "$match": { 
+               "doi": { "$type": "null" }, 
+               "$expr":  { 
+                    "$eq": [ "$$s2orc_mag", "$mag" ] 
+                }
+            }
+         }
+
+works_s2orc2oa_lookup_concise = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "externalids.MAG",
+         "foreignField": "mag",
+         "let": { "s2orc_mag": "$externalids.MAG" },
+         "pipeline": [ oa_paper_filter ],
+         "as": "matches"
+      }
+   }
+
+s2orc_bio_filter_mag_is_string = { "$match": {"s2fieldsofstudy.category": "Biology", "externalids.MAG": { "$type": "string" }, "doi": { "$type": "null" } } }
+
+res = list(db.paper_test.aggregate( [
+    s2orc_bio_filter_mag_is_string,
+    works_s2orc2oa_lookup,
+    only_keep_existing_matches
+] ))
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+```
+
+
+It seems pretty similar, but we'll stick with that approach.
+
+::: {.callout-tip}
+It is useful to test filters individually on both collections. You want to make sure that something did not went wrong and you actually are giving empty collections to your lookup operation. Also, always check your types. Here `externalids.MAG` and `ids.mag` were of different types, I had to add a field to `works_oa` that converted `ids.mag` as string.
+:::
+
+#### Augmenting S2ORC with openAlex metadata
+
+We'll augment S2ORC with OA using DOIs and MAGs in two steps. First using DOIs, without consideration for mag:
+
+```{python}
+start_time = time.time()
+
+s2orc_bio_filter_doi_is_string = { '$match': { 's2fieldsofstudy.category': 'Biology', 'doi': { "$type" : "string"}  } }
+
+concise_s2orc_to_oa_doi_lookup = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "doi",
+         "foreignField": "doi",
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+   s2orc_bio_filter_doi_is_string,
+   concise_s2orc_to_oa_doi_lookup,
+   only_keep_existing_matches,
+   { '$addFields': { 'works_oa': {'$cond': [{'$ne': ['$matches', []]}, "$matches", None]} } },
+   { '$project': { 'matches': 0 } }
+] ))
+
+print("Aggregation pipeline finished --- %s seconds ---" % (time.time() - start_time))
+
+db.paper_test.bulk_write([
+    UpdateOne( { 'doi': doc['doi'] }, { '$set': {'works_oa': doc['works_oa'][0]} })
+    for doc in res
+])
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+```
+
+Then, we augment paper with MAG but no DOIs. This is the big operation:
+
+```{python}
+start_time = time.time()
+
+s2orc_bio_filter_mag_is_string = { "$match": {"s2fieldsofstudy.category": "Biology", "externalids.MAG": { "$type": "string" }, "doi": { "$type": "null" } } }
+
+concise_s2orc_to_oa_mag_lookup = {
+      "$lookup": {
+         "from": "works_oa_test",
+         "localField": "externalids.MAG",
+         "foreignField": "mag",
+         "as": "matches"
+      }
+   }
+
+res = list(db.paper_test.aggregate( [
+   s2orc_bio_filter_mag_is_string,
+   concise_s2orc_to_oa_mag_lookup,
+   only_keep_existing_matches,
+   { '$addFields': { 'works_oa': {'$cond': [{'$ne': ['$matches', []]}, "$matches", None]} } },
+   { '$project': { 'matches': 0 } }
+] ))
+
+print("Aggregation pipeline finished --- %s seconds ---" % (time.time() - start_time))
+print(f"# hit: {len(res)}")
+
+db.paper_test.bulk_write([ 
+    UpdateOne( {'externalids.MAG': doc['externalids']["MAG"]}, {'$set': {'works_oa': doc['works_oa'][0]}} ) 
+    for doc in res
+    ])
+
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
+```
+
+Checking the modified collection:
+
+```{python}
+db.paper_test.find_one({'externalids.MAG':  res[0]['externalids']['MAG']})
+```
+
+
+The next step is to apply what we learn on the full database. As we modify our main databaset, we'll do it in a script that lives in our directory just for that.

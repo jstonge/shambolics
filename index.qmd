@@ -9,6 +9,8 @@ listing:
     - "posts/rise_of_comp2"
     - "posts/rise_of_comp3"
     - "posts/mongoDB"
+    - "posts/mongoDB_opt"
+    - "posts/data_statements"
   sort: "date desc"
   type: default
   categories: true
