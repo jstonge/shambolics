@@ -1,0 +1,86 @@
+---
+title: "Computer programming is not that different from unionization"
+description: |
+  Wait, what? I swear this is a good and useful analogy. 
+categories:
+  - PhD
+date: today
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false
+image: unions.jpg
+---
+
+![](unions.jpg)
+
+Labor unions are associations of workers who have demands aimed at improving their quality of life. From an organization point of view, the key challenge of unions is to organize themselves and recruit new members to be more effective when bargaining with the employers. 
+
+Unions coevolve with union busting, similar to prey-predators dynamics. As a result, there is often an individual cost-benefit ratio for joining a union, which is determined by the union busting effort, the institutional capacities of groups to promote union behavior and the perceived importance of the cause by involved individuals. 
+
+A key institutional capacity to advance union behavior is the ability to promote a sense of belonging by demonstrating the value of the cause to potentially community members. 
+
+Unions also evolve as a form of cultural group selection, where successful tactics and strategies are copied among union groups. If a group is able to grow and reproduce, it is more able to persist over time. As with traditional cultural group selection, we might think about how competition among groups promote cooperation insofar as there is more variation within groups than across groups [to check that claim and cite relevant refs].
+
+In summary, unions are a process with a cost-benefit ratio in which groups with more fitness will perform better.
+
+How is all of this related to computer programming? Isn't programming very personal:
+
+![](hacker.jpeg)
+
+For many scientists without computational or geek background, the perception about programming is that of the "lone hacker". A lonely activity that engage you and your computer. Someone somewhere wrote something we call a programming language that you can download and use to run scripts. These scripts usually do something that scientists are interested in, like calculating the functional diversity index for ecologists or extracting word frequency from a relevant corpus for literary reviews.
+
+But for other scientists who grew alongside the world of computer programming, they know that computer programming looks like the following:
+
+![](hacker_social.jpg)
+
+Behind the digital veil, there is often a community (ok, very often this is that one guy who did all the work, but even in this case communities can emerge from popular software) who wrote the code that you use. From the bottom of your hardware to the niche library that map onto scientific concepts, in passing by the scientific computing routines that most people use in whatever programming languages. In the Free and Open-Source Software world (F/OSS), this community is dedicated to write code that is free to use and modify. Programming in science is part of the computing world; it never is an individual activity even if it feels like it.
+
+It is just that we don't always see it, physically.
+
+With this entry, I hope to convince you of the following:
+
+> The group-based view matters for when it comes to modeling the rise of programming in science. Shifting the view from an individual activity to a collective one that is based on group-selection makes clear that there are various trade-offs when new people embrace computational methods via open source-software. By the end, I would introduce a family of group-based models that let us formally model the rise of programming as a (cultural) group selection process.
+
+Ok, wait. Am I saying that programming is always already a social activity? I hear many people responding that this is not their experience. Even if it is true that scientific software is written by someone else, does that mean the actual activity of coding has to be social too? 
+
+Well, yes and no. This reminds me of the distinction between individual and social learning in the theory of cultural evolution. With our [WEIRD](https://en.wikipedia.org/wiki/Psychology#WEIRD_bias) brains, we tend to assume many skills are individually learned. For example, running is something you learned on your own. But in many other societies, running is a skill that is socially learn [REF], and arguably everytime they run they embody that knowledge. In our WEIRD societies, people don't need to run in particular ways to survive. But invididuals who run as a serious hobby or professionally have learned at some point how to run. Thus, in particular modern niche, even running embody a social activity, even if you run by yourself. On top of this embodied perspective, running as a shared experience brings about collective gathering, subreddits, prestige and so on. 
+
+I am claiming that something similar than running happen with respect to computer programming. As scientists, you can open your laptop, download `R` or `Python`, and learn to code individually. But most likely your code will be unintelligible to others and even to yourself in the near future. Learning to code is about copying others, building a mental model, and eventually tinkering with the code so that it feels natural.
+
+
+Note that you can be an outlooker of your programming community, without being actively involved in the social realm. But sooner or later, there are features or bugs that make sense only in the context of seeing programming as a group-based process, similar to that of an union.
+
+As the social realm underlying programming is unveiled, the process of learning to program becomes somehow similar to that of that joining an union. 
+
+A key similarity is that in both case, the process of becoming part of a community changes the new member worldview. As someone becomes convince that unionization is valuable, it is willing to pay stronger cost to defend the idea. As someone becomes a programmer that is actively involved in the open-source world, it changes her perspective on the unfolding history of computer programming and the internet. In both cases, new members learn a new language that reinforce the sense of community. This is not static though. As institutions get bigger, they can both become degenerate or corporate, which is another beast than earlier institutional phase. In both cases, as institutions get bigger, norms and goodwills are replaced by code of conducts and protocols. If the institutions is successful, people might join for other reasons than further the advancement of the cause. Power might become in the hand of a few privileged individuals at the top, administration and bureaucraties might add layers of complexities that make no sense, etc.. 
+
+### Unionization is not programming
+
+
+A key difference is the following; what connects members of a union, and the effort to recruit new members, is determined by sharing an employer or a situation that would benefit from collective bargaining. The underlying thread is more loose for many people joining the open source movement. The development team might not be on a mission to convert all of their users to become part of their community. But some preaching happen, most obviously at the operating system level, but can go all the way up to any software layer.
+
+Another important difference is that learning to code can be benefitial in itself. In contrast, unionizing by yourself does not really make sense. This is why unionizing is akin to public-good games. To individual individual benefits, the group-level benefits must be in place. You can be the only coder in your group, and still enjoy the relative benefit of knowing how to code. But science is increasingly becoming a team effort (CITE), and being alone while learning to code severely limit your individual benefits. 
+
+Large projects that rely on coding skills usually require coordination and collaboration between knowledgeable people. Any group with a single coder that competes against other groups, in contextx where computational methods give an edge, will perform better. If your group is less successful, the relative benefits of knowing how to code might not be worth it.
+
+
+#### The need to convince uninterested people to join the cause
+
+Science is weird because one might argue there is pressure for people to constantly learn new tools and skills to produce sophisticated knowledge. Coding is one such thing that is taking many groups by surprise.
+
+#### Conclusion
+
+In summary, seeing how programming is like a union let us:
+
+ - Model the rise of programming a group-selection process.
+
+
+## Appendix: F/OSS success stories are as technical as they are communal
+
+- [Linux is making Apple Great Again](https://jasoneckert.github.io/myblog/linux-is-making-apple-great-again/)
+- [Hello Dolly: Democratizing the magic of ChatGPT with open models](https://www.databricks.com/blog/2023/03/24/hello-dolly-democratizing-magic-chatgpt-open-models.html)
+- [Alpaca: A Strong, Replicable Instruction-Following Model](https://crfm.stanford.edu/2023/03/13/alpaca.html)
+- [A one-year long research workshop on large multilingual models and datasets](https://bigscience.huggingface.co/)
+- [about openalex](https://openalex.org/about)

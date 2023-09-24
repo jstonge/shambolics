@@ -1,0 +1,136 @@
+/*-- scss:defaults --*/
+$primary:  whitesmoke !default;
+$font-family-base:  'Source Sans Pro',  'Lato', 'Merriweather', 'Roboto Regular', 'Cabin Regular' !default;
+$headings-font-family:  'Prata', 'Roboto', 'Playfair Display', 'Montserrat'    !default;
+$font-size-base: 15;
+$body-color: #373a3c !default;
+$body-bg: whitesmoke;
+$link-color: darkblue;
+$max-width: 2000px;
+
+// see https://quarto.org/docs/output-formats/html-themes.html
+
+//
+// Color system
+//
+
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #373a3c !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+
+$blue:    #2780e3 !default;
+$indigo:  #6610f2 !default;
+$purple:  #613d7c !default;
+$pink:    #e83e8c !default;
+$red:     #ff0039 !default;
+$orange:  #f0ad4e !default;
+$yellow:  #ff7518 !default;
+$green:   #3fb618 !default;
+$teal:    #20c997 !default;
+$cyan:    #9954bb !default;
+
+$primary:       $blue !default;
+$secondary:     $gray-800 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          $gray-800 !default;
+
+
+// Fonts
+$headings-font-weight:      400 !default;
+
+// Navbar
+
+$navbar-dark-hover-color:       rgba($white, 1) !default;
+$navbar-light-hover-color:      rgba($black, .9) !default;
+
+
+/*-- scss:rules --*/
+
+
+#title-block-header.quarto-title-block.default .quarto-title .title {
+    font-family: "Oleo Script", "Libre Baskerville", $headings-font-family;
+    font-size: $font-size-base * 2.5;
+  }
+
+.location-uni {
+    font-size: .8em;
+}
+
+
+// Trestles
+div.quarto-about-trestles {
+    display: flex !important;
+    flex-direction: column;
+    padding-top: 5em !important;
+    padding-bottom: 1em;
+
+  
+    @include media-breakpoint-up(lg) {
+        flex-direction: row-reverse;
+    }
+
+    @include media-breakpoint-down(lg) {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-contents {
+        flex-basis: 0;
+        flex-grow: 1;
+    
+        @include media-breakpoint-up(lg) {
+            border-left: solid 0px $border-color;
+            padding-left: 1.5em;
+        }
+
+        h2 {
+          border-bottom: none;
+        }
+    
+        main.content {
+          margin-top: 0;
+        }
+    }
+  
+    .about-entity {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-right: 1em;
+      margin-top: 10px;
+      
+  
+      .about-image {
+        object-fit: cover;
+        @include media-breakpoint-down(lg) {
+            margin-bottom: 1.5em;
+        }
+      }
+      @include image-shapes();
+  
+      .about-links {
+        @include responsive-buttons();
+        justify-content: center;
+      }
+  
+      .about-link {
+        @include responsive-button();
+      }
+    }
+
+  }
+  

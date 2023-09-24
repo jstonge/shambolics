@@ -1,19 +1,18 @@
 [
   {
-    "listing": "/index.html",
-    "items": [
-      "/posts/interactive-stats/index.html",
-      "/posts/s2orc_viz/index.html",
-      "/posts/survey-programming/index.html",
-      "/posts/rise_of_comp/index.html",
-      "/posts/rise_of_comp2/index.html",
-      "/posts/rise_of_comp3/index.html",
-      "/posts/mongoDB/index.html",
-      "/posts/data_statements/index.html"
-    ]
+    "listing": "/posts/complaints/index.html",
+    "items": []
   },
   {
-    "listing": "/unlisted_posts/complaints/index.html",
-    "items": []
+    "listing": "/blog.html",
+    "items": [
+      "/posts/netsci2023/index.html",
+      "/posts/interactive-stats/index.html",
+      "/posts/s2orc_viz/index.html",
+      "/posts/oa_viz/index.html",
+      "/posts/rise_of_comp/index.html",
+      "/posts/rise_of_comp3/index.html",
+      "/posts/mongoDB_opt/index.html"
+    ]
   }
 ]

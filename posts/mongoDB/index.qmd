@@ -16,7 +16,7 @@ format:
 image: mongo.png
 ---
 
-I currently use the [vscode plug-in](https://code.visualstudio.com/docs/azure/mongodb) to interact with mongoDB. I like it b/c it is a middle between mongoDB Compass and the commandline.
+To work with `mongoDB`, I highly recommend using the `mongoDB Compass`, `mongossh` and `pymongo`. 
 
 Key refs:
 
@@ -178,6 +178,11 @@ WHERE authors.last = "Clauset";
 
 ### Regex queries
 
+1-Testing regex with sample in a pipeline
+```js
+db.s2orc.aggregate([{ $sample: { size: 1 } }, { $addFields: { result: { $regexFindAll: { input: '$content.text', regex: /data/i } } } }])
+```
+
 ```js
 db.s2orc.find({
    content.text: {
@@ -304,7 +309,7 @@ Find duplicated rows (not sure it is working yet)
 [direct: mongos] papersDB> db.pdf_parses.aggregate(aggregation);
 ```
 
-### Lookups is an aggregate query
+### Lookups is an aggregate query (first way of doing it)
 
 ```js
 [direct: mongos]db.s2orc.aggregate([
@@ -313,6 +318,81 @@ Find duplicated rows (not sure it is working yet)
       } }
    ])
 ```
+
+### Setting a new field based on old field
+
+```python
+# here we add https://doi.org/ to externalids.DOI to facilitate lookup
+# with works_oa. 
+db.papers.update_many(
+    {},
+    [
+        { "$set": { 
+            "doi": { 
+                "$cond": [
+                    { "$ne": ["$externalids.DOI", None] },
+                    { "$concat": ["https://doi.org/", "$externalids.DOI"] },
+                    None
+                ]
+                }
+            } }
+    ]
+)
+```
+
+## Advanced query
+
+
+### Complex lookups
+
+Okay, we want to perform a `$lookup` to know  which 
+DOI in `papers` (s2orc) are also in `works_oa`. This is a costly operation,
+so we make sure to have the right index first (we created a `doi` field in `papers`).
+We need the index `publication_year`/`year`, `concepts`/`s2fieldofstudy`, and `doi`.
+
+```python
+db.works_oa.create_index([("publication_year", ASCENDING), ("concepts.diplay_name", ASCENDING), ("doi", ASCENDING)])
+db.papers.create_index([("year", ASCENDING), ("s2fieldsofstudy.category", ASCENDING), ("doi", ASCENDING)])
+```
+
+```python
+pipeline = [
+    {
+        "$match": { 
+             "$and":  [ 
+                { "year": 1960 },
+                # { "s2fieldsofstudy.category", "Biology"  }
+            ]
+        }
+   },
+   {
+      "$lookup": {
+         "from": "works_oa",
+         "localField": "doi",
+         "foreignField": "doi",
+         "let": { "col1_doi": "$doi" },
+         "pipeline": [ {
+            "$match": {
+               "$expr": { 
+                "$and": [
+                    { "$eq": [ "publication_date", "1960-12-30" ] },
+                    { "$eq": [ "concepts.display_name", "Biology" ] },
+                    { "$in": [ "$$col1_doi", "$doi" ] }
+                ]
+                }
+            }
+         } ],
+         "as": "matches"
+      }
+   },
+   {
+        "$match": { "matches": { "$ne": [] } }
+    }
+] 
+
+res = list(db.paper_test.aggregate(pipeline))
+```
+
 
 ## Document embeddings
 

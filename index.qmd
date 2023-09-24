@@ -1,23 +1,53 @@
 ---
-title: "shambolics"
-listing:
-  contents: 
-    - "posts/interactive-stats"
-    - "posts/s2orc_viz"
-    - "posts/survey-programming"
-    - "posts/rise_of_comp"
-    - "posts/rise_of_comp2"
-    - "posts/rise_of_comp3"
-    - "posts/mongoDB"
-    - "posts/mongoDB_opt"
-    - "posts/data_statements"
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
-page-layout: full
-title-block-banner: true
+title: "Jonathan St-Onge"
+image: profile.jpg
+about:
+  id: hero-heading
+  image-width: 20em
+  image-shape: round
+  template: trestles
+  links:
+      - icon: twitter
+        text: twitter
+        href: https://twitter.com/_jstonge
+      - icon: github
+        text: Github
+        href: https://github.com/jstonge
 ---
 
+:::{#hero-heading}
 
+I am a second year Ph.D. student at UVM Complex Systems Center in Burlington. I am interested in computational social science, cultural evolution and literate programming.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+## Interests
+
+- Natural language processing
+- Networks
+- Bayesian Modeling
+- Data visualization, visual essays, interactive articles
+
+
+:::
+
+::: {.column width="50%"}
+
+## Education
+
+**Ph.D. in Complex Systems and Datas Science** | June 2021 - present
+University of Vermont, Burlington | VT, CA  
+
+**M.A in Philosophy** | Sept 2017 - June 2019
+Université du Québec à Montréal, Montreal | Quebec, CA
+
+**B.A in Behavioral neuroscience** | Sept 2015 - June 2017
+McGill University, Montreal | Quebec, CA
+
+:::
+
+:::
+
+:::

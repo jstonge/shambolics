@@ -1,0 +1,22 @@
+---
+title: ""
+listing:
+  contents:
+    - "posts/interactive-stats/*.qmd"
+    - "posts/s2orc_viz/*.qmd"
+    - "posts/oa_viz/*.qmd"
+    - "posts/rise_of_comp/*.qmd"
+    - "posts/rise_of_comp2/*.qmd"
+    - "posts/rise_of_comp3/*.qmd"
+    - "posts/mongoDB_opt/*.qmd"
+    - "posts/netsci2023/*.qmd"
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: false
+---
+
+

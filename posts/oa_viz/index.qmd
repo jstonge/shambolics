@@ -1,0 +1,80 @@
+---
+title: "OpenAlex Viz"
+description: |
+  I always forget about the openAlex database details. Lets have them here.
+categories:
+  - Visualization
+  - NLP
+  - openAlex
+  - Interactive
+date: today
+execute:
+  cache: true
+author: Jonathan St-Onge
+editor: visual
+format: 
+    html:
+        echo: false
+image: cover.png
+---
+
+```{python}
+import pandas as pd
+import sys
+
+from pathlib import Path
+from creds import client
+
+db = client['papersDB']
+
+venues_db = pd.DataFrame(list(db.venues_oa.find(
+        { "type": "journal", "issn_l": { "$type": "string" }, "works_count": { "$gt": 0 } }, 
+        {
+            'works_count':1, 
+            'display_name':1,
+            "issn_l":1, 
+            "country_code":1, 
+            "publisher":1, 
+            "cited_by_count":1
+        }))
+    )
+
+venues_db['ratio_works_count_cited'] = venues_db.cited_by_count / venues_db.works_count
+venues_db = venues_db.drop("_id", axis=1)
+ojs_define(data = venues_db)
+```
+
+```{ojs}
+viewof select = Inputs.select(["ratio_works_count_cited", "works_count", "cited_by_count"])
+viewof range = Inputs.range([0, 100000], {step: 1000, label: "min works count"})
+
+Plot.plot({ 
+    height: 1000, 
+    marginLeft: 100, 
+    marginRight: 500,
+    width: 700, 
+    color: { legend: true },
+    marks: [
+        Plot.barX(transpose(data).filter(d => d.works_count > range), {
+            y: "issn_l", 
+            x: select, 
+            fill: "country_code",
+            stroke: "black",
+            sort: {
+                y: "x", 
+                reverse: true, 
+                limit: 50}
+        }),
+        Plot.textX(transpose(data).filter(d => d.works_count > range), {
+            y: "issn_l", 
+            x: select, 
+            text: d => `${d.display_name} (# works ${d.works_count} )`,
+            dx: 6, 
+            textAnchor: "start",
+            sort: {
+                y: "x", 
+                reverse: true, 
+                limit: 50}
+        })
+    ]})
+```
